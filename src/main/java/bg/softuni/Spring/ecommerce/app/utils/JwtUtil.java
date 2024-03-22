@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import java.security.Key;
+import java.security.*;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +20,12 @@ public class JwtUtil {
 
     private final String SECRET;
 
-    public JwtUtil(@Value("${jwt.secret}") String secret) {
+    KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("EC");
+    KeyPair keyPair = keyPairGenerator.generateKeyPair();
+    PrivateKey privateKey = keyPair.getPrivate();
+    PublicKey publicKey = keyPair.getPublic();
+
+    public JwtUtil(@Value("${jwt.secret}") String secret) throws NoSuchAlgorithmException {
         SECRET = secret;
     }
 
@@ -37,7 +42,7 @@ public class JwtUtil {
                 .setSubject(userName)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + (10000 * 60 * 30)))
-                .signWith(getSignKey(), SignatureAlgorithm.ES256)
+                .signWith(privateKey, SignatureAlgorithm.ES256)
                 .compact();
     }
 
@@ -56,7 +61,7 @@ public class JwtUtil {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(token).getBody();
+        return Jwts.parserBuilder().setSigningKey(privateKey).build().parseClaimsJws(token).getBody();
     }
 
     private Boolean isTokenExpired(String token) {
