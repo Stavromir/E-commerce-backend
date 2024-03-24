@@ -46,7 +46,7 @@ public class ProductEntity extends BaseEntity{
     }
 
     @Lob
-    @Column(columnDefinition = "longlob")
+    @Column(columnDefinition = "BLOB")
     public byte[] getImg() {
         return img;
     }
