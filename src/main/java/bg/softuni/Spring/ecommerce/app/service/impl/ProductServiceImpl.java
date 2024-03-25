@@ -9,6 +9,8 @@ import bg.softuni.Spring.ecommerce.app.service.ProductService;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -36,12 +38,30 @@ public class ProductServiceImpl implements ProductService {
 
         ProductEntity savedProduct = productRepository.save(productEntity);
 
+        return getProductDto(savedProduct);
+
+    }
+
+    @Override
+    public List<ProductDto> getAllProducts() {
+
+        List<ProductDto> productDtos = productRepository.findAll()
+                .stream()
+                .map(ProductServiceImpl::getProductDto)
+                .toList();
+
+
+        return productDtos;
+    }
+
+    private static ProductDto getProductDto(ProductEntity savedProduct) {
+
         return new ProductDto()
                 .setId(savedProduct.getId())
                 .setName(savedProduct.getName())
                 .setDescription(savedProduct.getDescription())
                 .setPrice(savedProduct.getPrice())
                 .setByteImg(savedProduct.getImg())
-                .setCategoryId(categoryEntity.getId());
+                .setCategoryId(savedProduct.getCategory().getId());
     }
 }

@@ -30,7 +30,7 @@ public class CategoryController {
         return ResponseEntity.status(HttpStatus.CREATED).body(category);
     }
 
-    @GetMapping("/")
+    @GetMapping("/category")
     public ResponseEntity<List<CategoryDto>> getAllCategories () {
 
         List<CategoryDto> allCategories = categoryService.getAllCategories();
