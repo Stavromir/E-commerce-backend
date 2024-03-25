@@ -6,6 +6,9 @@ import bg.softuni.Spring.ecommerce.app.repository.CategoryRepository;
 import bg.softuni.Spring.ecommerce.app.service.CategoryService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
@@ -27,5 +30,18 @@ public class CategoryServiceImpl implements CategoryService {
                 .setId(category.getId())
                 .setName(category.getName())
                 .setDescription(category.getDescription());
+    }
+
+    @Override
+    public List<CategoryDto> getAllCategories() {
+
+        return categoryRepository.findAll()
+                .stream()
+                .map(categoryEntity -> {
+                    return new CategoryDto()
+                            .setId(categoryEntity.getId())
+                            .setName(categoryEntity.getName())
+                            .setDescription(categoryEntity.getDescription());
+                }).toList();
     }
 }
