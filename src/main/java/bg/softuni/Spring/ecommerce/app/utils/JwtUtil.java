@@ -18,17 +18,11 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
 
-    private final String SECRET;
+    private final KeyPair keyPair;
 
-    KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("EC");
-    KeyPair keyPair = keyPairGenerator.generateKeyPair();
-    PrivateKey privateKey = keyPair.getPrivate();
-    PublicKey publicKey = keyPair.getPublic();
-
-    public JwtUtil(@Value("${jwt.secret}") String secret) throws NoSuchAlgorithmException {
-        SECRET = secret;
+    public JwtUtil() {
+        this.keyPair = generateKeyPair();
     }
-
 
     public String generateToken(String userName) {
         Map<String, Object> claim = new HashMap<>();
@@ -42,13 +36,18 @@ public class JwtUtil {
                 .setSubject(userName)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + (10000 * 60 * 30)))
-                .signWith(privateKey, SignatureAlgorithm.ES256)
+                .signWith(keyPair.getPrivate(), SignatureAlgorithm.ES256)
                 .compact();
     }
 
-    private Key getSignKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET);
-        return Keys.hmacShaKeyFor(keyBytes);
+    private KeyPair generateKeyPair() {
+        try {
+            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("EC");
+            keyPairGenerator.initialize(256); // 256-bit key size for ECDSA
+            return keyPairGenerator.generateKeyPair();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Failed to generate ECDSA key pair", e);
+        }
     }
 
     public String extractUsername(String token) {
@@ -61,7 +60,12 @@ public class JwtUtil {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder().setSigningKey(privateKey).build().parseClaimsJws(token).getBody();
+        return Jwts
+                .parserBuilder()
+                .setSigningKey(keyPair.getPublic())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 
     private Boolean isTokenExpired(String token) {
