@@ -10,6 +10,7 @@ public class ProductDto {
     private String description;
     private byte[] byteImg;
     private Long categoryId;
+    private String categoryName;
     private MultipartFile img;
 
     public ProductDto() {
@@ -66,6 +67,15 @@ public class ProductDto {
 
     public ProductDto setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
+        return this;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public ProductDto setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
         return this;
     }
 

@@ -54,6 +54,17 @@ public class ProductServiceImpl implements ProductService {
         return productDtos;
     }
 
+    @Override
+    public List<ProductDto> getAllProductsByName(String name) {
+
+        List<ProductDto> products = productRepository.findAllByNameContaining(name)
+                .stream()
+                .map(ProductServiceImpl::getProductDto)
+                .toList();
+
+        return products;
+    }
+
     private static ProductDto getProductDto(ProductEntity savedProduct) {
 
         return new ProductDto()
@@ -62,6 +73,7 @@ public class ProductServiceImpl implements ProductService {
                 .setDescription(savedProduct.getDescription())
                 .setPrice(savedProduct.getPrice())
                 .setByteImg(savedProduct.getImg())
-                .setCategoryId(savedProduct.getCategory().getId());
+                .setCategoryId(savedProduct.getCategory().getId())
+                .setCategoryName(savedProduct.getCategory().getName());
     }
 }
