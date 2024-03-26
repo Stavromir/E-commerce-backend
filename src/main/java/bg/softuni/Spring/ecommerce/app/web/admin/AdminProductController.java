@@ -1,4 +1,4 @@
-package bg.softuni.Spring.ecommerce.app.web;
+package bg.softuni.Spring.ecommerce.app.web.admin;
 
 import bg.softuni.Spring.ecommerce.app.model.dto.ProductDto;
 import bg.softuni.Spring.ecommerce.app.service.ProductService;
@@ -11,11 +11,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin")
-public class ProductController {
+public class AdminProductController {
 
     private final ProductService productService;
 
-    public ProductController(ProductService productService) {
+    public AdminProductController(ProductService productService) {
         this.productService = productService;
     }
 
@@ -35,8 +35,8 @@ public class ProductController {
     }
 
     @GetMapping("/search/{name}")
-    public ResponseEntity<List<ProductDto>> getProductsByName(@PathVariable String name) {
-        List<ProductDto> allProductsByName = productService.getAllProductsByName(name);
+    public ResponseEntity<List<ProductDto>> searchProductByTitle(@PathVariable String name) {
+        List<ProductDto> allProductsByName = productService.searchProductByTitle(name);
         return ResponseEntity.ok(allProductsByName);
     }
 

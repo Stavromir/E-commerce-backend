@@ -56,7 +56,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDto> getAllProductsByName(String name) {
+    public List<ProductDto> searchProductByTitle(String name) {
 
         List<ProductDto> products = productRepository.findAllByNameContaining(name)
                 .stream()
