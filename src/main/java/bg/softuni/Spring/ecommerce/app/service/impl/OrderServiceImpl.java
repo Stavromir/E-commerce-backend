@@ -7,6 +7,8 @@ import bg.softuni.Spring.ecommerce.app.repository.OrderRepository;
 import bg.softuni.Spring.ecommerce.app.service.OrderService;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class OrderServiceImpl implements OrderService {
 
@@ -27,5 +29,12 @@ public class OrderServiceImpl implements OrderService {
                 .setOrderStatus(OrderStatusEnum.PENDING);
 
         orderRepository.save(emptyOrder);
+    }
+
+    @Override
+    public OrderEntity getActiveOrder(Long userId, OrderStatusEnum orderStatus) {
+        OrderEntity activeOrder = orderRepository.findByUserIdAndOrderStatus(userId, orderStatus)
+                .orElseThrow(() -> new IllegalArgumentException("Order not exist"));
+        return activeOrder;
     }
 }

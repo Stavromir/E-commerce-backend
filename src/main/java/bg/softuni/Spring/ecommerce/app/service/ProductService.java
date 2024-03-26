@@ -1,9 +1,11 @@
 package bg.softuni.Spring.ecommerce.app.service;
 
 import bg.softuni.Spring.ecommerce.app.model.dto.ProductDto;
+import bg.softuni.Spring.ecommerce.app.model.entity.ProductEntity;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 public interface ProductService {
 
@@ -14,5 +16,7 @@ public interface ProductService {
     List<ProductDto> searchProductByTitle(String name);
 
     boolean deleteProduct(Long id);
+
+    boolean existById(Long productId);
 
 }

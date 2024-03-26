@@ -2,20 +2,20 @@ package bg.softuni.Spring.ecommerce.app.service.impl;
 
 import bg.softuni.Spring.ecommerce.app.model.dto.SignupRequest;
 import bg.softuni.Spring.ecommerce.app.model.dto.UserDto;
-import bg.softuni.Spring.ecommerce.app.model.entity.OrderEntity;
 import bg.softuni.Spring.ecommerce.app.model.entity.UserEntity;
 import bg.softuni.Spring.ecommerce.app.model.enums.UserRoleEnum;
-import bg.softuni.Spring.ecommerce.app.repository.OrderRepository;
 import bg.softuni.Spring.ecommerce.app.repository.UserRepository;
-import bg.softuni.Spring.ecommerce.app.service.AuthService;
+import bg.softuni.Spring.ecommerce.app.service.UserService;
 import bg.softuni.Spring.ecommerce.app.service.OrderService;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
-public class AuthServiceImpl implements AuthService {
+public class UserServiceImpl implements UserService {
 
     private final String adminName;
     private final String adminEmail;
@@ -23,7 +23,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final OrderService orderService;
 
-    public AuthServiceImpl(UserRepository userRepository,
+    public UserServiceImpl(UserRepository userRepository,
                            @Value("${admin.name}") String adminName,
                            @Value("${admin.email}") String adminEmail,
                            @Value("${admin.password}") String adminPassword,
@@ -58,6 +58,13 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public boolean hasUserWithEmail(String email) {
         return userRepository.findByEmail(email).isPresent();
+    }
+
+    @Override
+    public boolean existById(Long userId) {
+        Optional<UserEntity> user = userRepository.findById(userId);
+
+        return user.isPresent();
     }
 
 

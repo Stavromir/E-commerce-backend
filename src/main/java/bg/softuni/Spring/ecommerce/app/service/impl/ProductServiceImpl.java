@@ -78,6 +78,14 @@ public class ProductServiceImpl implements ProductService {
         return false;
     }
 
+    @Override
+    public boolean existById(Long productId) {
+
+        Optional<ProductEntity> product = productRepository.findById(productId);
+        
+        return product.isPresent();
+    }
+
     private static ProductDto getProductDto(ProductEntity savedProduct) {
 
         return new ProductDto()

@@ -5,9 +5,8 @@ import bg.softuni.Spring.ecommerce.app.model.dto.UserAuthenticationRequest;
 import bg.softuni.Spring.ecommerce.app.model.dto.UserDto;
 import bg.softuni.Spring.ecommerce.app.model.entity.UserEntity;
 import bg.softuni.Spring.ecommerce.app.repository.UserRepository;
-import bg.softuni.Spring.ecommerce.app.service.AuthService;
+import bg.softuni.Spring.ecommerce.app.service.UserService;
 import bg.softuni.Spring.ecommerce.app.utils.JwtUtil;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,13 +33,13 @@ public class UserAuthController {
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
     private final UserRepository userRepository;
-    private final AuthService authService;
+    private final UserService authService;
     private final JwtUtil jwtUtil;
 
     public UserAuthController(AuthenticationManager authenticationManager,
                               UserDetailsService userDetailsService,
                               UserRepository userRepository,
-                              AuthService authService,
+                              UserService authService,
                               JwtUtil jwtUtil) {
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
