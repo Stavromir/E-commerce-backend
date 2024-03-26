@@ -45,9 +45,9 @@ public class AuthServiceImpl implements AuthService {
 //                .setPassword(new BCryptPasswordEncoder().encode(signupRequest.getPassword()))
                 .setRole(UserRoleEnum.CUSTOMER);
 
-        OrderEntity emptyOrder = orderService.createEmptyOrder(user);
-
         UserEntity savedUser = userRepository.save(user);
+
+        orderService.createEmptyOrder(user);
 
         UserDto userDto = new UserDto()
                 .setId(savedUser.getId());

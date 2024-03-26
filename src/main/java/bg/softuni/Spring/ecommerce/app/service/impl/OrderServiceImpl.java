@@ -17,7 +17,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderEntity createEmptyOrder(UserEntity user) {
+    public void createEmptyOrder(UserEntity user) {
 
         OrderEntity emptyOrder = new OrderEntity()
                 .setAmount(0L)
@@ -26,6 +26,6 @@ public class OrderServiceImpl implements OrderService {
                 .setUser(user)
                 .setOrderStatus(OrderStatusEnum.PENDING);
 
-        return orderRepository.save(emptyOrder);
+        orderRepository.save(emptyOrder);
     }
 }
