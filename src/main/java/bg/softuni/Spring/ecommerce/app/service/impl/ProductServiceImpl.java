@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -63,6 +64,18 @@ public class ProductServiceImpl implements ProductService {
                 .toList();
 
         return products;
+    }
+
+    @Override
+    public boolean deleteProduct(Long id) {
+
+        Optional<ProductEntity> product = productRepository.findById(id);
+
+        if (product.isPresent()) {
+            productRepository.delete(product.get());
+            return true;
+        }
+        return false;
     }
 
     private static ProductDto getProductDto(ProductEntity savedProduct) {

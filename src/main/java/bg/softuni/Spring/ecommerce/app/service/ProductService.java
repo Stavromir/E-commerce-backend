@@ -13,5 +13,7 @@ public interface ProductService {
 
     List<ProductDto> getAllProductsByName(String name);
 
+    boolean deleteProduct(Long id);
+
 
 }
