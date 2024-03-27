@@ -10,8 +10,10 @@ public class CartItemDto {
     private Long price;
     private Long quantity;
     private Long productId;
+    private String productName;
     private Long userId;
     private Long orderId;
+    private byte[] returnedImg;
 
     public CartItemDto() {
     }
@@ -52,6 +54,15 @@ public class CartItemDto {
         return this;
     }
 
+    public String getProductName() {
+        return productName;
+    }
+
+    public CartItemDto setProductName(String productName) {
+        this.productName = productName;
+        return this;
+    }
+
     public Long getUserId() {
         return userId;
     }
@@ -67,6 +78,15 @@ public class CartItemDto {
 
     public CartItemDto setOrderId(Long orderId) {
         this.orderId = orderId;
+        return this;
+    }
+
+    public byte[] getReturnedImg() {
+        return returnedImg;
+    }
+
+    public CartItemDto setReturnedImg(byte[] returnedImg) {
+        this.returnedImg = returnedImg;
         return this;
     }
 }

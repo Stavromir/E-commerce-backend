@@ -19,4 +19,6 @@ public interface ProductService {
 
     boolean existById(Long productId);
 
+    ProductEntity getProductById(Long productId);
+
 }

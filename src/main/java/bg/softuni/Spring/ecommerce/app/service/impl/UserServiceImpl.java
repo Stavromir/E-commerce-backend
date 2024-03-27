@@ -67,6 +67,13 @@ public class UserServiceImpl implements UserService {
         return user.isPresent();
     }
 
+    @Override
+    public UserEntity getUserById(Long userId) {
+
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not exist"));
+    }
+
 
     @PostConstruct
     private void createAdminAccount() {

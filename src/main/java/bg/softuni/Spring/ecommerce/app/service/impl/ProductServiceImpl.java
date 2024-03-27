@@ -82,8 +82,14 @@ public class ProductServiceImpl implements ProductService {
     public boolean existById(Long productId) {
 
         Optional<ProductEntity> product = productRepository.findById(productId);
-        
+
         return product.isPresent();
+    }
+
+    @Override
+    public ProductEntity getProductById(Long productId) {
+        return productRepository.findById(productId)
+                .orElseThrow(() -> new IllegalArgumentException("Product not exist"));
     }
 
     private static ProductDto getProductDto(ProductEntity savedProduct) {
