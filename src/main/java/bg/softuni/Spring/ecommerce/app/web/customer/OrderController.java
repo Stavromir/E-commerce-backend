@@ -46,7 +46,7 @@ public class OrderController {
     }
 
     @GetMapping("/cart/{userId}")
-    public ResponseEntity<OrderDto> getCartByUserId(@RequestParam("userId") Long userId) {
+    public ResponseEntity<OrderDto> getCartByUserId(@PathVariable Long userId) {
 
         OrderDto cartByUserId = orderService.getCartByUserId(userId);
         return ResponseEntity.ok(cartByUserId);
