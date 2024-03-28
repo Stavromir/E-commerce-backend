@@ -18,4 +18,6 @@ public interface OrderService {
 
     OrderDto getCartByUserId(Long userId);
 
+    OrderDto applyCoupon(Long userId, String code);
+
 }

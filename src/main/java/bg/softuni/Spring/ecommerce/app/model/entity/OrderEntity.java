@@ -21,6 +21,7 @@ public class OrderEntity extends BaseEntity {
     private Long discount;
     private UUID trackingId;
     private UserEntity user;
+    private CouponEntity coupon;
     private List<CartItemEntity> cartItems;
 
 
@@ -116,6 +117,16 @@ public class OrderEntity extends BaseEntity {
 
     public OrderEntity setUser(UserEntity user) {
         this.user = user;
+        return this;
+    }
+
+    @OneToOne(cascade = CascadeType.MERGE)
+    public CouponEntity getCoupon() {
+        return coupon;
+    }
+
+    public OrderEntity setCoupon(CouponEntity coupon) {
+        this.coupon = coupon;
         return this;
     }
 

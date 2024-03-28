@@ -5,6 +5,7 @@ import bg.softuni.Spring.ecommerce.app.model.dto.OrderDto;
 import bg.softuni.Spring.ecommerce.app.service.OrderService;
 import bg.softuni.Spring.ecommerce.app.service.ProductService;
 import bg.softuni.Spring.ecommerce.app.service.UserService;
+import bg.softuni.Spring.ecommerce.app.service.exception.ValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -50,6 +51,19 @@ public class OrderController {
 
         OrderDto cartByUserId = orderService.getCartByUserId(userId);
         return ResponseEntity.ok(cartByUserId);
+    }
+
+    @GetMapping("/coupon/{userId}/{code}")
+    public ResponseEntity<?> applyCoupon(
+            @PathVariable("userId") Long userId, @PathVariable("code") String code
+    ) {
+        System.out.println();
+        try {
+            OrderDto orderDto = orderService.applyCoupon(userId, code);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(orderDto);
+        } catch (ValidationException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        }
     }
 
 
