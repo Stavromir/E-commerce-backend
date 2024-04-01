@@ -20,4 +20,6 @@ public interface OrderService {
 
     OrderDto applyCoupon(Long userId, String code);
 
+    Long increaseProductQuantity(AddProductInCardDto addProductInCardDto);
+
 }

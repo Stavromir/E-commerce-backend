@@ -57,7 +57,6 @@ public class OrderController {
     public ResponseEntity<?> applyCoupon(
             @PathVariable("userId") Long userId, @PathVariable("code") String code
     ) {
-        System.out.println();
         try {
             OrderDto orderDto = orderService.applyCoupon(userId, code);
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(orderDto);
@@ -66,5 +65,13 @@ public class OrderController {
         }
     }
 
-
+    @PostMapping("/addition")
+    public ResponseEntity<?> increaseQuantity(@RequestBody AddProductInCardDto addProductInCardDto) {
+        try {
+            Long orderId = orderService.increaseProductQuantity(addProductInCardDto);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(orderId);
+        } catch (ValidationException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
+    }
 }

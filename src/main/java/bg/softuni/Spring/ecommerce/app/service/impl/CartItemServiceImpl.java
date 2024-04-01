@@ -8,6 +8,8 @@ import bg.softuni.Spring.ecommerce.app.repository.CartItemRepository;
 import bg.softuni.Spring.ecommerce.app.service.CartItemService;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class CartItemServiceImpl implements CartItemService {
 
@@ -30,6 +32,15 @@ public class CartItemServiceImpl implements CartItemService {
                 .setUserId(updatedCart.getUser().getId())
                 .setProductName(updatedCart.getProduct().getName())
                 .setReturnedImg(updatedCart.getProduct().getImg());
+    }
+
+    @Override
+    public Optional<CartItemEntity> findByProductIdAndOrderIdAndUserID(AddProductInCardDto addProductInCardDto, Long orderId) {
+        return cartItemRepository.findByUserIdAndProductIdAndOrderId(
+                addProductInCardDto.getUserId(),
+                addProductInCardDto.getProductId(),
+                orderId
+        );
     }
 
     @Override

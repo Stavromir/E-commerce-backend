@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -103,6 +104,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         CouponEntity coupon = couponService.findByCode(code);
+        activeOrder.setCoupon(coupon);
 
         double discountAmount = (coupon.getDiscount() / 100.0) * activeOrder.getTotalAmount();
         double netAmount = activeOrder.getTotalAmount() - discountAmount;
@@ -114,6 +116,32 @@ public class OrderServiceImpl implements OrderService {
         OrderDto orderDto = getCartByUserId(userId);
 
         return orderDto;
+    }
+
+    @Override
+    public Long increaseProductQuantity(AddProductInCardDto addProductInCardDto) {
+        OrderEntity activeOrder = getOrder(addProductInCardDto.getUserId());
+
+        if (productService.existById(addProductInCardDto.getProductId()) &&
+                isCartItemPresent(addProductInCardDto)) {
+
+            CartItemEntity cartItem = cartItemService
+                    .findByProductIdAndOrderIdAndUserID(addProductInCardDto, activeOrder.getId()).get();
+
+            cartItem.setQuantity(cartItem.getQuantity() + 1);
+            activeOrder.setTotalAmount(activeOrder.getTotalAmount() + cartItem.getPrice());
+
+            if (activeOrder.getCoupon() != null) {
+                applyCoupon(addProductInCardDto.getUserId(), activeOrder.getCoupon().getCode());
+            } else {
+                activeOrder.setAmount(activeOrder.getAmount() + cartItem.getPrice());
+            }
+
+            orderRepository.save(activeOrder);
+            return activeOrder.getId();
+        } else {
+            throw new ValidationException("Cart / Product not found");
+        }
     }
 
     private OrderEntity getOrder(Long userId) {
