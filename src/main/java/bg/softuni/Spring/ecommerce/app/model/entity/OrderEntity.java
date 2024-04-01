@@ -110,7 +110,7 @@ public class OrderEntity extends BaseEntity {
         return this;
     }
 
-    @OneToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.MERGE)
     public UserEntity getUser() {
         return user;
     }

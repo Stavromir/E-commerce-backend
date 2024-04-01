@@ -2,6 +2,7 @@ package bg.softuni.Spring.ecommerce.app.service;
 
 import bg.softuni.Spring.ecommerce.app.model.dto.AddProductInCardDto;
 import bg.softuni.Spring.ecommerce.app.model.dto.OrderDto;
+import bg.softuni.Spring.ecommerce.app.model.dto.PlaceOrderDto;
 import bg.softuni.Spring.ecommerce.app.model.entity.OrderEntity;
 import bg.softuni.Spring.ecommerce.app.model.entity.UserEntity;
 import bg.softuni.Spring.ecommerce.app.model.enums.OrderStatusEnum;
@@ -21,5 +22,9 @@ public interface OrderService {
     OrderDto applyCoupon(Long userId, String code);
 
     Long increaseProductQuantity(AddProductInCardDto addProductInCardDto);
+
+    Long decreaseProductQuantity(AddProductInCardDto addProductInCardDto);
+
+    Long placeOrder(PlaceOrderDto placeOrderDto);
 
 }

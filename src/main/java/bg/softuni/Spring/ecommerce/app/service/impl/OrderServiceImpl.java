@@ -3,6 +3,7 @@ package bg.softuni.Spring.ecommerce.app.service.impl;
 import bg.softuni.Spring.ecommerce.app.model.dto.AddProductInCardDto;
 import bg.softuni.Spring.ecommerce.app.model.dto.CartItemDto;
 import bg.softuni.Spring.ecommerce.app.model.dto.OrderDto;
+import bg.softuni.Spring.ecommerce.app.model.dto.PlaceOrderDto;
 import bg.softuni.Spring.ecommerce.app.model.entity.*;
 import bg.softuni.Spring.ecommerce.app.model.enums.OrderStatusEnum;
 import bg.softuni.Spring.ecommerce.app.repository.OrderRepository;
@@ -11,8 +12,10 @@ import bg.softuni.Spring.ecommerce.app.service.exception.ValidationException;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -122,8 +125,7 @@ public class OrderServiceImpl implements OrderService {
     public Long increaseProductQuantity(AddProductInCardDto addProductInCardDto) {
         OrderEntity activeOrder = getOrder(addProductInCardDto.getUserId());
 
-        if (productService.existById(addProductInCardDto.getProductId()) &&
-                isCartItemPresent(addProductInCardDto)) {
+        if (isCartItemPresent(addProductInCardDto)) {
 
             CartItemEntity cartItem = cartItemService
                     .findByProductIdAndOrderIdAndUserID(addProductInCardDto, activeOrder.getId()).get();
@@ -141,6 +143,52 @@ public class OrderServiceImpl implements OrderService {
             return activeOrder.getId();
         } else {
             throw new ValidationException("Cart / Product not found");
+        }
+    }
+
+    @Override
+    public Long decreaseProductQuantity(AddProductInCardDto addProductInCardDto) {
+        OrderEntity activeOrder = getOrder(addProductInCardDto.getUserId());
+
+        if (isCartItemPresent(addProductInCardDto)) {
+
+            CartItemEntity cartItem = cartItemService
+                    .findByProductIdAndOrderIdAndUserID(addProductInCardDto, activeOrder.getId()).get();
+
+            cartItem.setQuantity(cartItem.getQuantity() - 1);
+            activeOrder.setTotalAmount(activeOrder.getTotalAmount() - cartItem.getPrice());
+
+            if (activeOrder.getCoupon() != null) {
+                applyCoupon(addProductInCardDto.getUserId(), activeOrder.getCoupon().getCode());
+            } else {
+                activeOrder.setAmount(activeOrder.getAmount() - cartItem.getPrice());
+            }
+
+            orderRepository.save(activeOrder);
+            return activeOrder.getId();
+        } else {
+            throw new ValidationException("Cart / Product not found");
+        }
+    }
+
+    @Override
+    public Long placeOrder(PlaceOrderDto placeOrderDto) {
+        OrderEntity activeOrder = getOrder(placeOrderDto.getUserId());
+
+        if (userService.existById(placeOrderDto.getUserId())) {
+
+            activeOrder.setOrderDescription(placeOrderDto.getOrderDescription());
+            activeOrder.setOrderStatus(OrderStatusEnum.PLACED);
+            activeOrder.setAddress(placeOrderDto.getAddress());
+            activeOrder.setDate(new Date());
+            activeOrder.setTrackingId(UUID.randomUUID());
+
+            orderRepository.save(activeOrder);
+
+            createEmptyOrder(userService.getUserById(placeOrderDto.getUserId()));
+            return activeOrder.getId();
+        } else {
+            throw new ValidationException("User not exist");
         }
     }
 

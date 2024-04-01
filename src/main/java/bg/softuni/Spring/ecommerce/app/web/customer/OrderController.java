@@ -2,6 +2,7 @@ package bg.softuni.Spring.ecommerce.app.web.customer;
 
 import bg.softuni.Spring.ecommerce.app.model.dto.AddProductInCardDto;
 import bg.softuni.Spring.ecommerce.app.model.dto.OrderDto;
+import bg.softuni.Spring.ecommerce.app.model.dto.PlaceOrderDto;
 import bg.softuni.Spring.ecommerce.app.service.OrderService;
 import bg.softuni.Spring.ecommerce.app.service.ProductService;
 import bg.softuni.Spring.ecommerce.app.service.UserService;
@@ -72,6 +73,26 @@ public class OrderController {
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(orderId);
         } catch (ValidationException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
+    }
+
+    @PostMapping("/subtraction")
+    public ResponseEntity<?> decreaseQuantity(@RequestBody AddProductInCardDto addProductInCardDto) {
+        try {
+            Long orderId = orderService.decreaseProductQuantity(addProductInCardDto);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(orderId);
+        } catch (ValidationException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
+    }
+
+    @PostMapping("/placeOrder")
+    public ResponseEntity<?> placeOrder(@RequestBody PlaceOrderDto placeOrderDto) {
+        try {
+            Long orderId = orderService.placeOrder(placeOrderDto);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(orderId);
+        } catch (ValidationException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
     }
 }
