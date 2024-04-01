@@ -200,6 +200,22 @@ public class OrderServiceImpl implements OrderService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public Long changeOrderStatus(Long orderId, String status) {
+        OrderEntity order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ValidationException("Invalid order"));
+
+        if (status.equalsIgnoreCase("Shipped")) {
+            order.setOrderStatus(OrderStatusEnum.SHIPPED);
+        } else if (status.equalsIgnoreCase("Delivered")) {
+            order.setOrderStatus(OrderStatusEnum.DELIVERED);
+        } else {
+            throw new ValidationException("Invalid order status");
+        }
+
+        return order.getId();
+    }
+
     private OrderEntity getOrder(Long userId) {
         return orderRepository
                 .findByUserIdAndOrderStatus(userId, OrderStatusEnum.PENDING)

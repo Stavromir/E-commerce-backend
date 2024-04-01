@@ -30,6 +30,8 @@ public interface OrderService {
 
     List<OrderDto> getAllPlacedOrders();
 
+    Long changeOrderStatus(Long orderId, String status);
+
 
 
 }
