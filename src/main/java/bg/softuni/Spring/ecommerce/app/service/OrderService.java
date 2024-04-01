@@ -7,6 +7,7 @@ import bg.softuni.Spring.ecommerce.app.model.entity.OrderEntity;
 import bg.softuni.Spring.ecommerce.app.model.entity.UserEntity;
 import bg.softuni.Spring.ecommerce.app.model.enums.OrderStatusEnum;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface OrderService {
@@ -26,5 +27,9 @@ public interface OrderService {
     Long decreaseProductQuantity(AddProductInCardDto addProductInCardDto);
 
     Long placeOrder(PlaceOrderDto placeOrderDto);
+
+    List<OrderDto> getAllPlacedOrders();
+
+
 
 }

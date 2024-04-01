@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -86,13 +87,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto getCartByUserId(Long userId) {
         OrderEntity activeOrder = getOrder(userId);
-
-        List<CartItemDto> cartItemDtos = activeOrder.getCartItems()
-                .stream()
-                .map(cartItemService::mapToCartItemDto)
-                .toList();
-
-        OrderDto orderDto = mapToOrderDto(activeOrder, cartItemDtos);
+        OrderDto orderDto = mapToOrderDto(activeOrder);
 
         return orderDto;
     }
@@ -192,20 +187,45 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+    @Override
+    public List<OrderDto> getAllPlacedOrders() {
+        List<OrderEntity> allByOrderStatusIn = orderRepository.findAllByOrderStatusIn(
+                List.of(OrderStatusEnum.PLACED,
+                        OrderStatusEnum.DELIVERED,
+                        OrderStatusEnum.SHIPPED));
+
+        return allByOrderStatusIn
+                .stream()
+                .map(this::mapToOrderDto)
+                .collect(Collectors.toList());
+    }
+
     private OrderEntity getOrder(Long userId) {
         return orderRepository
                 .findByUserIdAndOrderStatus(userId, OrderStatusEnum.PENDING)
                 .orElseThrow(() -> new IllegalArgumentException("Order not exist"));
     }
 
-    private static OrderDto mapToOrderDto(OrderEntity activeOrder, List<CartItemDto> cartItemDtos) {
+    private OrderDto mapToOrderDto(OrderEntity activeOrder) {
+
+        List<CartItemDto> cartItemDtos = activeOrder.getCartItems()
+                .stream()
+                .map(cartItemService::mapToCartItemDto)
+                .toList();
+
         OrderDto orderDto = new OrderDto()
-                .setAmount(activeOrder.getAmount())
                 .setId(activeOrder.getId())
+                .setAmount(activeOrder.getAmount())
+                .setOrderDescription(activeOrder.getOrderDescription())
+                .setDate(activeOrder.getDate())
+                .setAddress(activeOrder.getAddress())
+                .setPayment(activeOrder.getPayment())
+                .setTrackingId(activeOrder.getTrackingId())
                 .setOrderStatus(activeOrder.getOrderStatus())
                 .setDiscount(activeOrder.getDiscount())
                 .setTotalAmount(activeOrder.getTotalAmount())
-                .setCartItems(cartItemDtos);
+                .setCartItems(cartItemDtos)
+                .setUserName(activeOrder.getUser().getName());
 
         if (activeOrder.getCoupon() != null) {
             orderDto.setCouponName(activeOrder.getCoupon().getName());
