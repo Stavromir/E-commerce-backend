@@ -21,4 +21,8 @@ public interface ProductService {
 
     ProductEntity getProductById(Long productId);
 
+    ProductDto getProductDtoById(Long productId);
+
+    Long updateProduct(ProductDto productDto) throws IOException;
+
 }

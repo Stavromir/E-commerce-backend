@@ -66,4 +66,26 @@ public class AdminProductController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
     }
+
+    @GetMapping("/product/{productId}")
+    public ResponseEntity<?> getProductById(@PathVariable("productId") Long productId) {
+        try {
+            ProductDto productDtoById = productService.getProductDtoById(productId);
+            return ResponseEntity.ok(productDtoById);
+        } catch (ValidationException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
+    }
+
+    @PutMapping("/product/update")
+    public ResponseEntity<?> updateProduct(@ModelAttribute ProductDto productDto) throws IOException {
+
+        try {
+            Long productId = productService.updateProduct(productDto);
+            return ResponseEntity.status(HttpStatus.OK).body(productId);
+        } catch (ValidationException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
+
+    }
 }

@@ -27,16 +27,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto addProduct(ProductDto productDto) throws IOException {
+        ProductEntity productEntity = new ProductEntity();
 
-        CategoryEntity categoryEntity = categoryRepository.findById(productDto.getCategoryId())
-                .orElseThrow(() -> new IllegalArgumentException("Category not exist"));
-
-        ProductEntity productEntity = new ProductEntity()
-                .setName(productDto.getName())
-                .setDescription(productDto.getDescription())
-                .setPrice(productDto.getPrice())
-                .setImg(productDto.getImg().getBytes())
-                .setCategory(categoryEntity);
+        setProductFields(productDto, productEntity);
 
         ProductEntity savedProduct = productRepository.save(productEntity);
 
@@ -93,6 +86,21 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new ValidationException("Product not exist"));
     }
 
+    @Override
+    public ProductDto getProductDtoById(Long productId) {
+        ProductEntity product = getProductById(productId);
+        return getProductDto(product);
+    }
+
+    @Override
+    public Long updateProduct(ProductDto productDto) throws IOException {
+        ProductEntity product = getProductById(productDto.getId());
+
+        setProductFields(productDto, product);
+
+        return productRepository.save(product).getId();
+    }
+
     private static ProductDto getProductDto(ProductEntity savedProduct) {
 
         return new ProductDto()
@@ -103,5 +111,21 @@ public class ProductServiceImpl implements ProductService {
                 .setByteImg(savedProduct.getImg())
                 .setCategoryId(savedProduct.getCategory().getId())
                 .setCategoryName(savedProduct.getCategory().getName());
+    }
+
+    private void setProductFields(ProductDto productDto, ProductEntity productEntity) throws IOException {
+        CategoryEntity categoryEntity = categoryRepository.findById(productDto.getCategoryId())
+                .orElseThrow(() -> new IllegalArgumentException("Category not exist"));
+
+        productEntity
+                .setName(productDto.getName())
+                .setDescription(productDto.getDescription())
+                .setPrice(productDto.getPrice())
+                .setCategory(categoryEntity);
+
+        if (productDto.getImg() != null) {
+            productEntity
+                    .setImg(productDto.getImg().getBytes());
+        }
     }
 }
