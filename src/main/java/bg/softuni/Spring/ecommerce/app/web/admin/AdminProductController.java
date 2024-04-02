@@ -1,7 +1,10 @@
 package bg.softuni.Spring.ecommerce.app.web.admin;
 
+import bg.softuni.Spring.ecommerce.app.model.dto.FAQDto;
 import bg.softuni.Spring.ecommerce.app.model.dto.ProductDto;
+import bg.softuni.Spring.ecommerce.app.service.FAQService;
 import bg.softuni.Spring.ecommerce.app.service.ProductService;
+import bg.softuni.Spring.ecommerce.app.service.exception.ValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +17,12 @@ import java.util.List;
 public class AdminProductController {
 
     private final ProductService productService;
+    private final FAQService faqService;
 
-    public AdminProductController(ProductService productService) {
+    public AdminProductController(ProductService productService,
+                                  FAQService faqService) {
         this.productService = productService;
+        this.faqService = faqService;
     }
 
 
@@ -49,5 +55,15 @@ public class AdminProductController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping("/faq")
+    public ResponseEntity<?> createFAQ(@RequestBody FAQDto faqDto) {
+        try {
+            Long faqId = faqService.createFAQ(faqDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(faqId);
+        } catch (ValidationException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
     }
 }

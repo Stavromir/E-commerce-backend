@@ -6,6 +6,7 @@ import bg.softuni.Spring.ecommerce.app.model.entity.ProductEntity;
 import bg.softuni.Spring.ecommerce.app.repository.CategoryRepository;
 import bg.softuni.Spring.ecommerce.app.repository.ProductRepository;
 import bg.softuni.Spring.ecommerce.app.service.ProductService;
+import bg.softuni.Spring.ecommerce.app.service.exception.ValidationException;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -89,7 +90,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductEntity getProductById(Long productId) {
         return productRepository.findById(productId)
-                .orElseThrow(() -> new IllegalArgumentException("Product not exist"));
+                .orElseThrow(() -> new ValidationException("Product not exist"));
     }
 
     private static ProductDto getProductDto(ProductEntity savedProduct) {
