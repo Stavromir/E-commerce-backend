@@ -203,7 +203,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Long changeOrderStatus(Long orderId, String status) {
         OrderEntity order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new ValidationException("Invalid order"));
+                .orElseThrow(() -> new ValidationException("Order can not be found"));
 
         if (status.equalsIgnoreCase("Shipped")) {
             order.setOrderStatus(OrderStatusEnum.SHIPPED);
@@ -213,7 +213,18 @@ public class OrderServiceImpl implements OrderService {
             throw new ValidationException("Invalid order status");
         }
 
-        return order.getId();
+        return orderRepository.save(order).getId();
+    }
+
+    @Override
+    public List<OrderDto> getUserPlacedOrders(Long userId) {
+        List<OrderEntity> allPlacedUserOrders = orderRepository.findAllByUserIdAndOrderStatusIn(userId, List.of(OrderStatusEnum.PLACED,
+                OrderStatusEnum.SHIPPED, OrderStatusEnum.DELIVERED));
+
+        return allPlacedUserOrders
+                .stream()
+                .map(this::mapToOrderDto)
+                .collect(Collectors.toList());
     }
 
     private OrderEntity getOrder(Long userId) {

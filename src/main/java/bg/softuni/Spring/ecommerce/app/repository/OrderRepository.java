@@ -15,4 +15,6 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
     Optional<OrderEntity> findByUserIdAndOrderStatus(Long user_id, OrderStatusEnum orderStatus);
 
     List<OrderEntity> findAllByOrderStatusIn(List<OrderStatusEnum> orderStatus);
+
+    List<OrderEntity> findAllByUserIdAndOrderStatusIn(Long userId, List<OrderStatusEnum> orderStatus);
 }

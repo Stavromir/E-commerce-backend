@@ -3,12 +3,9 @@ package bg.softuni.Spring.ecommerce.app.service;
 import bg.softuni.Spring.ecommerce.app.model.dto.AddProductInCardDto;
 import bg.softuni.Spring.ecommerce.app.model.dto.OrderDto;
 import bg.softuni.Spring.ecommerce.app.model.dto.PlaceOrderDto;
-import bg.softuni.Spring.ecommerce.app.model.entity.OrderEntity;
 import bg.softuni.Spring.ecommerce.app.model.entity.UserEntity;
-import bg.softuni.Spring.ecommerce.app.model.enums.OrderStatusEnum;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface OrderService {
 
@@ -31,6 +28,8 @@ public interface OrderService {
     List<OrderDto> getAllPlacedOrders();
 
     Long changeOrderStatus(Long orderId, String status);
+
+    List<OrderDto> getUserPlacedOrders(Long userId);
 
 
 

@@ -11,18 +11,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/customer")
-public class OrderController {
+public class CustomerOrderController {
 
 
     private final OrderService orderService;
     private final ProductService productService;
     private final UserService userService;
 
-    public OrderController(OrderService orderService,
-                           ProductService productService,
-                           UserService userService) {
+    public CustomerOrderController(OrderService orderService,
+                                   ProductService productService,
+                                   UserService userService) {
         this.orderService = orderService;
         this.productService = productService;
         this.userService = userService;
@@ -94,5 +96,11 @@ public class OrderController {
         } catch (ValidationException ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
+    }
+
+    @GetMapping("/myOrders/{userId}")
+    public ResponseEntity<List<OrderDto>> getPlacedOrders(@RequestParam("userId") Long userId){
+        List<OrderDto> userPlacedOrders = orderService.getUserPlacedOrders(userId);
+        return ResponseEntity.ok(userPlacedOrders);
     }
 }
