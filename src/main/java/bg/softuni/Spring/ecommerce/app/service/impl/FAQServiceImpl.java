@@ -8,6 +8,9 @@ import bg.softuni.Spring.ecommerce.app.service.FAQService;
 import bg.softuni.Spring.ecommerce.app.service.ProductService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class FAQServiceImpl implements FAQService {
 
@@ -30,5 +33,20 @@ public class FAQServiceImpl implements FAQService {
                 .setProduct(product);
 
         return faqRepository.save(faq).getId();
+    }
+
+    @Override
+    public List<FAQDto> getAllFaq(Long productId) {
+        return faqRepository.getAllByProductId(productId)
+                .stream()
+                .map(FAQServiceImpl::mapToFaqDto)
+                .collect(Collectors.toList());
+    }
+
+    private static FAQDto mapToFaqDto(FAQEntity faqEntity) {
+        return new FAQDto()
+                .setAnswer(faqEntity.getAnswer())
+                .setQuestion(faqEntity.getQuestion())
+                .setId(faqEntity.getId());
     }
 }

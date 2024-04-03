@@ -1,28 +1,41 @@
 package bg.softuni.Spring.ecommerce.app.service.impl;
 
-import bg.softuni.Spring.ecommerce.app.model.dto.ProductDto;
+import bg.softuni.Spring.ecommerce.app.model.dto.*;
 import bg.softuni.Spring.ecommerce.app.model.entity.CategoryEntity;
 import bg.softuni.Spring.ecommerce.app.model.entity.ProductEntity;
 import bg.softuni.Spring.ecommerce.app.repository.CategoryRepository;
 import bg.softuni.Spring.ecommerce.app.repository.ProductRepository;
+import bg.softuni.Spring.ecommerce.app.service.FAQService;
+import bg.softuni.Spring.ecommerce.app.service.OrderService;
 import bg.softuni.Spring.ecommerce.app.service.ProductService;
+import bg.softuni.Spring.ecommerce.app.service.ReviewService;
 import bg.softuni.Spring.ecommerce.app.service.exception.ValidationException;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final OrderService orderService;
+    private final ReviewService reviewService;
+    private final FAQService faqService;
 
-    public ProductServiceImpl(ProductRepository productRepository, CategoryRepository categoryRepository) {
+    public ProductServiceImpl(ProductRepository productRepository,
+                              CategoryRepository categoryRepository,
+                              OrderService orderService,
+                              ReviewService reviewService,
+                              FAQService faqService) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.orderService = orderService;
+        this.reviewService = reviewService;
+        this.faqService = faqService;
     }
 
     @Override
@@ -33,7 +46,7 @@ public class ProductServiceImpl implements ProductService {
 
         ProductEntity savedProduct = productRepository.save(productEntity);
 
-        return getProductDto(savedProduct);
+        return mapToProductDto(savedProduct);
 
     }
 
@@ -42,7 +55,7 @@ public class ProductServiceImpl implements ProductService {
 
         List<ProductDto> productDtos = productRepository.findAll()
                 .stream()
-                .map(ProductServiceImpl::getProductDto)
+                .map(ProductServiceImpl::mapToProductDto)
                 .toList();
 
 
@@ -54,7 +67,7 @@ public class ProductServiceImpl implements ProductService {
 
         List<ProductDto> products = productRepository.findAllByNameContaining(name)
                 .stream()
-                .map(ProductServiceImpl::getProductDto)
+                .map(ProductServiceImpl::mapToProductDto)
                 .toList();
 
         return products;
@@ -89,7 +102,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto getProductDtoById(Long productId) {
         ProductEntity product = getProductById(productId);
-        return getProductDto(product);
+        return mapToProductDto(product);
     }
 
     @Override
@@ -101,7 +114,46 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.save(product).getId();
     }
 
-    private static ProductDto getProductDto(ProductEntity savedProduct) {
+    @Override
+    public OrderedProductsResponseDto getOrderedProductsDetailsByOrderId(Long id) {
+        OrderDto orderById = orderService.getOrderById(id);
+        List<CartItemDto> cartItems = orderById.getCartItems();
+
+        OrderedProductsResponseDto responseDto = new OrderedProductsResponseDto();
+        responseDto.setOrderAmount(orderById.getAmount());
+        List<ProductDto> productDtos = new ArrayList<>();
+
+        for (CartItemDto cartItem : cartItems) {
+            ProductDto productDto = new ProductDto();
+            productDto
+                    .setId(cartItem.getProductId())
+                    .setName(cartItem.getProductName())
+                    .setPrice(cartItem.getPrice())
+                    .setQuantity(cartItem.getQuantity())
+                    .setByteImg(cartItem.getReturnedImg());
+
+            productDtos.add(productDto);
+        }
+
+        responseDto.setProductDtos(productDtos);
+        return responseDto;
+    }
+
+    @Override
+    public ProductDetailDto getProductDetailsById(Long productId) {
+        ProductEntity product = getProductById(productId);
+        ProductDto productDto = mapToProductDto(product);
+
+        List<ReviewDto> allReviewsByProductId = reviewService.getAllReviewsByProductId(productId);
+        List<FAQDto> allFaq = faqService.getAllFaq(productId);
+
+        return new ProductDetailDto()
+                .setProductDto(productDto)
+                .setFaqDtos(allFaq)
+                .setReviewDtos(allReviewsByProductId);
+    }
+
+    private static ProductDto mapToProductDto(ProductEntity savedProduct) {
 
         return new ProductDto()
                 .setId(savedProduct.getId())

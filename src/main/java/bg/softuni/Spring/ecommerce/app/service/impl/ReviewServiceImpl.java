@@ -14,49 +14,22 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ReviewServiceImpl implements ReviewService {
 
-    private final OrderService orderService;
     private final ProductService productService;
     private final UserService userService;
     private final ReviewRepository reviewRepository;
 
-    public ReviewServiceImpl(OrderService orderService,
+    public ReviewServiceImpl(
                              ProductService productService,
                              UserService userService,
                              ReviewRepository reviewRepository) {
-        this.orderService = orderService;
         this.productService = productService;
         this.userService = userService;
         this.reviewRepository = reviewRepository;
-    }
-
-    @Override
-    public OrderedProductsResponseDto getOrderedProductsDetailsByOrderId(Long id) {
-
-        OrderDto orderById = orderService.getOrderById(id);
-        List<CartItemDto> cartItems = orderById.getCartItems();
-
-        OrderedProductsResponseDto responseDto = new OrderedProductsResponseDto();
-        responseDto.setOrderAmount(orderById.getAmount());
-        List<ProductDto> productDtos = new ArrayList<>();
-
-        for (CartItemDto cartItem : cartItems) {
-            ProductDto productDto = new ProductDto();
-            productDto
-                    .setId(cartItem.getProductId())
-                    .setName(cartItem.getProductName())
-                    .setPrice(cartItem.getPrice())
-                    .setQuantity(cartItem.getQuantity())
-                    .setByteImg(cartItem.getReturnedImg());
-
-            productDtos.add(productDto);
-        }
-
-        responseDto.setProductDtos(productDtos);
-        return responseDto;
     }
 
     @Override
@@ -74,5 +47,22 @@ public class ReviewServiceImpl implements ReviewService {
 
 
         return reviewRepository.save(reviewEntity).getId();
+    }
+
+    @Override
+    public List<ReviewDto> getAllReviewsByProductId(Long productId) {
+        return reviewRepository.getAllByProductId(productId)
+                .stream()
+                .map(ReviewServiceImpl::mapToReviewDto)
+                .collect(Collectors.toList());
+    }
+
+    private static ReviewDto mapToReviewDto(ReviewEntity reviewEntity) {
+        return new ReviewDto()
+                .setId(reviewEntity.getId())
+                .setDescription(reviewEntity.getDescription())
+                .setRating(reviewEntity.getRating())
+                .setReturnedImg(reviewEntity.getImg())
+                .setUserId(reviewEntity.getUser().getId());
     }
 }

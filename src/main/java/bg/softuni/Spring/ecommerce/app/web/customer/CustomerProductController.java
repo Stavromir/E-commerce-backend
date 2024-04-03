@@ -1,7 +1,11 @@
 package bg.softuni.Spring.ecommerce.app.web.customer;
 
+import bg.softuni.Spring.ecommerce.app.model.dto.OrderedProductsResponseDto;
+import bg.softuni.Spring.ecommerce.app.model.dto.ProductDetailDto;
 import bg.softuni.Spring.ecommerce.app.model.dto.ProductDto;
 import bg.softuni.Spring.ecommerce.app.service.ProductService;
+import bg.softuni.Spring.ecommerce.app.service.exception.ValidationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,5 +35,21 @@ public class CustomerProductController {
     public ResponseEntity<List<ProductDto>> searchProductByTitle(@PathVariable String name) {
         List<ProductDto> allProductsByName = productService.searchProductByTitle(name);
         return ResponseEntity.ok(allProductsByName);
+    }
+
+    @GetMapping("/ordered-products/{orderId}")
+    public ResponseEntity<OrderedProductsResponseDto> getOrderedProductsDetails(@PathVariable("orderId") Long orderId) {
+        return ResponseEntity
+                .ok(productService.getOrderedProductsDetailsByOrderId(orderId));
+    }
+
+    @GetMapping("/product/{productId}")
+    public ResponseEntity<?> getProductDetailById(@PathVariable("productId") Long productId){
+        try {
+            ProductDetailDto productDetailsById = productService.getProductDetailsById(productId);
+            return ResponseEntity.ok(productDetailsById);
+        } catch (ValidationException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
     }
 }

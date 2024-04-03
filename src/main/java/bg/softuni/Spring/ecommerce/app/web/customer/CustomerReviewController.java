@@ -21,12 +21,6 @@ public class CustomerReviewController {
     }
 
 
-    @GetMapping("/ordered-products/{orderId}")
-    public ResponseEntity<OrderedProductsResponseDto> getOrderedProductsDetails(@PathVariable("orderId") Long orderId) {
-        return ResponseEntity
-                .ok(reviewService.getOrderedProductsDetailsByOrderId(orderId));
-    }
-
     @PostMapping("/review")
     public ResponseEntity<?> postReview (@ModelAttribute ReviewDto reviewDto) throws IOException {
         try {
