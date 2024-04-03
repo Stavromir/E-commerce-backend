@@ -30,7 +30,8 @@ public class OrderServiceImpl implements OrderService {
     public OrderServiceImpl(OrderRepository orderRepository,
                             CartItemService cartItemService,
                             ProductService productService,
-                            @Lazy UserService userService, CouponService couponService) {
+                            @Lazy UserService userService,
+                            CouponService couponService) {
         this.orderRepository = orderRepository;
         this.cartItemService = cartItemService;
         this.productService = productService;

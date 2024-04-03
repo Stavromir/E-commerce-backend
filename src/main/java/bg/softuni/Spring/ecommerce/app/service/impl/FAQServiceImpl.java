@@ -6,6 +6,7 @@ import bg.softuni.Spring.ecommerce.app.model.entity.ProductEntity;
 import bg.softuni.Spring.ecommerce.app.repository.FAQRepository;
 import bg.softuni.Spring.ecommerce.app.service.FAQService;
 import bg.softuni.Spring.ecommerce.app.service.ProductService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +18,8 @@ public class FAQServiceImpl implements FAQService {
     private final FAQRepository faqRepository;
     private final ProductService productService;
 
-    public FAQServiceImpl(FAQRepository faqRepository, ProductService productService) {
+    public FAQServiceImpl(FAQRepository faqRepository,
+                          @Lazy ProductService productService) {
         this.faqRepository = faqRepository;
         this.productService = productService;
     }

@@ -9,6 +9,7 @@ import bg.softuni.Spring.ecommerce.app.service.OrderService;
 import bg.softuni.Spring.ecommerce.app.service.ProductService;
 import bg.softuni.Spring.ecommerce.app.service.ReviewService;
 import bg.softuni.Spring.ecommerce.app.service.UserService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -23,9 +24,8 @@ public class ReviewServiceImpl implements ReviewService {
     private final UserService userService;
     private final ReviewRepository reviewRepository;
 
-    public ReviewServiceImpl(
-                             ProductService productService,
-                             UserService userService,
+    public ReviewServiceImpl(@Lazy ProductService productService,
+                             @Lazy UserService userService,
                              ReviewRepository reviewRepository) {
         this.productService = productService;
         this.userService = userService;
@@ -63,6 +63,6 @@ public class ReviewServiceImpl implements ReviewService {
                 .setDescription(reviewEntity.getDescription())
                 .setRating(reviewEntity.getRating())
                 .setReturnedImg(reviewEntity.getImg())
-                .setUserId(reviewEntity.getUser().getId());
+                .setUsername(reviewEntity.getUser().getName());
     }
 }

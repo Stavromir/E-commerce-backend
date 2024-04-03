@@ -10,6 +10,7 @@ import bg.softuni.Spring.ecommerce.app.service.OrderService;
 import bg.softuni.Spring.ecommerce.app.service.ProductService;
 import bg.softuni.Spring.ecommerce.app.service.ReviewService;
 import bg.softuni.Spring.ecommerce.app.service.exception.ValidationException;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -28,7 +29,7 @@ public class ProductServiceImpl implements ProductService {
 
     public ProductServiceImpl(ProductRepository productRepository,
                               CategoryRepository categoryRepository,
-                              OrderService orderService,
+                              @Lazy OrderService orderService,
                               ReviewService reviewService,
                               FAQService faqService) {
         this.productRepository = productRepository;
