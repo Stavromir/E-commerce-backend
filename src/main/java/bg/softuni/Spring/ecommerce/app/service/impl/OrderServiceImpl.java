@@ -227,6 +227,14 @@ public class OrderServiceImpl implements OrderService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public OrderDto getOrderById(Long id) {
+        OrderEntity order = orderRepository.findById(id)
+                .orElseThrow(() -> new ValidationException("Order not exist"));
+
+        return mapToOrderDto(order);
+    }
+
     private OrderEntity getOrder(Long userId) {
         return orderRepository
                 .findByUserIdAndOrderStatus(userId, OrderStatusEnum.PENDING)

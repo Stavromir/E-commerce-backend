@@ -31,6 +31,8 @@ public interface OrderService {
 
     List<OrderDto> getUserPlacedOrders(Long userId);
 
+    OrderDto getOrderById(Long id);
+
 
 
 }

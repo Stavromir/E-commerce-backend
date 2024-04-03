@@ -12,6 +12,7 @@ public class ProductDto {
     private Long categoryId;
     private String categoryName;
     private MultipartFile img;
+    private Long quantity;
 
     public ProductDto() {
     }
@@ -85,6 +86,15 @@ public class ProductDto {
 
     public ProductDto setImg(MultipartFile img) {
         this.img = img;
+        return this;
+    }
+
+    public Long getQuantity() {
+        return quantity;
+    }
+
+    public ProductDto setQuantity(Long quantity) {
+        this.quantity = quantity;
         return this;
     }
 }
