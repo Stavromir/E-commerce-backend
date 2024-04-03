@@ -6,6 +6,7 @@ import bg.softuni.Spring.ecommerce.app.model.dto.PlaceOrderDto;
 import bg.softuni.Spring.ecommerce.app.model.entity.UserEntity;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface OrderService {
 
@@ -32,6 +33,8 @@ public interface OrderService {
     List<OrderDto> getUserPlacedOrders(Long userId);
 
     OrderDto getOrderById(Long id);
+
+    OrderDto searchOrderByTrackingId(UUID trackingId);
 
 
 

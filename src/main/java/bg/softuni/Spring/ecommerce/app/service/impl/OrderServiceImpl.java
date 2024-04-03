@@ -236,6 +236,14 @@ public class OrderServiceImpl implements OrderService {
         return mapToOrderDto(order);
     }
 
+    @Override
+    public OrderDto searchOrderByTrackingId(UUID trackingId) {
+        OrderEntity order = orderRepository.findByTrackingId(trackingId)
+                .orElseThrow(() -> new ValidationException("Order not exist"));
+
+        return mapToOrderDto(order);
+    }
+
     private OrderEntity getOrder(Long userId) {
         return orderRepository
                 .findByUserIdAndOrderStatus(userId, OrderStatusEnum.PENDING)
