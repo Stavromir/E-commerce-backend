@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api")
 public class TrackingController {
 
     private final OrderService orderService;

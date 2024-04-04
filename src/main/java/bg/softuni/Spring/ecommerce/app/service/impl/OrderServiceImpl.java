@@ -1,9 +1,6 @@
 package bg.softuni.Spring.ecommerce.app.service.impl;
 
-import bg.softuni.Spring.ecommerce.app.model.dto.AddProductInCardDto;
-import bg.softuni.Spring.ecommerce.app.model.dto.CartItemDto;
-import bg.softuni.Spring.ecommerce.app.model.dto.OrderDto;
-import bg.softuni.Spring.ecommerce.app.model.dto.PlaceOrderDto;
+import bg.softuni.Spring.ecommerce.app.model.dto.*;
 import bg.softuni.Spring.ecommerce.app.model.entity.*;
 import bg.softuni.Spring.ecommerce.app.model.enums.OrderStatusEnum;
 import bg.softuni.Spring.ecommerce.app.repository.OrderRepository;
@@ -12,10 +9,8 @@ import bg.softuni.Spring.ecommerce.app.service.exception.ValidationException;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -242,6 +237,60 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new ValidationException("Order not exist"));
 
         return mapToOrderDto(order);
+    }
+
+    @Override
+    public AnalyticsResponseDto getAnalytics() {
+
+        LocalDate currentDate = LocalDate.now();
+        LocalDate previousMonthDate = currentDate.minusMonths(1);
+
+        Long currentMonthOrders = (long) getTotalOrdersForMonth(currentDate.getMonthValue(), currentDate.getYear()).size();
+        Long previousMonthOrders = (long) getTotalOrdersForMonth(previousMonthDate.getMonthValue(), previousMonthDate.getYear()).size();
+        Long currentMonthEarnings = getTotalEarningsForMonth(currentDate.getMonthValue(), currentDate.getYear());
+        Long previousMonthEarnings = getTotalEarningsForMonth(previousMonthDate.getMonthValue(), previousMonthDate.getYear());
+
+        Long allPlacedOrders = (long) orderRepository.findAllByOrderStatus(OrderStatusEnum.PLACED).size();
+        Long allShippedOrders = (long) orderRepository.findAllByOrderStatus(OrderStatusEnum.SHIPPED).size();
+        Long allDeliveredOrders = (long) orderRepository.findAllByOrderStatus(OrderStatusEnum.DELIVERED).size();
+
+        return new AnalyticsResponseDto()
+                .setPlacedOrders(allPlacedOrders)
+                .setShippedOrders(allShippedOrders)
+                .setDeliveredOrders(allDeliveredOrders)
+                .setCurrentMonthOrders(currentMonthOrders)
+                .setPreviousMonthOrders(previousMonthOrders)
+                .setCurrentMonthEarnings(currentMonthEarnings)
+                .setPreviousMonthEarnings(previousMonthEarnings);
+    }
+
+    private Long getTotalEarningsForMonth(int month, int year){
+        return getTotalOrdersForMonth(month, year)
+                .stream()
+                .mapToLong(OrderEntity::getAmount)
+                .sum();
+    }
+
+    private List<OrderEntity> getTotalOrdersForMonth(int month, int year) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month - 1);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+
+        Date beginOfMonth = calendar.getTime();
+
+        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+
+        Date endOfMonth = calendar.getTime();
+
+        return orderRepository
+                .findAllByDateBetweenAndOrderStatus(beginOfMonth, endOfMonth, OrderStatusEnum.DELIVERED);
     }
 
     private OrderEntity getOrder(Long userId) {

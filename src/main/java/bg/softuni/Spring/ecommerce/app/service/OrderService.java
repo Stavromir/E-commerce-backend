@@ -1,6 +1,7 @@
 package bg.softuni.Spring.ecommerce.app.service;
 
 import bg.softuni.Spring.ecommerce.app.model.dto.AddProductInCardDto;
+import bg.softuni.Spring.ecommerce.app.model.dto.AnalyticsResponseDto;
 import bg.softuni.Spring.ecommerce.app.model.dto.OrderDto;
 import bg.softuni.Spring.ecommerce.app.model.dto.PlaceOrderDto;
 import bg.softuni.Spring.ecommerce.app.model.entity.UserEntity;
@@ -35,6 +36,8 @@ public interface OrderService {
     OrderDto getOrderById(Long id);
 
     OrderDto searchOrderByTrackingId(UUID trackingId);
+
+    AnalyticsResponseDto getAnalytics();
 
 
 

@@ -1,5 +1,6 @@
 package bg.softuni.Spring.ecommerce.app.web.admin;
 
+import bg.softuni.Spring.ecommerce.app.model.dto.AnalyticsResponseDto;
 import bg.softuni.Spring.ecommerce.app.model.dto.OrderDto;
 import bg.softuni.Spring.ecommerce.app.service.OrderService;
 import bg.softuni.Spring.ecommerce.app.service.exception.ValidationException;
@@ -36,5 +37,10 @@ public class AdminOrderController {
         } catch (ValidationException ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
+    }
+
+    @GetMapping("/analytics")
+    public ResponseEntity<AnalyticsResponseDto> getAnalytics(){
+        return ResponseEntity.ok(orderService.getAnalytics());
     }
 }
