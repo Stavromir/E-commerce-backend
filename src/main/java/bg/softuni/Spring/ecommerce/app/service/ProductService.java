@@ -1,6 +1,6 @@
 package bg.softuni.Spring.ecommerce.app.service;
 
-import bg.softuni.Spring.ecommerce.app.model.dto.OrderedProductsResponseDto;
+import bg.softuni.Spring.ecommerce.app.model.dto.OrderedProductsDto;
 import bg.softuni.Spring.ecommerce.app.model.dto.ProductDetailDto;
 import bg.softuni.Spring.ecommerce.app.model.dto.ProductDto;
 import bg.softuni.Spring.ecommerce.app.model.entity.ProductEntity;
@@ -25,7 +25,7 @@ public interface ProductService {
     ProductDto getProductDtoById(Long productId);
 
     Long updateProduct(ProductDto productDto) throws IOException;
-    OrderedProductsResponseDto getOrderedProductsDetailsByOrderId(Long id);
+    OrderedProductsDto getOrderedProductsDetailsByOrderId(Long id);
 
     ProductDetailDto getProductDetailsById(Long productId);
 

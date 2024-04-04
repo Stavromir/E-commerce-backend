@@ -1,6 +1,6 @@
 package bg.softuni.Spring.ecommerce.app.service.impl;
 
-import bg.softuni.Spring.ecommerce.app.model.dto.SignupRequest;
+import bg.softuni.Spring.ecommerce.app.model.dto.SignupRequestDto;
 import bg.softuni.Spring.ecommerce.app.model.dto.UserDto;
 import bg.softuni.Spring.ecommerce.app.model.entity.UserEntity;
 import bg.softuni.Spring.ecommerce.app.model.enums.UserRoleEnum;
@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto createUser(SignupRequest signupRequest) {
+    public UserDto createUser(SignupRequestDto signupRequest) {
 
         UserEntity user = new UserEntity()
                 .setEmail(signupRequest.getEmail())

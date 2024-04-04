@@ -1,7 +1,7 @@
 package bg.softuni.Spring.ecommerce.app.web;
 
-import bg.softuni.Spring.ecommerce.app.model.dto.SignupRequest;
-import bg.softuni.Spring.ecommerce.app.model.dto.UserAuthenticationRequest;
+import bg.softuni.Spring.ecommerce.app.model.dto.SignupRequestDto;
+import bg.softuni.Spring.ecommerce.app.model.dto.UserAuthenticationRequestDto;
 import bg.softuni.Spring.ecommerce.app.model.dto.UserDto;
 import bg.softuni.Spring.ecommerce.app.model.entity.UserEntity;
 import bg.softuni.Spring.ecommerce.app.repository.UserRepository;
@@ -49,7 +49,7 @@ public class UserAuthController {
     }
 
     @PostMapping("/authenticate")
-    public void createAuthenticationToken (@RequestBody UserAuthenticationRequest userAuthenticationRequest,
+    public void createAuthenticationToken (@RequestBody UserAuthenticationRequestDto userAuthenticationRequest,
                                            HttpServletResponse response) throws IOException, JSONException {
 
 
@@ -81,7 +81,7 @@ public class UserAuthController {
 
 
     @PostMapping("/sign-up")
-    public ResponseEntity<?> signupUser (@RequestBody SignupRequest signupRequest) {
+    public ResponseEntity<?> signupUser (@RequestBody SignupRequestDto signupRequest) {
 
         if (authService.hasUserWithEmail(signupRequest.getEmail())) {
             return new ResponseEntity<>("User already exists", HttpStatus.NOT_ACCEPTABLE);

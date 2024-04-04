@@ -1,19 +1,19 @@
 package bg.softuni.Spring.ecommerce.app.model.dto;
 
-public class SignupRequest {
+public class SignupRequestDto {
 
     private String email;
     private String password;
     private String name;
 
-    public SignupRequest() {
+    public SignupRequestDto() {
     }
 
     public String getEmail() {
         return email;
     }
 
-    public SignupRequest setEmail(String email) {
+    public SignupRequestDto setEmail(String email) {
         this.email = email;
         return this;
     }
@@ -22,7 +22,7 @@ public class SignupRequest {
         return password;
     }
 
-    public SignupRequest setPassword(String password) {
+    public SignupRequestDto setPassword(String password) {
         this.password = password;
         return this;
     }
@@ -31,7 +31,7 @@ public class SignupRequest {
         return name;
     }
 
-    public SignupRequest setName(String name) {
+    public SignupRequestDto setName(String name) {
         this.name = name;
         return this;
     }

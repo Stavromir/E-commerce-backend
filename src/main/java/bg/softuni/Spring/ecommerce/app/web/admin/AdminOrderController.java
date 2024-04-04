@@ -39,7 +39,7 @@ public class AdminOrderController {
         }
     }
 
-    @GetMapping("/analytics")
+    @GetMapping("/order/analytics")
     public ResponseEntity<AnalyticsResponseDto> getAnalytics(){
         return ResponseEntity.ok(orderService.getAnalytics());
     }

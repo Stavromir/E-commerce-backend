@@ -1,6 +1,5 @@
 package bg.softuni.Spring.ecommerce.app.web.customer;
 
-import bg.softuni.Spring.ecommerce.app.model.dto.OrderedProductsResponseDto;
 import bg.softuni.Spring.ecommerce.app.model.dto.ReviewDto;
 import bg.softuni.Spring.ecommerce.app.service.ReviewService;
 import bg.softuni.Spring.ecommerce.app.service.exception.ValidationException;

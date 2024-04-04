@@ -1,18 +1,18 @@
 package bg.softuni.Spring.ecommerce.app.model.dto;
 
-public class UserAuthenticationRequest {
+public class UserAuthenticationRequestDto {
 
     private String username;
     private String password;
 
-    public UserAuthenticationRequest() {
+    public UserAuthenticationRequestDto() {
     }
 
     public String getUsername() {
         return username;
     }
 
-    public UserAuthenticationRequest setUsername(String username) {
+    public UserAuthenticationRequestDto setUsername(String username) {
         this.username = username;
         return this;
     }
@@ -21,7 +21,7 @@ public class UserAuthenticationRequest {
         return password;
     }
 
-    public UserAuthenticationRequest setPassword(String password) {
+    public UserAuthenticationRequestDto setPassword(String password) {
         this.password = password;
         return this;
     }
