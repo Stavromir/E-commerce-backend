@@ -17,6 +17,7 @@ public class ProductEntity extends BaseEntity{
     public ProductEntity() {
     }
 
+    @Column(nullable = false)
     public String getName() {
         return name;
     }
@@ -26,6 +27,7 @@ public class ProductEntity extends BaseEntity{
         return this;
     }
 
+    @Column(nullable = false)
     public Long getPrice() {
         return price;
     }
@@ -35,7 +37,7 @@ public class ProductEntity extends BaseEntity{
         return this;
     }
 
-    @Column(name = "description", columnDefinition = "TEXT")
+    @Column(name = "description", columnDefinition = "TEXT", nullable = false)
     public String getDescription() {
         return description;
     }
@@ -46,7 +48,7 @@ public class ProductEntity extends BaseEntity{
     }
 
     @Lob
-    @Column(columnDefinition = "BLOB")
+    @Column(columnDefinition = "BLOB", nullable = false)
     public byte[] getImg() {
         return img;
     }
