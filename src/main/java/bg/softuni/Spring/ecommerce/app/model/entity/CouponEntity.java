@@ -1,5 +1,6 @@
 package bg.softuni.Spring.ecommerce.app.model.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
@@ -17,6 +18,7 @@ public class CouponEntity extends BaseEntity {
     public CouponEntity() {
     }
 
+    @Column(nullable = false, unique = true)
     public String getName() {
         return name;
     }
@@ -26,6 +28,7 @@ public class CouponEntity extends BaseEntity {
         return this;
     }
 
+    @Column(nullable = false, unique = true)
     public String getCode() {
         return code;
     }
@@ -35,6 +38,7 @@ public class CouponEntity extends BaseEntity {
         return this;
     }
 
+    @Column(nullable = false)
     public Long getDiscount() {
         return discount;
     }
@@ -44,6 +48,7 @@ public class CouponEntity extends BaseEntity {
         return this;
     }
 
+    @Column(nullable = false)
     public Date getExpirationDate() {
         return expirationDate;
     }

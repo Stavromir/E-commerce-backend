@@ -1,5 +1,6 @@
 package bg.softuni.Spring.ecommerce.app.model.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -15,6 +16,7 @@ public class FAQEntity extends BaseEntity{
     public FAQEntity() {
     }
 
+    @Column(nullable = false)
     public String getQuestion() {
         return question;
     }
@@ -24,6 +26,7 @@ public class FAQEntity extends BaseEntity{
         return this;
     }
 
+    @Column(nullable = false)
     public String getAnswer() {
         return answer;
     }
