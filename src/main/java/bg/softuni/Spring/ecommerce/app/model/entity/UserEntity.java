@@ -19,6 +19,7 @@ public class UserEntity extends BaseEntity{
     public UserEntity() {
     }
 
+    @Column(unique = true, nullable = false)
     public String getEmail() {
         return email;
     }
@@ -28,6 +29,7 @@ public class UserEntity extends BaseEntity{
         return this;
     }
 
+    @Column(nullable = false)
     public String getPassword() {
         return password;
     }
@@ -37,6 +39,7 @@ public class UserEntity extends BaseEntity{
         return this;
     }
 
+    @Column(nullable = false)
     public String getName() {
         return name;
     }
@@ -46,6 +49,7 @@ public class UserEntity extends BaseEntity{
         return this;
     }
 
+    @Column(nullable = false)
     public UserRoleEnum getRole() {
         return role;
     }
