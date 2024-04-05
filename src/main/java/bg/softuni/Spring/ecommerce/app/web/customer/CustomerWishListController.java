@@ -2,7 +2,7 @@ package bg.softuni.Spring.ecommerce.app.web.customer;
 
 import bg.softuni.Spring.ecommerce.app.model.dto.WishListDto;
 import bg.softuni.Spring.ecommerce.app.service.WishListService;
-import bg.softuni.Spring.ecommerce.app.service.exception.ValidationException;
+import bg.softuni.Spring.ecommerce.app.service.exception.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +24,7 @@ public class CustomerWishListController {
         try {
             Long wishListId = wishListService.addProductToWishList(wishListDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(wishListId);
-        } catch (ValidationException ex) {
+        } catch (ObjectNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
     }
@@ -34,7 +34,7 @@ public class CustomerWishListController {
         try {
             List<WishListDto> allProductsInWishList = wishListService.getAllProductsInWishList(userId);
             return ResponseEntity.ok(allProductsInWishList);
-        } catch (ValidationException ex) {
+        } catch (ObjectNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
     }

@@ -4,7 +4,7 @@ import bg.softuni.Spring.ecommerce.app.model.dto.OrderedProductsDto;
 import bg.softuni.Spring.ecommerce.app.model.dto.ProductDetailDto;
 import bg.softuni.Spring.ecommerce.app.model.dto.ProductDto;
 import bg.softuni.Spring.ecommerce.app.service.ProductService;
-import bg.softuni.Spring.ecommerce.app.service.exception.ValidationException;
+import bg.softuni.Spring.ecommerce.app.service.exception.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,7 +48,7 @@ public class CustomerProductController {
         try {
             ProductDetailDto productDetailsById = productService.getProductDetailsById(productId);
             return ResponseEntity.ok(productDetailsById);
-        } catch (ValidationException ex) {
+        } catch (ObjectNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
     }

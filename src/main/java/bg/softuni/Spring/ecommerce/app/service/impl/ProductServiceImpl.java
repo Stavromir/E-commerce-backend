@@ -9,7 +9,7 @@ import bg.softuni.Spring.ecommerce.app.service.FAQService;
 import bg.softuni.Spring.ecommerce.app.service.OrderService;
 import bg.softuni.Spring.ecommerce.app.service.ProductService;
 import bg.softuni.Spring.ecommerce.app.service.ReviewService;
-import bg.softuni.Spring.ecommerce.app.service.exception.ValidationException;
+import bg.softuni.Spring.ecommerce.app.service.exception.ObjectNotFoundException;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -97,7 +97,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductEntity getProductById(Long productId) {
         return productRepository.findById(productId)
-                .orElseThrow(() -> new ValidationException("Product not exist"));
+                .orElseThrow(() -> new ObjectNotFoundException("Product not exist"));
     }
 
     @Override

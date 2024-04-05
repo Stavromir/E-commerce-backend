@@ -2,7 +2,7 @@ package bg.softuni.Spring.ecommerce.app.web.admin;
 
 import bg.softuni.Spring.ecommerce.app.model.dto.CouponDto;
 import bg.softuni.Spring.ecommerce.app.service.CouponService;
-import bg.softuni.Spring.ecommerce.app.service.exception.ValidationException;
+import bg.softuni.Spring.ecommerce.app.service.exception.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +26,7 @@ public class AdminCouponController {
         try {
             CouponDto coupon = couponService.createCoupon(couponDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(coupon);
-        } catch (ValidationException ex) {
+        } catch (ObjectNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
     }

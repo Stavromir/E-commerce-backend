@@ -5,7 +5,7 @@ import bg.softuni.Spring.ecommerce.app.model.entity.*;
 import bg.softuni.Spring.ecommerce.app.model.enums.OrderStatusEnum;
 import bg.softuni.Spring.ecommerce.app.repository.OrderRepository;
 import bg.softuni.Spring.ecommerce.app.service.*;
-import bg.softuni.Spring.ecommerce.app.service.exception.ValidationException;
+import bg.softuni.Spring.ecommerce.app.service.exception.ObjectNotFoundException;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -50,10 +50,14 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Long addProductToCart(AddProductInCardDto addProductInCardDto) {
 
+        UserEntity user = userService.getUserById(addProductInCardDto.getUserId());
         OrderEntity activeOrder = getOrder(addProductInCardDto.getUserId());
 
+        if (!isCartItemPresent(addProductInCardDto, activeOrder.getId())) {
+            throw new IllegalArgumentException("Product is already in cart!");
+        }
+
         ProductEntity product = productService.getProductById(addProductInCardDto.getProductId());
-        UserEntity user = userService.getUserById(addProductInCardDto.getUserId());
 
 
         CartItemEntity cartItem = new CartItemEntity()
@@ -75,9 +79,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public boolean isCartItemPresent(AddProductInCardDto addProductInCardDto) {
-        OrderEntity activeOrder = getOrder(addProductInCardDto.getUserId());
-        return cartItemService.isCartItemPresentInOrder(addProductInCardDto, activeOrder.getId());
+    public boolean isCartItemPresent(AddProductInCardDto addProductInCardDto, Long activeOrderId) {
+        return cartItemService.isCartItemPresentInOrder(addProductInCardDto, activeOrderId);
     }
 
     @Override
@@ -94,7 +97,7 @@ public class OrderServiceImpl implements OrderService {
         OrderEntity activeOrder = getOrder(userId);
 
         if (couponService.isExpired(code)) {
-            throw new ValidationException("Coupon has expired");
+            throw new ObjectNotFoundException("Coupon has expired");
         }
 
         CouponEntity coupon = couponService.findByCode(code);
@@ -133,7 +136,7 @@ public class OrderServiceImpl implements OrderService {
             orderRepository.save(activeOrder);
             return activeOrder.getId();
         } else {
-            throw new ValidationException("Cart / Product not found");
+            throw new ObjectNotFoundException("Cart / Product not found");
         }
     }
 
@@ -158,7 +161,7 @@ public class OrderServiceImpl implements OrderService {
             orderRepository.save(activeOrder);
             return activeOrder.getId();
         } else {
-            throw new ValidationException("Cart / Product not found");
+            throw new ObjectNotFoundException("Cart / Product not found");
         }
     }
 
@@ -179,7 +182,7 @@ public class OrderServiceImpl implements OrderService {
             createEmptyOrder(userService.getUserById(placeOrderDto.getUserId()));
             return activeOrder.getId();
         } else {
-            throw new ValidationException("User not exist");
+            throw new ObjectNotFoundException("User not exist");
         }
     }
 
@@ -199,14 +202,14 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Long changeOrderStatus(Long orderId, String status) {
         OrderEntity order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new ValidationException("Order can not be found"));
+                .orElseThrow(() -> new ObjectNotFoundException("Order can not be found"));
 
         if (status.equalsIgnoreCase("Shipped")) {
             order.setOrderStatus(OrderStatusEnum.SHIPPED);
         } else if (status.equalsIgnoreCase("Delivered")) {
             order.setOrderStatus(OrderStatusEnum.DELIVERED);
         } else {
-            throw new ValidationException("Invalid order status");
+            throw new ObjectNotFoundException("Invalid order status");
         }
 
         return orderRepository.save(order).getId();
@@ -226,7 +229,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto getOrderById(Long id) {
         OrderEntity order = orderRepository.findById(id)
-                .orElseThrow(() -> new ValidationException("Order not exist"));
+                .orElseThrow(() -> new ObjectNotFoundException("Order not exist"));
 
         return mapToOrderDto(order);
     }
@@ -234,7 +237,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto searchOrderByTrackingId(UUID trackingId) {
         OrderEntity order = orderRepository.findByTrackingId(trackingId)
-                .orElseThrow(() -> new ValidationException("Order not exist"));
+                .orElseThrow(() -> new ObjectNotFoundException("Order not exist"));
 
         return mapToOrderDto(order);
     }
@@ -296,7 +299,7 @@ public class OrderServiceImpl implements OrderService {
     private OrderEntity getOrder(Long userId) {
         return orderRepository
                 .findByUserIdAndOrderStatus(userId, OrderStatusEnum.PENDING)
-                .orElseThrow(() -> new IllegalArgumentException("Order not exist"));
+                .orElseThrow(() -> new ObjectNotFoundException("Order not exist"));
     }
 
     private OrderDto mapToOrderDto(OrderEntity activeOrder) {

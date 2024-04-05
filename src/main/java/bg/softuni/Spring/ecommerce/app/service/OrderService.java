@@ -15,7 +15,7 @@ public interface OrderService {
 
     Long addProductToCart (AddProductInCardDto addProductInCardDto);
 
-    boolean isCartItemPresent(AddProductInCardDto addProductInCardDto);
+    boolean isCartItemPresent(AddProductInCardDto addProductInCardDto, Long activeOrderId);
 
     OrderDto getCartByUserId(Long userId);
 

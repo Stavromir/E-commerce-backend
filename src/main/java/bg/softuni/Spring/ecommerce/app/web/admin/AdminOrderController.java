@@ -3,7 +3,7 @@ package bg.softuni.Spring.ecommerce.app.web.admin;
 import bg.softuni.Spring.ecommerce.app.model.dto.AnalyticsResponseDto;
 import bg.softuni.Spring.ecommerce.app.model.dto.OrderDto;
 import bg.softuni.Spring.ecommerce.app.service.OrderService;
-import bg.softuni.Spring.ecommerce.app.service.exception.ValidationException;
+import bg.softuni.Spring.ecommerce.app.service.exception.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +34,7 @@ public class AdminOrderController {
         try {
             Long changedOrderId = orderService.changeOrderStatus(orderId, status);
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(changedOrderId);
-        } catch (ValidationException ex) {
+        } catch (ObjectNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
     }

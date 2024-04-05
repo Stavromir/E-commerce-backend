@@ -4,7 +4,7 @@ import bg.softuni.Spring.ecommerce.app.model.dto.FAQDto;
 import bg.softuni.Spring.ecommerce.app.model.dto.ProductDto;
 import bg.softuni.Spring.ecommerce.app.service.FAQService;
 import bg.softuni.Spring.ecommerce.app.service.ProductService;
-import bg.softuni.Spring.ecommerce.app.service.exception.ValidationException;
+import bg.softuni.Spring.ecommerce.app.service.exception.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -62,7 +62,7 @@ public class AdminProductController {
         try {
             Long faqId = faqService.createFAQ(faqDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(faqId);
-        } catch (ValidationException ex) {
+        } catch (ObjectNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
     }
@@ -72,7 +72,7 @@ public class AdminProductController {
         try {
             ProductDto productDtoById = productService.getProductDtoById(productId);
             return ResponseEntity.ok(productDtoById);
-        } catch (ValidationException ex) {
+        } catch (ObjectNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
     }
@@ -83,7 +83,7 @@ public class AdminProductController {
         try {
             Long productId = productService.updateProduct(productDto);
             return ResponseEntity.status(HttpStatus.OK).body(productId);
-        } catch (ValidationException ex) {
+        } catch (ObjectNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
 

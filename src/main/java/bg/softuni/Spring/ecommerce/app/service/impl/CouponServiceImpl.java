@@ -4,7 +4,7 @@ import bg.softuni.Spring.ecommerce.app.model.dto.CouponDto;
 import bg.softuni.Spring.ecommerce.app.model.entity.CouponEntity;
 import bg.softuni.Spring.ecommerce.app.repository.CouponRepository;
 import bg.softuni.Spring.ecommerce.app.service.CouponService;
-import bg.softuni.Spring.ecommerce.app.service.exception.ValidationException;
+import bg.softuni.Spring.ecommerce.app.service.exception.ObjectNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -25,7 +25,7 @@ public class CouponServiceImpl implements CouponService {
     public CouponDto createCoupon(CouponDto couponDto) {
 
         if (couponRepository.existsByCode(couponDto.getCode())) {
-            throw new ValidationException("Coupon code already exist");
+            throw new ObjectNotFoundException("Coupon code already exist");
         }
 
         CouponEntity coupon = new CouponEntity()
@@ -51,7 +51,7 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public CouponEntity findByCode(String code) {
         return couponRepository.findByCode(code)
-                .orElseThrow(() -> new ValidationException("Coupon not found"));
+                .orElseThrow(() -> new ObjectNotFoundException("Coupon not found"));
     }
 
     @Override

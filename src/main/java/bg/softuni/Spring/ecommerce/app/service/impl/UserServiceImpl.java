@@ -7,6 +7,7 @@ import bg.softuni.Spring.ecommerce.app.model.enums.UserRoleEnum;
 import bg.softuni.Spring.ecommerce.app.repository.UserRepository;
 import bg.softuni.Spring.ecommerce.app.service.UserService;
 import bg.softuni.Spring.ecommerce.app.service.OrderService;
+import bg.softuni.Spring.ecommerce.app.service.exception.ObjectNotFoundException;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
@@ -71,7 +72,7 @@ public class UserServiceImpl implements UserService {
     public UserEntity getUserById(Long userId) {
 
         return userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not exist"));
+                .orElseThrow(() -> new ObjectNotFoundException("User not exist"));
     }
 
 
