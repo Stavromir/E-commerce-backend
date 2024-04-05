@@ -42,9 +42,11 @@ public class ReviewServiceImpl implements ReviewService {
                 .setDescription(reviewDto.getDescription())
                 .setProduct(product)
                 .setUser(user)
-                .setRating(reviewDto.getRating())
-                .setImg(reviewDto.getImg().getBytes());
+                .setRating(reviewDto.getRating());
 
+        if (reviewDto.getImg() != null){
+            reviewEntity.setImg(reviewDto.getImg().getBytes());
+        }
 
         return reviewRepository.save(reviewEntity).getId();
     }

@@ -11,4 +11,6 @@ import java.util.List;
 public interface WishListRepository extends JpaRepository<WishListEntity, Long> {
 
     List<WishListEntity> getAllByUserId(Long userId);
+
+    boolean existsByProductId(Long productId);
 }

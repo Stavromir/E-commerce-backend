@@ -10,8 +10,10 @@ public interface UserService {
 
     boolean hasUserWithEmail(String email);
 
-    boolean existById(Long userId);
-
     UserEntity getUserById(Long userId);
+
+    UserEntity findUserByEmail(String email);
+
+
 
 }

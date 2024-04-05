@@ -14,6 +14,6 @@ public interface CartItemService {
 
     CartItemDto mapToCartItemDto(CartItemEntity updatedCart);
 
-    Optional<CartItemEntity> findByProductIdAndOrderIdAndUserID(AddProductInCardDto addProductInCardDto, Long orderId);
+    CartItemEntity findByProductIdAndOrderIdAndUserID(AddProductInCardDto addProductInCardDto, Long orderId);
 
 }

@@ -23,12 +23,9 @@ public class AdminCouponController {
 
     @PostMapping("/coupons")
     public ResponseEntity<?> createCoupon(@RequestBody CouponDto couponDto) {
-        try {
+
             CouponDto coupon = couponService.createCoupon(couponDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(coupon);
-        } catch (ObjectNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-        }
     }
 
     @GetMapping("/coupons")

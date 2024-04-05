@@ -22,11 +22,8 @@ public class CustomerReviewController {
 
     @PostMapping("/review")
     public ResponseEntity<?> postReview (@ModelAttribute ReviewDto reviewDto) throws IOException {
-        try {
+
             Long reviewId = reviewService.postReview(reviewDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(reviewId);
-        } catch (ObjectNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        }
     }
 }

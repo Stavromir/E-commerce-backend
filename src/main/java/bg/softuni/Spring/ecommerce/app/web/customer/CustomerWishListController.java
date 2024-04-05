@@ -20,22 +20,16 @@ public class CustomerWishListController {
     }
 
     @PostMapping("/wishlist")
-    public ResponseEntity<?> addProductToWishList(@RequestBody WishListDto wishListDto) {
-        try {
+    public ResponseEntity<Long> addProductToWishList(@RequestBody WishListDto wishListDto) {
+
             Long wishListId = wishListService.addProductToWishList(wishListDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(wishListId);
-        } catch (ObjectNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-        }
     }
 
     @GetMapping("/wishlist/{userId}")
-    public ResponseEntity<?> getAllProductsInWishList(@PathVariable("userId") Long userId){
-        try {
+    public ResponseEntity<List<WishListDto>> getAllProductsInWishList(@PathVariable("userId") Long userId){
+
             List<WishListDto> allProductsInWishList = wishListService.getAllProductsInWishList(userId);
             return ResponseEntity.ok(allProductsInWishList);
-        } catch (ObjectNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-        }
     }
 }

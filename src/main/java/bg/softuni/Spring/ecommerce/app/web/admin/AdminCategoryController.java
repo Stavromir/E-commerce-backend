@@ -21,12 +21,12 @@ public class AdminCategoryController {
 
 
     @PostMapping("/category")
-    public ResponseEntity<CategoryDto> createCategory(
+    public ResponseEntity<Long> createCategory(
             @RequestBody CategoryDto categoryDto) {
 
-        CategoryDto category = categoryService.createCategory(categoryDto);
+        Long categoryId = categoryService.createCategory(categoryDto);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(category);
+        return ResponseEntity.status(HttpStatus.CREATED).body(categoryId);
     }
 
     @GetMapping("/categories")

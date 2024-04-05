@@ -1,12 +1,15 @@
 package bg.softuni.Spring.ecommerce.app.service;
 
 import bg.softuni.Spring.ecommerce.app.model.dto.CategoryDto;
+import bg.softuni.Spring.ecommerce.app.model.entity.CategoryEntity;
 
 import java.util.List;
 
 public interface CategoryService {
 
-    CategoryDto createCategory(CategoryDto categoryDto);
+    Long createCategory(CategoryDto categoryDto);
 
     List<CategoryDto> getAllCategories();
+
+    CategoryEntity findById(Long categoryId);
 }

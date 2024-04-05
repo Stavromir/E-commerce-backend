@@ -6,6 +6,7 @@ import bg.softuni.Spring.ecommerce.app.model.entity.CartItemEntity;
 import bg.softuni.Spring.ecommerce.app.model.entity.OrderEntity;
 import bg.softuni.Spring.ecommerce.app.repository.CartItemRepository;
 import bg.softuni.Spring.ecommerce.app.service.CartItemService;
+import bg.softuni.Spring.ecommerce.app.service.exception.ObjectNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -35,12 +36,12 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public Optional<CartItemEntity> findByProductIdAndOrderIdAndUserID(AddProductInCardDto addProductInCardDto, Long orderId) {
+    public CartItemEntity findByProductIdAndOrderIdAndUserID(AddProductInCardDto addProductInCardDto, Long orderId) {
         return cartItemRepository.findByUserIdAndProductIdAndOrderId(
                 addProductInCardDto.getUserId(),
                 addProductInCardDto.getProductId(),
-                orderId
-        );
+                orderId)
+                .orElseThrow(() -> new ObjectNotFoundException("Cart item not exist"));
     }
 
     @Override

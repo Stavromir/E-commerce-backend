@@ -3,12 +3,8 @@ package bg.softuni.Spring.ecommerce.app.service.impl;
 import bg.softuni.Spring.ecommerce.app.model.dto.*;
 import bg.softuni.Spring.ecommerce.app.model.entity.CategoryEntity;
 import bg.softuni.Spring.ecommerce.app.model.entity.ProductEntity;
-import bg.softuni.Spring.ecommerce.app.repository.CategoryRepository;
 import bg.softuni.Spring.ecommerce.app.repository.ProductRepository;
-import bg.softuni.Spring.ecommerce.app.service.FAQService;
-import bg.softuni.Spring.ecommerce.app.service.OrderService;
-import bg.softuni.Spring.ecommerce.app.service.ProductService;
-import bg.softuni.Spring.ecommerce.app.service.ReviewService;
+import bg.softuni.Spring.ecommerce.app.service.*;
 import bg.softuni.Spring.ecommerce.app.service.exception.ObjectNotFoundException;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -16,24 +12,23 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
-    private final CategoryRepository categoryRepository;
+    private final CategoryService categoryService;
     private final OrderService orderService;
     private final ReviewService reviewService;
     private final FAQService faqService;
 
     public ProductServiceImpl(ProductRepository productRepository,
-                              CategoryRepository categoryRepository,
+                              CategoryService categoryService,
                               @Lazy OrderService orderService,
                               ReviewService reviewService,
                               FAQService faqService) {
         this.productRepository = productRepository;
-        this.categoryRepository = categoryRepository;
+        this.categoryService = categoryService;
         this.orderService = orderService;
         this.reviewService = reviewService;
         this.faqService = faqService;
@@ -54,45 +49,30 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDto> getAllProducts() {
 
-        List<ProductDto> productDtos = productRepository.findAll()
+        return productRepository.findAll()
                 .stream()
                 .map(ProductServiceImpl::mapToProductDto)
                 .toList();
-
-
-        return productDtos;
     }
 
     @Override
     public List<ProductDto> searchProductByTitle(String name) {
 
-        List<ProductDto> products = productRepository.findAllByNameContaining(name)
+        return productRepository.findAllByNameContaining(name)
                 .stream()
                 .map(ProductServiceImpl::mapToProductDto)
                 .toList();
-
-        return products;
     }
 
     @Override
-    public boolean deleteProduct(Long id) {
+    public void deleteProduct(Long id) {
 
-        Optional<ProductEntity> product = productRepository.findById(id);
+        ProductEntity product = productRepository.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException("Product does not exist"));
 
-        if (product.isPresent()) {
-            productRepository.delete(product.get());
-            return true;
-        }
-        return false;
+        productRepository.delete(product);
     }
 
-    @Override
-    public boolean existById(Long productId) {
-
-        Optional<ProductEntity> product = productRepository.findById(productId);
-
-        return product.isPresent();
-    }
 
     @Override
     public ProductEntity getProductById(Long productId) {
@@ -117,7 +97,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public OrderedProductsDto getOrderedProductsDetailsByOrderId(Long id) {
-        OrderDto orderById = orderService.getOrderById(id);
+        OrderDto orderById = orderService.getOrderDtoById(id);
         List<CartItemDto> cartItems = orderById.getCartItems();
 
         OrderedProductsDto responseDto = new OrderedProductsDto();
@@ -167,8 +147,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private void setProductFields(ProductDto productDto, ProductEntity productEntity) throws IOException {
-        CategoryEntity categoryEntity = categoryRepository.findById(productDto.getCategoryId())
-                .orElseThrow(() -> new IllegalArgumentException("Category not exist"));
+        CategoryEntity categoryEntity = categoryService.findById(productDto.getCategoryId());
 
         productEntity
                 .setName(productDto.getName())

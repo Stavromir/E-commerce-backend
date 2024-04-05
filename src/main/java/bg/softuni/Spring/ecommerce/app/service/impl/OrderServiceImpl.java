@@ -51,9 +51,10 @@ public class OrderServiceImpl implements OrderService {
     public Long addProductToCart(AddProductInCardDto addProductInCardDto) {
 
         UserEntity user = userService.getUserById(addProductInCardDto.getUserId());
-        OrderEntity activeOrder = getOrder(addProductInCardDto.getUserId());
 
-        if (!isCartItemPresent(addProductInCardDto, activeOrder.getId())) {
+        OrderEntity activeOrder = getOrderWithStatusPending(addProductInCardDto.getUserId());
+
+        if (isCartItemPresent(addProductInCardDto, activeOrder.getId())) {
             throw new IllegalArgumentException("Product is already in cart!");
         }
 
@@ -85,7 +86,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto getCartByUserId(Long userId) {
-        OrderEntity activeOrder = getOrder(userId);
+        OrderEntity activeOrder = getOrderWithStatusPending(userId);
         OrderDto orderDto = mapToOrderDto(activeOrder);
 
         return orderDto;
@@ -94,7 +95,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto applyCoupon(Long userId, String code) {
-        OrderEntity activeOrder = getOrder(userId);
+        OrderEntity activeOrder = getOrderWithStatusPending(userId);
 
         if (couponService.isExpired(code)) {
             throw new ObjectNotFoundException("Coupon has expired");
@@ -117,73 +118,59 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Long increaseProductQuantity(AddProductInCardDto addProductInCardDto) {
-        OrderEntity activeOrder = getOrder(addProductInCardDto.getUserId());
+        OrderEntity activeOrder = getOrderWithStatusPending(addProductInCardDto.getUserId());
 
-        if (isCartItemPresent(addProductInCardDto)) {
+        CartItemEntity cartItem = cartItemService
+                .findByProductIdAndOrderIdAndUserID(addProductInCardDto, activeOrder.getId());
 
-            CartItemEntity cartItem = cartItemService
-                    .findByProductIdAndOrderIdAndUserID(addProductInCardDto, activeOrder.getId()).get();
+        cartItem.setQuantity(cartItem.getQuantity() + 1);
+        activeOrder.setTotalAmount(activeOrder.getTotalAmount() + cartItem.getPrice());
 
-            cartItem.setQuantity(cartItem.getQuantity() + 1);
-            activeOrder.setTotalAmount(activeOrder.getTotalAmount() + cartItem.getPrice());
-
-            if (activeOrder.getCoupon() != null) {
-                applyCoupon(addProductInCardDto.getUserId(), activeOrder.getCoupon().getCode());
-            } else {
-                activeOrder.setAmount(activeOrder.getAmount() + cartItem.getPrice());
-            }
-
-            orderRepository.save(activeOrder);
-            return activeOrder.getId();
+        if (activeOrder.getCoupon() != null) {
+            applyCoupon(addProductInCardDto.getUserId(), activeOrder.getCoupon().getCode());
         } else {
-            throw new ObjectNotFoundException("Cart / Product not found");
+            activeOrder.setAmount(activeOrder.getAmount() + cartItem.getPrice());
         }
+
+        orderRepository.save(activeOrder);
+        return activeOrder.getId();
     }
 
     @Override
     public Long decreaseProductQuantity(AddProductInCardDto addProductInCardDto) {
-        OrderEntity activeOrder = getOrder(addProductInCardDto.getUserId());
+        OrderEntity activeOrder = getOrderWithStatusPending(addProductInCardDto.getUserId());
 
-        if (isCartItemPresent(addProductInCardDto)) {
+        CartItemEntity cartItem = cartItemService
+                .findByProductIdAndOrderIdAndUserID(addProductInCardDto, activeOrder.getId());
 
-            CartItemEntity cartItem = cartItemService
-                    .findByProductIdAndOrderIdAndUserID(addProductInCardDto, activeOrder.getId()).get();
+        cartItem.setQuantity(cartItem.getQuantity() - 1);
+        activeOrder.setTotalAmount(activeOrder.getTotalAmount() - cartItem.getPrice());
 
-            cartItem.setQuantity(cartItem.getQuantity() - 1);
-            activeOrder.setTotalAmount(activeOrder.getTotalAmount() - cartItem.getPrice());
-
-            if (activeOrder.getCoupon() != null) {
-                applyCoupon(addProductInCardDto.getUserId(), activeOrder.getCoupon().getCode());
-            } else {
-                activeOrder.setAmount(activeOrder.getAmount() - cartItem.getPrice());
-            }
-
-            orderRepository.save(activeOrder);
-            return activeOrder.getId();
+        if (activeOrder.getCoupon() != null) {
+            applyCoupon(addProductInCardDto.getUserId(), activeOrder.getCoupon().getCode());
         } else {
-            throw new ObjectNotFoundException("Cart / Product not found");
+            activeOrder.setAmount(activeOrder.getAmount() - cartItem.getPrice());
         }
+
+        orderRepository.save(activeOrder);
+        return activeOrder.getId();
     }
 
     @Override
     public Long placeOrder(PlaceOrderDto placeOrderDto) {
-        OrderEntity activeOrder = getOrder(placeOrderDto.getUserId());
+        OrderEntity activeOrder = getOrderWithStatusPending(placeOrderDto.getUserId());
+        UserEntity user = userService.getUserById(placeOrderDto.getUserId());
 
-        if (userService.existById(placeOrderDto.getUserId())) {
+        activeOrder.setOrderDescription(placeOrderDto.getOrderDescription());
+        activeOrder.setOrderStatus(OrderStatusEnum.PLACED);
+        activeOrder.setAddress(placeOrderDto.getAddress());
+        activeOrder.setDate(new Date());
+        activeOrder.setTrackingId(UUID.randomUUID());
 
-            activeOrder.setOrderDescription(placeOrderDto.getOrderDescription());
-            activeOrder.setOrderStatus(OrderStatusEnum.PLACED);
-            activeOrder.setAddress(placeOrderDto.getAddress());
-            activeOrder.setDate(new Date());
-            activeOrder.setTrackingId(UUID.randomUUID());
+        orderRepository.save(activeOrder);
 
-            orderRepository.save(activeOrder);
-
-            createEmptyOrder(userService.getUserById(placeOrderDto.getUserId()));
-            return activeOrder.getId();
-        } else {
-            throw new ObjectNotFoundException("User not exist");
-        }
+        createEmptyOrder(user);
+        return activeOrder.getId();
     }
 
     @Override
@@ -227,7 +214,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDto getOrderById(Long id) {
+    public OrderDto getOrderDtoById(Long id) {
         OrderEntity order = orderRepository.findById(id)
                 .orElseThrow(() -> new ObjectNotFoundException("Order not exist"));
 
@@ -267,7 +254,7 @@ public class OrderServiceImpl implements OrderService {
                 .setPreviousMonthEarnings(previousMonthEarnings);
     }
 
-    private Long getTotalEarningsForMonth(int month, int year){
+    private Long getTotalEarningsForMonth(int month, int year) {
         return getTotalOrdersForMonth(month, year)
                 .stream()
                 .mapToLong(OrderEntity::getAmount)
@@ -296,7 +283,7 @@ public class OrderServiceImpl implements OrderService {
                 .findAllByDateBetweenAndOrderStatus(beginOfMonth, endOfMonth, OrderStatusEnum.DELIVERED);
     }
 
-    private OrderEntity getOrder(Long userId) {
+    private OrderEntity getOrderWithStatusPending(Long userId) {
         return orderRepository
                 .findByUserIdAndOrderStatus(userId, OrderStatusEnum.PENDING)
                 .orElseThrow(() -> new ObjectNotFoundException("Order not exist"));

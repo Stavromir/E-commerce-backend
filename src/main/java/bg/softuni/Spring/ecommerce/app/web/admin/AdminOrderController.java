@@ -31,12 +31,8 @@ public class AdminOrderController {
     public ResponseEntity<?> changeOrderStatus(@PathVariable("orderId") Long orderId,
                                                @PathVariable("status") String status){
 
-        try {
             Long changedOrderId = orderService.changeOrderStatus(orderId, status);
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(changedOrderId);
-        } catch (ObjectNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-        }
     }
 
     @GetMapping("/order/analytics")

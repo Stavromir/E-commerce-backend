@@ -33,7 +33,7 @@ public interface OrderService {
 
     List<OrderDto> getUserPlacedOrders(Long userId);
 
-    OrderDto getOrderById(Long id);
+    OrderDto getOrderDtoById(Long id);
 
     OrderDto searchOrderByTrackingId(UUID trackingId);
 

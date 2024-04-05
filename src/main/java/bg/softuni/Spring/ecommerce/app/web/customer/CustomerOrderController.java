@@ -41,15 +41,11 @@ public class CustomerOrderController {
     }
 
     @GetMapping("/coupon/{userId}/{code}")
-    public ResponseEntity<?> applyCoupon(
-            @PathVariable("userId") Long userId, @PathVariable("code") String code
+    public ResponseEntity<?> applyCoupon(@PathVariable("userId") Long userId,
+            @PathVariable("code") String code
     ) {
-        try {
             OrderDto orderDto = orderService.applyCoupon(userId, code);
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(orderDto);
-        } catch (ObjectNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-        }
     }
 
     @PostMapping("/addition")

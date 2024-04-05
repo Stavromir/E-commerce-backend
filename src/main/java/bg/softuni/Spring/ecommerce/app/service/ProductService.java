@@ -16,9 +16,7 @@ public interface ProductService {
 
     List<ProductDto> searchProductByTitle(String name);
 
-    boolean deleteProduct(Long id);
-
-    boolean existById(Long productId);
+    void deleteProduct(Long id);
 
     ProductEntity getProductById(Long productId);
 

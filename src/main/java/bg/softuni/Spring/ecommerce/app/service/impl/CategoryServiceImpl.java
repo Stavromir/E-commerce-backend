@@ -4,6 +4,7 @@ import bg.softuni.Spring.ecommerce.app.model.dto.CategoryDto;
 import bg.softuni.Spring.ecommerce.app.model.entity.CategoryEntity;
 import bg.softuni.Spring.ecommerce.app.repository.CategoryRepository;
 import bg.softuni.Spring.ecommerce.app.service.CategoryService;
+import bg.softuni.Spring.ecommerce.app.service.exception.ObjectNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,17 +20,17 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDto createCategory(CategoryDto categoryDto) {
+    public Long createCategory(CategoryDto categoryDto) {
+
+        if (categoryRepository.existsByName(categoryDto.getName())) {
+            throw new IllegalArgumentException("Category already exist");
+        }
+
         CategoryEntity categoryEntity = new CategoryEntity()
                 .setName(categoryDto.getName())
                 .setDescription(categoryDto.getDescription());
 
-        CategoryEntity category = categoryRepository.save(categoryEntity);
-
-        return new CategoryDto()
-                .setId(category.getId())
-                .setName(category.getName())
-                .setDescription(category.getDescription());
+        return categoryRepository.save(categoryEntity).getId();
     }
 
     @Override
@@ -44,4 +45,11 @@ public class CategoryServiceImpl implements CategoryService {
                             .setDescription(categoryEntity.getDescription());
                 }).toList();
     }
+
+    @Override
+    public CategoryEntity findById(Long categoryId) {
+        return categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new ObjectNotFoundException("Category not exist"));
+    }
+
 }

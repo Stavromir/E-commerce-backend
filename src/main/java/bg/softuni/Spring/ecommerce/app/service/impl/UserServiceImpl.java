@@ -62,16 +62,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean existById(Long userId) {
-        Optional<UserEntity> user = userRepository.findById(userId);
-
-        return user.isPresent();
-    }
-
-    @Override
     public UserEntity getUserById(Long userId) {
 
         return userRepository.findById(userId)
+                .orElseThrow(() -> new ObjectNotFoundException("User not exist"));
+    }
+
+    @Override
+    public UserEntity findUserByEmail(String email) {
+        return userRepository.findByEmail(email)
                 .orElseThrow(() -> new ObjectNotFoundException("User not exist"));
     }
 

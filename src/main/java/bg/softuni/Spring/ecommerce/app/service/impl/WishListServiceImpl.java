@@ -30,6 +30,11 @@ public class WishListServiceImpl implements WishListService {
 
     @Override
     public Long addProductToWishList(WishListDto wishListDto) {
+
+        if (wishListRepository.existsByProductId(wishListDto.getProductId())) {
+            throw new IllegalArgumentException("Product already in wishlist");
+        }
+
         ProductEntity product = productService.getProductById(wishListDto.getProductId());
         UserEntity user = userService.getUserById(wishListDto.getUserId());
 

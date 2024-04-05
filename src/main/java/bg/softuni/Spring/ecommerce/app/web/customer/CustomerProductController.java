@@ -45,11 +45,8 @@ public class CustomerProductController {
 
     @GetMapping("/product/{productId}")
     public ResponseEntity<?> getProductDetailById(@PathVariable("productId") Long productId){
-        try {
+
             ProductDetailDto productDetailsById = productService.getProductDetailsById(productId);
             return ResponseEntity.ok(productDetailsById);
-        } catch (ObjectNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        }
     }
 }

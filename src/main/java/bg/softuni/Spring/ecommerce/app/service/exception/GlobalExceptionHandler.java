@@ -11,8 +11,16 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(ObjectNotFoundException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponseDto handleValidationException(ObjectNotFoundException exception) {
+        return new ErrorResponseDto()
+                .setMessage(exception.getMessage())
+                .setSuccess(Boolean.FALSE);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponseDto handleIllegalArgumentException(IllegalArgumentException exception) {
         return new ErrorResponseDto()
                 .setMessage(exception.getMessage())
                 .setSuccess(Boolean.FALSE);

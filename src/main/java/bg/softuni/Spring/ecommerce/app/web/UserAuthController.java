@@ -32,25 +32,22 @@ public class UserAuthController {
 
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
-    private final UserRepository userRepository;
-    private final UserService authService;
+    private final UserService userService;
     private final JwtUtil jwtUtil;
 
     public UserAuthController(AuthenticationManager authenticationManager,
                               UserDetailsService userDetailsService,
-                              UserRepository userRepository,
                               UserService authService,
                               JwtUtil jwtUtil) {
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
-        this.userRepository = userRepository;
-        this.authService = authService;
+        this.userService = authService;
         this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/authenticate")
-    public void createAuthenticationToken (@RequestBody UserAuthenticationRequestDto userAuthenticationRequest,
-                                           HttpServletResponse response) throws IOException, JSONException {
+    public void createAuthenticationToken(@RequestBody UserAuthenticationRequestDto userAuthenticationRequest,
+                                          HttpServletResponse response) throws IOException, JSONException {
 
 
         try {
@@ -61,16 +58,14 @@ public class UserAuthController {
         }
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(userAuthenticationRequest.getUsername());
-        Optional<UserEntity> optionalUser = userRepository.findByEmail(userAuthenticationRequest.getUsername());
+        UserEntity userEntity = userService.findUserByEmail(userAuthenticationRequest.getUsername());
         String jwt = jwtUtil.generateToken(userDetails.getUsername());
 
-        if (optionalUser.isPresent()) {
-            response.getWriter().write(new JSONObject()
-                    .put("userId", optionalUser.get().getId())
-                    .put("role", optionalUser.get().getRole())
-                    .toString()
-            );
-        }
+        response.getWriter().write(new JSONObject()
+                .put("userId", userEntity.getId())
+                .put("role", userEntity.getRole())
+                .toString()
+        );
 
         response.addHeader("Access-Control-Expose-Headers", "Authorization");
         response.addHeader("Access-Control-Allow-Headers", "Authorization, X-PINGOTHER, Origin, " +
@@ -81,13 +76,13 @@ public class UserAuthController {
 
 
     @PostMapping("/sign-up")
-    public ResponseEntity<?> signupUser (@RequestBody SignupRequestDto signupRequest) {
+    public ResponseEntity<?> signupUser(@RequestBody SignupRequestDto signupRequest) {
 
-        if (authService.hasUserWithEmail(signupRequest.getEmail())) {
+        if (userService.hasUserWithEmail(signupRequest.getEmail())) {
             return new ResponseEntity<>("User already exists", HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserDto userDTO = authService.createUser(signupRequest);
+        UserDto userDTO = userService.createUser(signupRequest);
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 }
