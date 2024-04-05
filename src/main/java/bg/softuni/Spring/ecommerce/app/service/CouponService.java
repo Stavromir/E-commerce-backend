@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface CouponService {
 
-    public CouponDto createCoupon(CouponDto couponDto);
+    Long createCoupon(CouponDto couponDto);
 
     List<CouponDto> getAllCoupons();
 

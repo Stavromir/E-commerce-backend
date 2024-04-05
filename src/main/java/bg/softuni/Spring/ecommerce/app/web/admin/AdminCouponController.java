@@ -3,8 +3,10 @@ package bg.softuni.Spring.ecommerce.app.web.admin;
 import bg.softuni.Spring.ecommerce.app.model.dto.CouponDto;
 import bg.softuni.Spring.ecommerce.app.service.CouponService;
 import bg.softuni.Spring.ecommerce.app.service.exception.ObjectNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,10 +24,10 @@ public class AdminCouponController {
 
 
     @PostMapping("/coupons")
-    public ResponseEntity<?> createCoupon(@RequestBody CouponDto couponDto) {
+    public ResponseEntity<Long> createCoupon(@RequestBody CouponDto couponDto) {
 
-            CouponDto coupon = couponService.createCoupon(couponDto);
-            return ResponseEntity.status(HttpStatus.CREATED).body(coupon);
+            Long couponId = couponService.createCoupon(couponDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(couponId);
     }
 
     @GetMapping("/coupons")
