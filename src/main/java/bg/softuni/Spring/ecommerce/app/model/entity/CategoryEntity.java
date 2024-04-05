@@ -14,6 +14,7 @@ public class CategoryEntity extends BaseEntity {
     public CategoryEntity() {
     }
 
+    @Column(nullable = false, unique = true)
     public String getName() {
         return name;
     }

@@ -17,6 +17,7 @@ public class CartItemEntity extends BaseEntity {
     public CartItemEntity() {
     }
 
+    @Column(nullable = false)
     public Long getPrice() {
         return price;
     }
@@ -26,6 +27,7 @@ public class CartItemEntity extends BaseEntity {
         return this;
     }
 
+    @Column(nullable = false)
     public Long getQuantity() {
         return quantity;
     }
