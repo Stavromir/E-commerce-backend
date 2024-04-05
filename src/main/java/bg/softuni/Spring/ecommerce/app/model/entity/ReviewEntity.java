@@ -15,6 +15,7 @@ public class ReviewEntity extends BaseEntity{
     public ReviewEntity() {
     }
 
+    @Column(nullable = false)
     public Long getRating() {
         return rating;
     }
@@ -24,7 +25,7 @@ public class ReviewEntity extends BaseEntity{
         return this;
     }
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", nullable = false)
     public String getDescription() {
         return description;
     }
