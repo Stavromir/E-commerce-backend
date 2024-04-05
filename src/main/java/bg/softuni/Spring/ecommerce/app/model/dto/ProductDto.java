@@ -1,5 +1,7 @@
 package bg.softuni.Spring.ecommerce.app.model.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import org.springframework.web.multipart.MultipartFile;
 
 public class ProductDto {
@@ -26,6 +28,7 @@ public class ProductDto {
         return this;
     }
 
+    @NotBlank
     public String getName() {
         return name;
     }
@@ -35,6 +38,7 @@ public class ProductDto {
         return this;
     }
 
+    @Positive
     public Long getPrice() {
         return price;
     }
@@ -44,6 +48,7 @@ public class ProductDto {
         return this;
     }
 
+    @NotBlank
     public String getDescription() {
         return description;
     }

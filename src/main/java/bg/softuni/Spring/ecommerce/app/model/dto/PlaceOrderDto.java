@@ -1,5 +1,8 @@
 package bg.softuni.Spring.ecommerce.app.model.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class PlaceOrderDto {
 
     private Long userId;
@@ -15,6 +18,8 @@ public class PlaceOrderDto {
         return this;
     }
 
+    @NotNull
+    @NotBlank
     public String getAddress() {
         return address;
     }

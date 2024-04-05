@@ -42,40 +42,31 @@ public class CustomerOrderController {
 
     @GetMapping("/coupon/{userId}/{code}")
     public ResponseEntity<?> applyCoupon(@PathVariable("userId") Long userId,
-            @PathVariable("code") String code
+                                         @PathVariable("code") String code
     ) {
-            OrderDto orderDto = orderService.applyCoupon(userId, code);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(orderDto);
+        OrderDto orderDto = orderService.applyCoupon(userId, code);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(orderDto);
     }
 
     @PostMapping("/addition")
-    public ResponseEntity<?> increaseQuantity(@RequestBody AddProductInCardDto addProductInCardDto) {
-        try {
-            Long orderId = orderService.increaseProductQuantity(addProductInCardDto);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(orderId);
-        } catch (ObjectNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        }
+    public ResponseEntity<Long> increaseQuantity(@RequestBody AddProductInCardDto addProductInCardDto) {
+
+        Long orderId = orderService.increaseProductQuantity(addProductInCardDto);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(orderId);
     }
 
     @PostMapping("/subtraction")
     public ResponseEntity<?> decreaseQuantity(@RequestBody AddProductInCardDto addProductInCardDto) {
-        try {
-            Long orderId = orderService.decreaseProductQuantity(addProductInCardDto);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(orderId);
-        } catch (ObjectNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        }
+
+        Long orderId = orderService.decreaseProductQuantity(addProductInCardDto);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(orderId);
     }
 
     @PostMapping("/placeOrder")
     public ResponseEntity<?> placeOrder(@RequestBody PlaceOrderDto placeOrderDto) {
-        try {
-            Long orderId = orderService.placeOrder(placeOrderDto);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(orderId);
-        } catch (ObjectNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-        }
+
+        Long orderId = orderService.placeOrder(placeOrderDto);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(orderId);
     }
 
     @GetMapping("/myOrders/{userId}")

@@ -1,5 +1,10 @@
 package bg.softuni.Spring.ecommerce.app.model.dto;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
+
 import java.util.Date;
 
 public class CouponDto {
@@ -22,6 +27,7 @@ public class CouponDto {
         return this;
     }
 
+    @Size(min = 4)
     public String getName() {
         return name;
     }
@@ -31,6 +37,7 @@ public class CouponDto {
         return this;
     }
 
+    @Size(min = 4)
     public String getCode() {
         return code;
     }
@@ -40,6 +47,7 @@ public class CouponDto {
         return this;
     }
 
+    @Positive
     public Long getDiscount() {
         return discount;
     }
@@ -49,6 +57,7 @@ public class CouponDto {
         return this;
     }
 
+    @NotNull
     public Date getExpirationDate() {
         return expirationDate;
     }

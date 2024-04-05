@@ -1,14 +1,16 @@
 package bg.softuni.Spring.ecommerce.app.model.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
+
 public class SignupRequestDto {
 
     private String email;
     private String password;
     private String name;
 
-    public SignupRequestDto() {
-    }
 
+    @Email
     public String getEmail() {
         return email;
     }
@@ -18,6 +20,7 @@ public class SignupRequestDto {
         return this;
     }
 
+    @Size(min = 3, max = 10)
     public String getPassword() {
         return password;
     }

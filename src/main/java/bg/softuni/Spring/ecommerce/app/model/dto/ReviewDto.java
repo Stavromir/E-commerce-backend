@@ -2,6 +2,8 @@ package bg.softuni.Spring.ecommerce.app.model.dto;
 
 import bg.softuni.Spring.ecommerce.app.model.entity.ProductEntity;
 import bg.softuni.Spring.ecommerce.app.model.entity.UserEntity;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Positive;
 import org.springframework.web.multipart.MultipartFile;
 
 public class ReviewDto {
@@ -24,6 +26,7 @@ public class ReviewDto {
         return this;
     }
 
+    @Positive
     public Long getRating() {
         return rating;
     }
@@ -33,6 +36,7 @@ public class ReviewDto {
         return this;
     }
 
+    @NotEmpty
     public String getDescription() {
         return description;
     }

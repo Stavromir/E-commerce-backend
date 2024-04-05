@@ -1,5 +1,7 @@
 package bg.softuni.Spring.ecommerce.app.model.dto;
 
+import jakarta.validation.constraints.Size;
+
 public class FAQDto {
 
     private Long id;
@@ -16,6 +18,7 @@ public class FAQDto {
         return this;
     }
 
+    @Size(min = 10)
     public String getQuestion() {
         return question;
     }
@@ -25,6 +28,7 @@ public class FAQDto {
         return this;
     }
 
+    @Size(min = 10)
     public String getAnswer() {
         return answer;
     }

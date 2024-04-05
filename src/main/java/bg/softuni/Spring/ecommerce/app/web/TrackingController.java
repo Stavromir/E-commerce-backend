@@ -21,12 +21,9 @@ public class TrackingController {
     }
 
     @GetMapping("/order/{trackingId}")
-    public ResponseEntity<?> findOrderByTrackingId(@PathVariable("trackingId") UUID trackingId) {
-        try {
+    public ResponseEntity<OrderDto> findOrderByTrackingId(@PathVariable("trackingId") UUID trackingId) {
+
             OrderDto orderDto = orderService.searchOrderByTrackingId(trackingId);
             return ResponseEntity.ok(orderDto);
-        } catch (ObjectNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-        }
     }
 }
