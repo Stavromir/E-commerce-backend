@@ -28,7 +28,6 @@ public class OrderEntity extends BaseEntity {
     public OrderEntity() {
     }
 
-    @Column(nullable = false)
     public String getOrderDescription() {
         return orderDescription;
     }
@@ -38,7 +37,6 @@ public class OrderEntity extends BaseEntity {
         return this;
     }
 
-    @Column(nullable = false)
     public Date getDate() {
         return date;
     }
@@ -48,7 +46,6 @@ public class OrderEntity extends BaseEntity {
         return this;
     }
 
-    @Column(nullable = false)
     public Long getAmount() {
         return amount;
     }
@@ -58,7 +55,6 @@ public class OrderEntity extends BaseEntity {
         return this;
     }
 
-    @Column(nullable = false)
     public String getAddress() {
         return address;
     }
@@ -68,7 +64,6 @@ public class OrderEntity extends BaseEntity {
         return this;
     }
 
-    @Column(nullable = false)
     public String getPayment() {
         return payment;
     }
@@ -79,7 +74,6 @@ public class OrderEntity extends BaseEntity {
     }
 
     @Enumerated
-    @Column(nullable = false)
     public OrderStatusEnum getOrderStatus() {
         return orderStatus;
     }
@@ -89,7 +83,6 @@ public class OrderEntity extends BaseEntity {
         return this;
     }
 
-    @Column(nullable = false)
     public Long getTotalAmount() {
         return totalAmount;
     }

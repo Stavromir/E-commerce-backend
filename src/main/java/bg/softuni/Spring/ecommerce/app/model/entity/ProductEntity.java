@@ -2,6 +2,10 @@ package bg.softuni.Spring.ecommerce.app.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import java.util.Set;
 
 @Entity
 @Table(name = "products")
@@ -12,6 +16,7 @@ public class ProductEntity extends BaseEntity{
     private String description;
     private byte[] img;
     private CategoryEntity category;
+    private Set<CartItemEntity> carts;
 
 
     public ProductEntity() {
@@ -65,6 +70,16 @@ public class ProductEntity extends BaseEntity{
 
     public ProductEntity setCategory(CategoryEntity category) {
         this.category = category;
+        return this;
+    }
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
+    public Set<CartItemEntity> getCarts() {
+        return carts;
+    }
+
+    public ProductEntity setCarts(Set<CartItemEntity> carts) {
+        this.carts = carts;
         return this;
     }
 }
