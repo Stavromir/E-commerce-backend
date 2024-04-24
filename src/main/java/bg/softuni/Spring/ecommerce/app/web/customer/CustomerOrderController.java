@@ -1,12 +1,9 @@
 package bg.softuni.Spring.ecommerce.app.web.customer;
 
-import bg.softuni.Spring.ecommerce.app.model.dto.AddProductInCardDto;
+import bg.softuni.Spring.ecommerce.app.model.dto.AddProductInCartDto;
 import bg.softuni.Spring.ecommerce.app.model.dto.OrderDto;
 import bg.softuni.Spring.ecommerce.app.model.dto.PlaceOrderDto;
 import bg.softuni.Spring.ecommerce.app.service.OrderService;
-import bg.softuni.Spring.ecommerce.app.service.ProductService;
-import bg.softuni.Spring.ecommerce.app.service.UserService;
-import bg.softuni.Spring.ecommerce.app.service.exception.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +23,7 @@ public class CustomerOrderController {
 
 
     @PostMapping("/cart")
-    public ResponseEntity<Long> addProductToCart(@RequestBody AddProductInCardDto addProductInCardDto) {
+    public ResponseEntity<Long> addProductToCart(@RequestBody AddProductInCartDto addProductInCardDto) {
 
         Long cartItemId = orderService.addProductToCart(addProductInCardDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(cartItemId);
@@ -49,14 +46,14 @@ public class CustomerOrderController {
     }
 
     @PostMapping("/addition")
-    public ResponseEntity<Long> increaseQuantity(@RequestBody AddProductInCardDto addProductInCardDto) {
+    public ResponseEntity<Long> increaseQuantity(@RequestBody AddProductInCartDto addProductInCardDto) {
 
         Long orderId = orderService.increaseProductQuantity(addProductInCardDto);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(orderId);
     }
 
     @PostMapping("/subtraction")
-    public ResponseEntity<?> decreaseQuantity(@RequestBody AddProductInCardDto addProductInCardDto) {
+    public ResponseEntity<?> decreaseQuantity(@RequestBody AddProductInCartDto addProductInCardDto) {
 
         Long orderId = orderService.decreaseProductQuantity(addProductInCardDto);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(orderId);

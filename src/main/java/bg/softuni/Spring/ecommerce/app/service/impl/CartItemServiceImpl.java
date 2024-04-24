@@ -1,15 +1,12 @@
 package bg.softuni.Spring.ecommerce.app.service.impl;
 
-import bg.softuni.Spring.ecommerce.app.model.dto.AddProductInCardDto;
+import bg.softuni.Spring.ecommerce.app.model.dto.AddProductInCartDto;
 import bg.softuni.Spring.ecommerce.app.model.dto.CartItemDto;
 import bg.softuni.Spring.ecommerce.app.model.entity.CartItemEntity;
-import bg.softuni.Spring.ecommerce.app.model.entity.OrderEntity;
 import bg.softuni.Spring.ecommerce.app.repository.CartItemRepository;
 import bg.softuni.Spring.ecommerce.app.service.CartItemService;
 import bg.softuni.Spring.ecommerce.app.service.exception.ObjectNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class CartItemServiceImpl implements CartItemService {
@@ -19,7 +16,6 @@ public class CartItemServiceImpl implements CartItemService {
 
 
     public CartItemServiceImpl(CartItemRepository cartItemRepository) {
-
         this.cartItemRepository = cartItemRepository;
     }
 
@@ -36,7 +32,7 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public CartItemEntity findByProductIdAndOrderIdAndUserID(AddProductInCardDto addProductInCardDto, Long orderId) {
+    public CartItemEntity findByProductIdAndOrderIdAndUserID(AddProductInCartDto addProductInCardDto, Long orderId) {
         return cartItemRepository.findByUserIdAndProductIdAndOrderId(
                 addProductInCardDto.getUserId(),
                 addProductInCardDto.getProductId(),
@@ -45,7 +41,7 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public boolean isCartItemPresentInOrder(AddProductInCardDto addProductInCardDto, Long orderId) {
+    public boolean isCartItemPresentInOrder(AddProductInCartDto addProductInCardDto, Long orderId) {
 
         return cartItemRepository.findByUserIdAndProductIdAndOrderId(
                 addProductInCardDto.getUserId(),

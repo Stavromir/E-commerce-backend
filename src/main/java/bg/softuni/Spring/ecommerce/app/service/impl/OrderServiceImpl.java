@@ -48,7 +48,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Long addProductToCart(AddProductInCardDto addProductInCardDto) {
+    public Long addProductToCart(AddProductInCartDto addProductInCardDto) {
 
         UserEntity user = userService.getUserById(addProductInCardDto.getUserId());
 
@@ -80,7 +80,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public boolean isCartItemPresent(AddProductInCardDto addProductInCardDto, Long activeOrderId) {
+    public boolean isCartItemPresent(AddProductInCartDto addProductInCardDto, Long activeOrderId) {
         return cartItemService.isCartItemPresentInOrder(addProductInCardDto, activeOrderId);
     }
 
@@ -117,7 +117,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Long increaseProductQuantity(AddProductInCardDto addProductInCardDto) {
+    public Long increaseProductQuantity(AddProductInCartDto addProductInCardDto) {
         OrderEntity activeOrder = getOrderWithStatusPending(addProductInCardDto.getUserId());
 
         CartItemEntity cartItem = cartItemService
@@ -137,7 +137,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Long decreaseProductQuantity(AddProductInCardDto addProductInCardDto) {
+    public Long decreaseProductQuantity(AddProductInCartDto addProductInCardDto) {
         OrderEntity activeOrder = getOrderWithStatusPending(addProductInCardDto.getUserId());
 
         CartItemEntity cartItem = cartItemService

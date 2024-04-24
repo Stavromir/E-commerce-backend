@@ -1,18 +1,18 @@
 package bg.softuni.Spring.ecommerce.app.model.dto;
 
-public class AddProductInCardDto {
+public class AddProductInCartDto {
 
     private Long userId;
     private Long productId;
 
-    public AddProductInCardDto() {
+    public AddProductInCartDto() {
     }
 
     public Long getUserId() {
         return userId;
     }
 
-    public AddProductInCardDto setUserId(Long userId) {
+    public AddProductInCartDto setUserId(Long userId) {
         this.userId = userId;
         return this;
     }
@@ -21,7 +21,7 @@ public class AddProductInCardDto {
         return productId;
     }
 
-    public AddProductInCardDto setProductId(Long productId) {
+    public AddProductInCartDto setProductId(Long productId) {
         this.productId = productId;
         return this;
     }
