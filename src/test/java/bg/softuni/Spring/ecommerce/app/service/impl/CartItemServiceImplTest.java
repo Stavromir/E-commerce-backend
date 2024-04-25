@@ -45,14 +45,13 @@ class CartItemServiceImplTest {
 
         Mockito.when(cartItemRepository.findByUserIdAndProductIdAndOrderId(USER_ID, PRODUCT_ID, ORDER_ID))
                 .thenReturn(Optional.of(testCartItem));
+        AddProductInCartDto productInCartDto = createProductInCardDto();
 
         //Act
-        AddProductInCartDto productInCartDto = createProductInCardDto();
         CartItemEntity cartItem = cartItemServiceToTest
                 .findByProductIdAndOrderIdAndUserID(productInCartDto, testCartItem.getOrder().getId());
 
         //Assert
-
         assertNotNull(cartItem);
 
         assertEquals(testCartItem.getProduct().getId(), cartItem.getProduct().getId());
@@ -68,6 +67,18 @@ class CartItemServiceImplTest {
                 ObjectNotFoundException.class,
                 () -> cartItemServiceToTest.findByProductIdAndOrderIdAndUserID(productInCartDto, ORDER_ID)
         );
+    }
+
+    @Test
+    void testCartItemIsPresentInOrder() {
+        AddProductInCartDto productInCartDto = createProductInCardDto();
+
+        CartItemEntity testCartItem = createTestCartItem();
+
+        Mockito.when(cartItemRepository.findByUserIdAndProductIdAndOrderId(USER_ID, PRODUCT_ID, ORDER_ID))
+                .thenReturn(Optional.of(testCartItem));
+
+        assertTrue(cartItemServiceToTest.isCartItemPresentInOrder(productInCartDto, testCartItem.getOrder().getId()));
     }
 
     private AddProductInCartDto createProductInCardDto() {
