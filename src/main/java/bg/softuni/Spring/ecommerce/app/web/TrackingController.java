@@ -20,7 +20,7 @@ public class TrackingController {
         this.orderService = orderService;
     }
 
-    @GetMapping("/order/{trackingId}")
+    @GetMapping("/orders/{trackingId}")
     public ResponseEntity<OrderDto> findOrderByTrackingId(@PathVariable("trackingId") UUID trackingId) {
 
             OrderDto orderDto = orderService.searchOrderByTrackingId(trackingId);
