@@ -67,7 +67,7 @@ public class CustomerOrderController {
     }
 
     @GetMapping("/orders/{userId}")
-    public ResponseEntity<List<OrderDto>> getPlacedOrders(@PathVariable Long userId) {
+    public ResponseEntity<List<OrderDto>> getOrdersByUserId(@PathVariable Long userId) {
         List<OrderDto> userPlacedOrders = orderService.getUserPlacedOrders(userId);
         return ResponseEntity.ok(userPlacedOrders);
     }

@@ -31,13 +31,13 @@ public class CustomerProductController {
         return ResponseEntity.ok(allProducts);
     }
 
-    @GetMapping("/products/{name}")
+    @GetMapping("/products/title/{name}")
     public ResponseEntity<List<ProductDto>> searchProductByTitle(@PathVariable String name) {
         List<ProductDto> allProductsByName = productService.searchProductByTitle(name);
         return ResponseEntity.ok(allProductsByName);
     }
 
-    @GetMapping("/products/{orderId}")
+    @GetMapping("/products/order/{orderId}")
     public ResponseEntity<OrderedProductsDto> getOrderedProductsDetails(@PathVariable("orderId") Long orderId) {
         return ResponseEntity
                 .ok(productService.getOrderedProductsDetailsByOrderId(orderId));
