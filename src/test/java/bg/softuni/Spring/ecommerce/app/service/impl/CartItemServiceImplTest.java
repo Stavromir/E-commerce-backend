@@ -70,6 +70,15 @@ class CartItemServiceImplTest {
     }
 
     @Test
+    void testCartItemIsNotPresentInOrder() {
+        AddProductInCartDto productInCartDto = createProductInCardDto();
+
+        CartItemEntity testCartItem = createTestCartItem();
+
+        assertFalse(cartItemServiceToTest.isCartItemPresentInOrder(productInCartDto, testCartItem.getOrder().getId()));
+    }
+
+    @Test
     void testCartItemIsPresentInOrder() {
         AddProductInCartDto productInCartDto = createProductInCardDto();
 
@@ -79,6 +88,21 @@ class CartItemServiceImplTest {
                 .thenReturn(Optional.of(testCartItem));
 
         assertTrue(cartItemServiceToTest.isCartItemPresentInOrder(productInCartDto, testCartItem.getOrder().getId()));
+    }
+
+    @Test
+    void testSaveCartEntitySuccessfully() {
+        CartItemEntity testCartItemPassed = createTestCartItem();
+        CartItemEntity testCartItemReturned = createTestCartItem();
+
+        Mockito.when(cartItemServiceToTest.saveCartEntity(testCartItemPassed))
+                        .thenReturn(testCartItemReturned);
+
+        CartItemEntity cartItemEntity = cartItemServiceToTest.saveCartEntity(testCartItemPassed);
+
+        assertNotNull(cartItemEntity);
+        assertEquals(testCartItemPassed.getUser().getId(), testCartItemReturned.getUser().getId());
+        assertEquals(testCartItemPassed.getProduct().getId(), testCartItemReturned.getProduct().getId());
     }
 
     private AddProductInCartDto createProductInCardDto() {
