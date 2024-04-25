@@ -22,7 +22,7 @@ public class CustomerOrderController {
     }
 
 
-    @PostMapping("/cart")
+    @PostMapping("/carts")
     public ResponseEntity<Long> addProductToCart(@RequestBody AddProductInCartDto addProductInCardDto) {
 
         Long cartItemId = orderService.addProductToCart(addProductInCardDto);
@@ -30,14 +30,14 @@ public class CustomerOrderController {
 
     }
 
-    @GetMapping("/cart/{userId}")
+    @GetMapping("/carts/{userId}")
     public ResponseEntity<OrderDto> getCartByUserId(@PathVariable Long userId) {
 
         OrderDto cartByUserId = orderService.getCartByUserId(userId);
         return ResponseEntity.ok(cartByUserId);
     }
 
-    @GetMapping("/coupon/{userId}/{code}")
+    @GetMapping("/coupons/{userId}/{code}")
     public ResponseEntity<OrderDto> applyCoupon(@PathVariable("userId") Long userId,
                                          @PathVariable("code") String code
     ) {
@@ -45,28 +45,28 @@ public class CustomerOrderController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(orderDto);
     }
 
-    @PostMapping("/addition")
+    @PostMapping("/carts/addition")
     public ResponseEntity<Long> increaseQuantity(@RequestBody AddProductInCartDto addProductInCardDto) {
 
         Long orderId = orderService.increaseProductQuantity(addProductInCardDto);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(orderId);
     }
 
-    @PostMapping("/subtraction")
+    @PostMapping("/carts/subtraction")
     public ResponseEntity<Long> decreaseQuantity(@RequestBody AddProductInCartDto addProductInCardDto) {
 
         Long orderId = orderService.decreaseProductQuantity(addProductInCardDto);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(orderId);
     }
 
-    @PostMapping("/placeOrder")
+    @PostMapping("/orders")
     public ResponseEntity<Long> placeOrder(@RequestBody PlaceOrderDto placeOrderDto) {
 
         Long orderId = orderService.placeOrder(placeOrderDto);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(orderId);
     }
 
-    @GetMapping("/myOrders/{userId}")
+    @GetMapping("/orders/{userId}")
     public ResponseEntity<List<OrderDto>> getPlacedOrders(@PathVariable Long userId) {
         List<OrderDto> userPlacedOrders = orderService.getUserPlacedOrders(userId);
         return ResponseEntity.ok(userPlacedOrders);
