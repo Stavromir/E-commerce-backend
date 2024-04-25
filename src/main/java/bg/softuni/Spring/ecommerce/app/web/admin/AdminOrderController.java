@@ -20,22 +20,22 @@ public class AdminOrderController {
         this.orderService = orderService;
     }
 
-    @GetMapping("/placedOrders")
+    @GetMapping("/orders")
     public ResponseEntity<List<OrderDto>> getAllPlacedOrders(){
 
         List<OrderDto> allPlacedOrders = orderService.getAllPlacedOrders();
         return ResponseEntity.status(HttpStatus.OK).body(allPlacedOrders);
     }
 
-    @GetMapping("/changeStatus/{orderId}/{status}")
-    public ResponseEntity<?> changeOrderStatus(@PathVariable("orderId") Long orderId,
+    @PatchMapping("/orders/{orderId}/{status}")
+    public ResponseEntity<Long> changeOrderStatus(@PathVariable("orderId") Long orderId,
                                                @PathVariable("status") String status){
 
             Long changedOrderId = orderService.changeOrderStatus(orderId, status);
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(changedOrderId);
     }
 
-    @GetMapping("/order/analytics")
+    @GetMapping("/analytics")
     public ResponseEntity<AnalyticsResponseDto> getAnalytics(){
         return ResponseEntity.ok(orderService.getAnalytics());
     }
