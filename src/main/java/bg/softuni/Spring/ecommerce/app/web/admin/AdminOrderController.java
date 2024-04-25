@@ -27,7 +27,7 @@ public class AdminOrderController {
         return ResponseEntity.status(HttpStatus.OK).body(allPlacedOrders);
     }
 
-    @PatchMapping("/orders/{orderId}/{status}")
+    @GetMapping("/orders/{orderId}/{status}")
     public ResponseEntity<Long> changeOrderStatus(@PathVariable("orderId") Long orderId,
                                                @PathVariable("status") String status){
 
