@@ -27,7 +27,7 @@ public class AdminProductController {
 
 
     // @ModelAttribute не ми допада
-    @PostMapping("/product")
+    @PostMapping("/products")
     public ResponseEntity<ProductDto> addProduct (@ModelAttribute ProductDto productDto) throws IOException {
         ProductDto productDto1 = productService.addProduct(productDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(productDto1);
@@ -40,34 +40,34 @@ public class AdminProductController {
         return ResponseEntity.ok(allProducts);
     }
 
-    @GetMapping("/search/{name}")
+    @GetMapping("/products/{name}")
     public ResponseEntity<List<ProductDto>> searchProductByTitle(@PathVariable String name) {
         List<ProductDto> allProductsByName = productService.searchProductByTitle(name);
         return ResponseEntity.ok(allProductsByName);
     }
 
-    @DeleteMapping("/product/{productId}")
+    @DeleteMapping("/products/{productId}")
     public ResponseEntity<Void> deleteProduct(@PathVariable("productId") Long productId) {
         productService.deleteProduct(productId);
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/faq")
-    public ResponseEntity<?> createFAQ(@RequestBody FAQDto faqDto) {
+    @PostMapping("/faqs")
+    public ResponseEntity<Long> createFAQ(@RequestBody FAQDto faqDto) {
 
             Long faqId = faqService.createFAQ(faqDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(faqId);
     }
 
-    @GetMapping("/product/{productId}")
-    public ResponseEntity<?> getProductById(@PathVariable("productId") Long productId) {
+    @GetMapping("/products/{productId}")
+    public ResponseEntity<ProductDto> getProductById(@PathVariable("productId") Long productId) {
 
             ProductDto productDtoById = productService.getProductDtoById(productId);
             return ResponseEntity.ok(productDtoById);
     }
 
-    @PutMapping("/product/update")
-    public ResponseEntity<?> updateProduct(@ModelAttribute ProductDto productDto) throws IOException {
+    @PutMapping("/products")
+    public ResponseEntity<Long> updateProduct(@ModelAttribute ProductDto productDto) throws IOException {
 
             Long productId = productService.updateProduct(productDto);
             return ResponseEntity.status(HttpStatus.OK).body(productId);
