@@ -20,8 +20,8 @@ public class CustomerReviewController {
     }
 
 
-    @PostMapping("/review")
-    public ResponseEntity<?> postReview (@ModelAttribute ReviewDto reviewDto) throws IOException {
+    @PostMapping("/reviews")
+    public ResponseEntity<Long> postReview (@ModelAttribute ReviewDto reviewDto) throws IOException {
 
             Long reviewId = reviewService.postReview(reviewDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(reviewId);
