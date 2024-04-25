@@ -38,7 +38,7 @@ public class CustomerOrderController {
     }
 
     @GetMapping("/coupon/{userId}/{code}")
-    public ResponseEntity<?> applyCoupon(@PathVariable("userId") Long userId,
+    public ResponseEntity<OrderDto> applyCoupon(@PathVariable("userId") Long userId,
                                          @PathVariable("code") String code
     ) {
         OrderDto orderDto = orderService.applyCoupon(userId, code);
@@ -53,14 +53,14 @@ public class CustomerOrderController {
     }
 
     @PostMapping("/subtraction")
-    public ResponseEntity<?> decreaseQuantity(@RequestBody AddProductInCartDto addProductInCardDto) {
+    public ResponseEntity<Long> decreaseQuantity(@RequestBody AddProductInCartDto addProductInCardDto) {
 
         Long orderId = orderService.decreaseProductQuantity(addProductInCardDto);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(orderId);
     }
 
     @PostMapping("/placeOrder")
-    public ResponseEntity<?> placeOrder(@RequestBody PlaceOrderDto placeOrderDto) {
+    public ResponseEntity<Long> placeOrder(@RequestBody PlaceOrderDto placeOrderDto) {
 
         Long orderId = orderService.placeOrder(placeOrderDto);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(orderId);

@@ -20,7 +20,7 @@ public class AdminCategoryController {
     }
 
 
-    @PostMapping("/category")
+    @PostMapping("/categories")
     public ResponseEntity<Long> createCategory(
             @RequestBody CategoryDto categoryDto) {
 
