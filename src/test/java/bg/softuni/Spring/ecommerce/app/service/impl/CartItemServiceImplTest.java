@@ -7,13 +7,13 @@ import bg.softuni.Spring.ecommerce.app.model.entity.ProductEntity;
 import bg.softuni.Spring.ecommerce.app.model.entity.UserEntity;
 import bg.softuni.Spring.ecommerce.app.repository.CartItemRepository;
 import bg.softuni.Spring.ecommerce.app.service.CartItemService;
+import bg.softuni.Spring.ecommerce.app.service.exception.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
 
@@ -58,6 +58,16 @@ class CartItemServiceImplTest {
         assertEquals(testCartItem.getProduct().getId(), cartItem.getProduct().getId());
         assertEquals(testCartItem.getOrder().getId(), cartItem.getOrder().getId());
         assertEquals(testCartItem.getUser().getId(), cartItem.getUser().getId());
+    }
+
+    @Test
+    void testNotFoundCartItemByProductIdOrderIdAndUserId() {
+        AddProductInCartDto productInCartDto = createProductInCardDto();
+
+        assertThrows(
+                ObjectNotFoundException.class,
+                () -> cartItemServiceToTest.findByProductIdAndOrderIdAndUserID(productInCartDto, ORDER_ID)
+        );
     }
 
     private AddProductInCartDto createProductInCardDto() {
