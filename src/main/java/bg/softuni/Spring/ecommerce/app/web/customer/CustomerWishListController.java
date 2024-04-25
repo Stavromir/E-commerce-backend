@@ -19,14 +19,14 @@ public class CustomerWishListController {
         this.wishListService = wishListService;
     }
 
-    @PostMapping("/wishlist")
+    @PostMapping("/wishlists")
     public ResponseEntity<Long> addProductToWishList(@RequestBody WishListDto wishListDto) {
 
             Long wishListId = wishListService.addProductToWishList(wishListDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(wishListId);
     }
 
-    @GetMapping("/wishlist/{userId}")
+    @GetMapping("/wishlists/{userId}")
     public ResponseEntity<List<WishListDto>> getAllProductsInWishList(@PathVariable("userId") Long userId){
 
             List<WishListDto> allProductsInWishList = wishListService.getAllProductsInWishList(userId);
