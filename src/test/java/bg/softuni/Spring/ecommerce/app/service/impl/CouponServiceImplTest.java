@@ -4,6 +4,7 @@ import bg.softuni.Spring.ecommerce.app.model.dto.CouponDto;
 import bg.softuni.Spring.ecommerce.app.model.entity.CouponEntity;
 import bg.softuni.Spring.ecommerce.app.repository.CouponRepository;
 import bg.softuni.Spring.ecommerce.app.service.CouponService;
+import bg.softuni.Spring.ecommerce.app.service.exception.ObjectNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -54,6 +55,20 @@ class CouponServiceImplTest {
         assertEquals(testCouponDto.getExpirationDate(), coupon.getExpirationDate());
     }
 
+    @Test
+    void testCreateExistingCoupon() {
+
+        CouponDto testCouponDto = createCouponDto();
+
+        when(couponRepository.existsByCode(anyString()))
+                .thenReturn(true);
+
+        assertThrows(
+                ObjectNotFoundException.class,
+                () -> couponServiceToTest.createCoupon(testCouponDto)
+        );
+    }
+
     private CouponEntity createCouponEntity() {
         return new CouponEntity()
                 .setName(COUPON_NAME)
@@ -68,11 +83,6 @@ class CouponServiceImplTest {
                 .setCode(COUPON_CODE)
                 .setDiscount(COUPON_DISCOUNT)
                 .setExpirationDate(COUPON_EXPIRATION_DATE);
-    }
-
-    @Test
-    void testCreateExistingCoupon() {
-
     }
 
 
