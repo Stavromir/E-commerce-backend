@@ -8,8 +8,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -17,8 +18,9 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class CategoryServiceImplTest {
 
-    public static final String CATEGORY_NAME = "testCategory";
-    public static final String CATEGORY_DESCRIPTION = "testDESCRIPTION";
+    public static final Long CATEGORY_ONE_ID = 1L;
+    public static final String CATEGORY_ONE_NAME = "categoryOne";
+    public static final String CATEGORY_ONE_DESCRIPTION = "descriptionOne";
 
     private CategoryService categoryServiceToTest;
 
@@ -34,14 +36,14 @@ class CategoryServiceImplTest {
     void testCreateExistingCategory() {
         CategoryDto categoryDto = createCategoryDto();
 
-        when(categoryRepository.existsByName(CATEGORY_NAME))
+        when(categoryRepository.existsByName(CATEGORY_ONE_NAME))
                 .thenReturn(true);
 
         assertThrows(
                 IllegalArgumentException.class,
                 () -> categoryServiceToTest.createCategory(categoryDto)
         );
-        verify(categoryRepository, times(1)).existsByName(CATEGORY_NAME);
+        verify(categoryRepository, times(1)).existsByName(CATEGORY_ONE_NAME);
     }
 
     @Test
@@ -61,17 +63,42 @@ class CategoryServiceImplTest {
         verify(categoryRepository, times(1)).save(any(CategoryEntity.class));
     }
 
+    @Test
+    void testGetCategoryDro() {
+        CategoryEntity categoryEntity = createCategoryEntity();
+
+        CategoryDto categoryDto = categoryServiceToTest.getCategoryDto(categoryEntity);
+
+        assertNotNull(categoryDto);
+        assertEquals(categoryEntity.getName(), categoryDto.getName());
+        assertEquals(categoryEntity.getDescription(), categoryDto.getDescription());
+        assertEquals(categoryEntity.getId(), categoryDto.getId());
+    }
+
+    @Test
+    void testFindById () {
+
+    }
+
+    @Test
+    void testNotFoundById() {
+
+    }
+
 
     private CategoryDto createCategoryDto () {
         return new CategoryDto()
-                .setName(CATEGORY_NAME)
-                .setDescription(CATEGORY_DESCRIPTION);
+                .setId(CATEGORY_ONE_ID)
+                .setName(CATEGORY_ONE_NAME)
+                .setDescription(CATEGORY_ONE_DESCRIPTION);
     }
 
     private CategoryEntity createCategoryEntity() {
-        return new CategoryEntity()
-                .setName(CATEGORY_NAME)
-                .setDescription(CATEGORY_DESCRIPTION);
+        CategoryEntity category = new CategoryEntity()
+                .setName(CATEGORY_ONE_NAME)
+                .setDescription(CATEGORY_ONE_DESCRIPTION);
+        category.setId(CATEGORY_ONE_ID);
+        return category;
     }
 
 }
