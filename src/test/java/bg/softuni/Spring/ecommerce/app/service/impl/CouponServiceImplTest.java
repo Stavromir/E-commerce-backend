@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -82,6 +83,26 @@ class CouponServiceImplTest {
         assertEquals(testCoupon.getCode(), couponDto.getCode());
         assertEquals(testCoupon.getDiscount(), couponDto.getDiscount());
         assertEquals(testCoupon.getExpirationDate(), couponDto.getExpirationDate());
+    }
+
+    @Test
+    void testFindByCode() {
+        CouponEntity testCouponEntity = createCouponEntity();
+
+        when(couponRepository.findByCode(anyString()))
+                .thenReturn(Optional.of(testCouponEntity));
+
+        CouponEntity couponEntity = couponServiceToTest.findByCode(anyString());
+
+        assertNotNull(couponEntity);
+    }
+
+    @Test
+    void testNotFoundByCode() {
+        assertThrows(
+                ObjectNotFoundException.class,
+                () -> couponServiceToTest.findByCode(anyString())
+        );
     }
 
     private CouponEntity createCouponEntity() {
