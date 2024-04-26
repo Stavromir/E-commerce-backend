@@ -22,7 +22,7 @@ public class CouponServiceImpl implements CouponService {
 
 
     @Override
-    public Long createCoupon(CouponDto couponDto) {
+    public CouponEntity createCoupon(CouponDto couponDto) {
 
         if (couponRepository.existsByCode(couponDto.getCode())) {
             throw new ObjectNotFoundException("Coupon code already exist");
@@ -34,14 +34,14 @@ public class CouponServiceImpl implements CouponService {
                 .setDiscount(couponDto.getDiscount())
                 .setExpirationDate(couponDto.getExpirationDate());
 
-        return couponRepository.save(coupon).getId();
+        return couponRepository.save(coupon);
     }
 
     @Override
     public List<CouponDto> getAllCoupons() {
         return couponRepository.findAll()
                 .stream()
-                .map(CouponServiceImpl::getCouponDto)
+                .map(this::getCouponDto)
                 .collect(Collectors.toList());
     }
 
@@ -60,8 +60,8 @@ public class CouponServiceImpl implements CouponService {
         return currentDate.after(expirationDate);
     }
 
-
-    private static CouponDto getCouponDto(CouponEntity coupon) {
+    @Override
+    public CouponDto getCouponDto(CouponEntity coupon) {
         return new CouponDto()
                 .setId(coupon.getId())
                 .setName(coupon.getName())

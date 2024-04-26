@@ -20,7 +20,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Long createCategory(CategoryDto categoryDto) {
+    public CategoryEntity createCategory(CategoryDto categoryDto) {
 
         if (categoryRepository.existsByName(categoryDto.getName())) {
             throw new IllegalArgumentException("Category already exist");
@@ -30,7 +30,7 @@ public class CategoryServiceImpl implements CategoryService {
                 .setName(categoryDto.getName())
                 .setDescription(categoryDto.getDescription());
 
-        return categoryRepository.save(categoryEntity).getId();
+        return categoryRepository.save(categoryEntity);
     }
 
     @Override
@@ -38,18 +38,21 @@ public class CategoryServiceImpl implements CategoryService {
 
         return categoryRepository.findAll()
                 .stream()
-                .map(categoryEntity -> {
-                    return new CategoryDto()
-                            .setId(categoryEntity.getId())
-                            .setName(categoryEntity.getName())
-                            .setDescription(categoryEntity.getDescription());
-                }).toList();
+                .map(this::getCategoryDto).toList();
     }
 
     @Override
     public CategoryEntity findById(Long categoryId) {
         return categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ObjectNotFoundException("Category not exist"));
+    }
+
+    @Override
+    public CategoryDto getCategoryDto(CategoryEntity categoryEntity) {
+        return new CategoryDto()
+                .setId(categoryEntity.getId())
+                .setName(categoryEntity.getName())
+                .setDescription(categoryEntity.getDescription());
     }
 
 }

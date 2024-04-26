@@ -26,7 +26,7 @@ public class AdminCouponController {
     @PostMapping("/coupons")
     public ResponseEntity<Long> createCoupon(@RequestBody CouponDto couponDto) {
 
-            Long couponId = couponService.createCoupon(couponDto);
+            Long couponId = couponService.createCoupon(couponDto).getId();
             return ResponseEntity.status(HttpStatus.CREATED).body(couponId);
     }
 

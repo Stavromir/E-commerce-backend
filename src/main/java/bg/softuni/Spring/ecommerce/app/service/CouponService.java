@@ -7,11 +7,13 @@ import java.util.List;
 
 public interface CouponService {
 
-    Long createCoupon(CouponDto couponDto);
+    CouponEntity createCoupon(CouponDto couponDto);
 
     List<CouponDto> getAllCoupons();
 
     CouponEntity findByCode(String code);
 
     boolean isExpired(String code);
+
+    CouponDto getCouponDto(CouponEntity coupon);
 }

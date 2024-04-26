@@ -24,7 +24,7 @@ public class AdminCategoryController {
     public ResponseEntity<Long> createCategory(
             @RequestBody CategoryDto categoryDto) {
 
-        Long categoryId = categoryService.createCategory(categoryDto);
+        Long categoryId = categoryService.createCategory(categoryDto).getId();
 
         return ResponseEntity.status(HttpStatus.CREATED).body(categoryId);
     }
