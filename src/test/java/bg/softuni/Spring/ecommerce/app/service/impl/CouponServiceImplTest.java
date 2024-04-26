@@ -22,6 +22,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class CouponServiceImplTest {
 
+    public static final Long COUPON_ID = 1L;
     public static final String COUPON_NAME = "CouponOne";
     public static final String COUPON_CODE = "CodeOne";
     public static final Long COUPON_DISCOUNT = 10L;
@@ -69,12 +70,28 @@ class CouponServiceImplTest {
         );
     }
 
+    @Test
+    void testGetCouponDto(){
+        CouponEntity testCoupon = createCouponEntity();
+
+        CouponDto couponDto = couponServiceToTest.getCouponDto(testCoupon);
+
+        assertNotNull(couponDto);
+        assertEquals(testCoupon.getId(), couponDto.getId());
+        assertEquals(testCoupon.getName(), couponDto.getName());
+        assertEquals(testCoupon.getCode(), couponDto.getCode());
+        assertEquals(testCoupon.getDiscount(), couponDto.getDiscount());
+        assertEquals(testCoupon.getExpirationDate(), couponDto.getExpirationDate());
+    }
+
     private CouponEntity createCouponEntity() {
-        return new CouponEntity()
+        CouponEntity coupon = new CouponEntity()
                 .setName(COUPON_NAME)
                 .setCode(COUPON_CODE)
                 .setDiscount(COUPON_DISCOUNT)
                 .setExpirationDate(COUPON_EXPIRATION_DATE);
+        coupon.setId(COUPON_ID);
+        return coupon;
     }
 
     private CouponDto createCouponDto() {
