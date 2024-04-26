@@ -41,6 +41,7 @@ class CategoryServiceImplTest {
                 IllegalArgumentException.class,
                 () -> categoryServiceToTest.createCategory(categoryDto)
         );
+        verify(categoryRepository, times(1)).existsByName(CATEGORY_NAME);
     }
 
     @Test
