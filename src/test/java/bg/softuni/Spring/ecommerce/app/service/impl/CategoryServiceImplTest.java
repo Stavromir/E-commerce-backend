@@ -4,13 +4,14 @@ import bg.softuni.Spring.ecommerce.app.model.dto.CategoryDto;
 import bg.softuni.Spring.ecommerce.app.model.entity.CategoryEntity;
 import bg.softuni.Spring.ecommerce.app.repository.CategoryRepository;
 import bg.softuni.Spring.ecommerce.app.service.CategoryService;
+import bg.softuni.Spring.ecommerce.app.service.exception.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -77,12 +78,25 @@ class CategoryServiceImplTest {
 
     @Test
     void testFindById () {
+        CategoryEntity testCategoryEntity = createCategoryEntity();
 
+        when(categoryRepository.findById(anyLong()))
+                .thenReturn(Optional.of(testCategoryEntity));
+
+        CategoryEntity foundCategory = categoryServiceToTest.findById(CATEGORY_ONE_ID);
+
+        assertNotNull(foundCategory);
+        assertEquals(testCategoryEntity.getDescription(), foundCategory.getDescription());
+        assertEquals(testCategoryEntity.getName(), foundCategory.getName());
     }
 
     @Test
     void testNotFoundById() {
 
+        assertThrows(
+                ObjectNotFoundException.class,
+                () -> categoryServiceToTest.findById(CATEGORY_ONE_ID)
+        );
     }
 
 
