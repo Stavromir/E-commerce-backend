@@ -27,7 +27,9 @@ class CouponServiceImplTest {
     public static final String COUPON_NAME = "CouponOne";
     public static final String COUPON_CODE = "CodeOne";
     public static final Long COUPON_DISCOUNT = 10L;
-    public static final Date COUPON_EXPIRATION_DATE = new Date();
+    public static final Date COUPON_EXPIRATION_NOW_DATE = new Date();
+    public static final Date COUPON_EXPIRATION_PAST_DATE = new Date(System.currentTimeMillis() - 86400000);
+    public static final Date COUPON_EXPIRATION_FEATURE_DATE = new Date(System.currentTimeMillis() + 86400000);
 
     private CouponService couponServiceToTest;
 
@@ -105,12 +107,34 @@ class CouponServiceImplTest {
         );
     }
 
+    @Test
+    void testIsExpired () {
+        CouponEntity testCouponEntity = createCouponEntity()
+                .setExpirationDate(COUPON_EXPIRATION_PAST_DATE);
+
+        when(couponRepository.findByCode(anyString()))
+                .thenReturn(Optional.of(testCouponEntity));
+
+        assertTrue(couponServiceToTest.isExpired(anyString()));
+    }
+
+    @Test
+    void testIsNotExpired() {
+        CouponEntity testCouponEntity = createCouponEntity()
+                .setExpirationDate(COUPON_EXPIRATION_FEATURE_DATE);
+
+        when(couponRepository.findByCode(anyString()))
+                .thenReturn(Optional.of(testCouponEntity));
+
+        assertFalse(couponServiceToTest.isExpired(anyString()));
+    }
+
     private CouponEntity createCouponEntity() {
         CouponEntity coupon = new CouponEntity()
                 .setName(COUPON_NAME)
                 .setCode(COUPON_CODE)
                 .setDiscount(COUPON_DISCOUNT)
-                .setExpirationDate(COUPON_EXPIRATION_DATE);
+                .setExpirationDate(COUPON_EXPIRATION_NOW_DATE);
         coupon.setId(COUPON_ID);
         return coupon;
     }
@@ -120,7 +144,7 @@ class CouponServiceImplTest {
                 .setName(COUPON_NAME)
                 .setCode(COUPON_CODE)
                 .setDiscount(COUPON_DISCOUNT)
-                .setExpirationDate(COUPON_EXPIRATION_DATE);
+                .setExpirationDate(COUPON_EXPIRATION_NOW_DATE);
     }
 
 
