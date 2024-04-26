@@ -83,7 +83,7 @@ class CategoryServiceImplTest {
         when(categoryRepository.findById(anyLong()))
                 .thenReturn(Optional.of(testCategoryEntity));
 
-        CategoryEntity foundCategory = categoryServiceToTest.findById(CATEGORY_ONE_ID);
+        CategoryEntity foundCategory = categoryServiceToTest.findById(anyLong());
 
         assertNotNull(foundCategory);
         assertEquals(testCategoryEntity.getDescription(), foundCategory.getDescription());
