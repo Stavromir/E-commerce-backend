@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class CategoryServiceImplTest {
+class CategoryServiceTest {
 
     public static final Long CATEGORY_ONE_ID = 1L;
     public static final String CATEGORY_ONE_NAME = "categoryOne";

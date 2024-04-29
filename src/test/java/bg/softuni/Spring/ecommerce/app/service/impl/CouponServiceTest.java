@@ -5,15 +5,12 @@ import bg.softuni.Spring.ecommerce.app.model.entity.CouponEntity;
 import bg.softuni.Spring.ecommerce.app.repository.CouponRepository;
 import bg.softuni.Spring.ecommerce.app.service.CouponService;
 import bg.softuni.Spring.ecommerce.app.service.exception.ObjectNotFoundException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.Optional;
 
@@ -21,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class CouponServiceImplTest {
+class CouponServiceTest {
 
     public static final Long COUPON_ID = 1L;
     public static final String COUPON_NAME = "CouponOne";
