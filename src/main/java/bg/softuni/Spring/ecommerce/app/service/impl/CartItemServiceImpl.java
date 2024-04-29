@@ -3,6 +3,9 @@ package bg.softuni.Spring.ecommerce.app.service.impl;
 import bg.softuni.Spring.ecommerce.app.model.dto.AddProductInCartDto;
 import bg.softuni.Spring.ecommerce.app.model.dto.CartItemDto;
 import bg.softuni.Spring.ecommerce.app.model.entity.CartItemEntity;
+import bg.softuni.Spring.ecommerce.app.model.entity.OrderEntity;
+import bg.softuni.Spring.ecommerce.app.model.entity.ProductEntity;
+import bg.softuni.Spring.ecommerce.app.model.entity.UserEntity;
 import bg.softuni.Spring.ecommerce.app.repository.CartItemRepository;
 import bg.softuni.Spring.ecommerce.app.service.CartItemService;
 import bg.softuni.Spring.ecommerce.app.service.exception.ObjectNotFoundException;
@@ -53,6 +56,17 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     public CartItemEntity saveCartEntity(CartItemEntity cartItemEntity) {
         return cartItemRepository.save(cartItemEntity);
+    }
+
+    @Override
+    public CartItemEntity createCartItem(ProductEntity product, Long price, Long quantity,
+                                         UserEntity user, OrderEntity order) {
+        return  new CartItemEntity()
+                .setProduct(product)
+                .setPrice(product.getPrice())
+                .setQuantity(1L)
+                .setUser(user)
+                .setOrder(order);
     }
 
 }
