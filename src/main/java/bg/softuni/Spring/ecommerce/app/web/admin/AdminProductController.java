@@ -4,7 +4,6 @@ import bg.softuni.Spring.ecommerce.app.model.dto.FAQDto;
 import bg.softuni.Spring.ecommerce.app.model.dto.ProductDto;
 import bg.softuni.Spring.ecommerce.app.service.FAQService;
 import bg.softuni.Spring.ecommerce.app.service.ProductService;
-import bg.softuni.Spring.ecommerce.app.service.exception.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +41,7 @@ public class AdminProductController {
 
     @GetMapping("/products/title/{name}")
     public ResponseEntity<List<ProductDto>> searchProductByTitle(@PathVariable String name) {
-        List<ProductDto> allProductsByName = productService.searchProductByTitle(name);
+        List<ProductDto> allProductsByName = productService.findProductsByTitle(name);
         return ResponseEntity.ok(allProductsByName);
     }
 

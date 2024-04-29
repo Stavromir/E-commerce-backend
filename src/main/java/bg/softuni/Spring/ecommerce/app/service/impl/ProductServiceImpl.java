@@ -56,7 +56,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDto> searchProductByTitle(String name) {
+    public List<ProductDto> findProductsByTitle(String name) {
 
         return productRepository.findAllByNameContaining(name)
                 .stream()
@@ -126,7 +126,7 @@ public class ProductServiceImpl implements ProductService {
         ProductDto productDto = mapToProductDto(product);
 
         List<ReviewDto> allReviewsByProductId = reviewService.getAllReviewsByProductId(productId);
-        List<FAQDto> allFaq = faqService.getAllFaq(productId);
+        List<FAQDto> allFaq = faqService.getAllFaqByProductId(productId);
 
         return new ProductDetailDto()
                 .setProductDto(productDto)

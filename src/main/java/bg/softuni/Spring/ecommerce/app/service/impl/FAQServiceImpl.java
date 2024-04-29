@@ -29,16 +29,16 @@ public class FAQServiceImpl implements FAQService {
 
         ProductEntity product = productService.getProductById(faqDto.getProductId());
 
-        FAQEntity faq = new FAQEntity()
+        FAQEntity createdFAQ = new FAQEntity()
                 .setQuestion(faqDto.getQuestion())
                 .setAnswer(faqDto.getAnswer())
                 .setProduct(product);
 
-        return faqRepository.save(faq);
+        return faqRepository.save(createdFAQ);
     }
 
     @Override
-    public List<FAQDto> getAllFaq(Long productId) {
+    public List<FAQDto> getAllFaqByProductId(Long productId) {
         return faqRepository.getAllByProductId(productId)
                 .stream()
                 .map(FAQServiceImpl::mapToFaqDto)
