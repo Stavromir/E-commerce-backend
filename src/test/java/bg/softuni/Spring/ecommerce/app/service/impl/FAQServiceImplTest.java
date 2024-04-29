@@ -23,6 +23,17 @@ import java.io.IOException;
 @SpringBootTest
 class FAQServiceImplTest {
 
+    public static final String CATEGORY_NAME = "categoryName";
+    public static final String CATEGORY_DESCRIPTION = "categoryDescription";
+    public static final Long PRODUCT_PRICE = 1000L;
+    public static final String FIRST_PRODUCT_NAME = "firstProductName";
+    public static final String SECOND_PRODUCT_NAME = "secondProductName";
+    public static final String PRODUCT_DESCRIPTION = "productDescription";
+    public static final String FIRST_FAQ_QUESTION = "firstFaqQuestion";
+    public static final String SECOND_FAQ_QUESTION = "secondFaqQuestion";
+    public static final String FIRST_FAQ_ANSWER = "firstFaqAnswer";
+    public static final String SECOND_FAQ_ANSWER = "secondFaqAnswer";
+
     @Autowired
     private FAQService faqService;
 
@@ -48,26 +59,16 @@ class FAQServiceImplTest {
     @Test
     void testCreateFaq () throws IOException {
 
-        CategoryDto categoryDto = new CategoryDto()
-                .setName("testCategory")
-                .setDescription("testDescription");
+        CategoryDto categoryDto = getCategoryDto();
 
         Long categoryId = categoryService.createCategory(categoryDto).getId();
 
-        ProductDto testProduct = new ProductDto()
-                .setName("Product")
-                .setPrice(1000L)
-                .setDescription("Description")
-                .setCategoryId(categoryId);
+        ProductDto firstTestProduct = getProductDto(FIRST_PRODUCT_NAME, PRODUCT_DESCRIPTION,
+                PRODUCT_PRICE, categoryId);
 
-        ProductDto productDto = productService.addProduct(testProduct);
+        Long firstProductId = productService.addProduct(firstTestProduct).getId();
 
-        Long id = productDto.getId();
-
-        FAQDto faqDto = new FAQDto()
-                .setQuestion("q")
-                .setAnswer("a")
-                .setProductId(id);
+        FAQDto faqDto = getFaqDto(firstProductId);
 
         FAQEntity faq = faqService.createFAQ(faqDto);
 
@@ -75,6 +76,35 @@ class FAQServiceImplTest {
         Assertions.assertEquals(faqDto.getAnswer(), faq.getAnswer());
         Assertions.assertEquals(faqDto.getQuestion(), faq.getQuestion());
         Assertions.assertEquals(faqDto.getProductId(), faq.getProduct().getId());
+    }
+
+    private static FAQDto getFaqDto(Long firstProductId) {
+        return new FAQDto()
+                .setQuestion(FIRST_FAQ_QUESTION)
+                .setAnswer(FIRST_FAQ_ANSWER)
+                .setProductId(firstProductId);
+    }
+
+    private static ProductDto getProductDto(String name, String description,
+                                            Long price,Long categoryId) {
+
+        return new ProductDto()
+                .setName(name)
+                .setPrice(price)
+                .setDescription(description)
+                .setCategoryId(categoryId);
+    }
+
+    private static CategoryDto getCategoryDto() {
+        return new CategoryDto()
+                .setName(CATEGORY_NAME)
+                .setDescription(CATEGORY_DESCRIPTION);
+    }
+
+    @Test
+    void testGetAllFAQs () {
+
+
 
     }
 
