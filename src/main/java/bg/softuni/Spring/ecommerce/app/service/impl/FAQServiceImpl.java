@@ -25,7 +25,7 @@ public class FAQServiceImpl implements FAQService {
     }
 
     @Override
-    public Long createFAQ(FAQDto faqDto) {
+    public FAQEntity createFAQ(FAQDto faqDto) {
 
         ProductEntity product = productService.getProductById(faqDto.getProductId());
 
@@ -34,7 +34,7 @@ public class FAQServiceImpl implements FAQService {
                 .setAnswer(faqDto.getAnswer())
                 .setProduct(product);
 
-        return faqRepository.save(faq).getId();
+        return faqRepository.save(faq);
     }
 
     @Override

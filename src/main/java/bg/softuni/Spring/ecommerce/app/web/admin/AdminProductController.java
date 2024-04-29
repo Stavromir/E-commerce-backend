@@ -55,7 +55,7 @@ public class AdminProductController {
     @PostMapping("/faqs")
     public ResponseEntity<Long> createFAQ(@RequestBody FAQDto faqDto) {
 
-            Long faqId = faqService.createFAQ(faqDto);
+            Long faqId = faqService.createFAQ(faqDto).getId();
             return ResponseEntity.status(HttpStatus.CREATED).body(faqId);
     }
 
