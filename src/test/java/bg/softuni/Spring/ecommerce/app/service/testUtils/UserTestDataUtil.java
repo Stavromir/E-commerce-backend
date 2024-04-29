@@ -17,23 +17,23 @@ public class UserTestDataUtil {
 
 
     public UserEntity createTestUser (String email) {
-        UserEntity user = createUser()
-                .setRole(UserRoleEnum.CUSTOMER);
-
+        return createUser(email, UserRoleEnum.CUSTOMER);
     }
 
     public UserEntity createTestAdmin(String email) {
+        return createUser(email, UserRoleEnum.ADMIN);
 
     }
 
-    private UserEntity createUser() {
+    private UserEntity createUser(String email, UserRoleEnum userRoleEnum) {
 
         byte[] img = HexFormat.of().parseHex("e04f");
 
         return new UserEntity()
                 .setName("User")
-                .setEmail("user@email.com")
+                .setEmail(email)
                 .setPassword("testPass")
+                .setRole(userRoleEnum)
                 .setImg(img);
     }
 }
