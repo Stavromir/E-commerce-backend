@@ -5,9 +5,7 @@ import bg.softuni.Spring.ecommerce.app.model.dto.CategoryDto;
 import bg.softuni.Spring.ecommerce.app.model.dto.FAQDto;
 import bg.softuni.Spring.ecommerce.app.model.dto.ProductDto;
 import bg.softuni.Spring.ecommerce.app.model.entity.FAQEntity;
-import bg.softuni.Spring.ecommerce.app.model.entity.ProductEntity;
 import bg.softuni.Spring.ecommerce.app.repository.FAQRepository;
-import bg.softuni.Spring.ecommerce.app.repository.ProductRepository;
 import bg.softuni.Spring.ecommerce.app.service.CategoryService;
 import bg.softuni.Spring.ecommerce.app.service.FAQService;
 import bg.softuni.Spring.ecommerce.app.service.ProductService;
@@ -21,14 +19,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.io.IOException;
 
 @SpringBootTest
-class FAQServiceImplTest {
+class FAQServiceIntegrationTest {
 
     public static final String CATEGORY_NAME = "categoryName";
     public static final String CATEGORY_DESCRIPTION = "categoryDescription";
     public static final Long PRODUCT_PRICE = 1000L;
     public static final String FIRST_PRODUCT_NAME = "firstProductName";
-    public static final String SECOND_PRODUCT_NAME = "secondProductName";
-    public static final String PRODUCT_DESCRIPTION = "productDescription";
+    public static final String FIRST_PRODUCT_DESCRIPTION = "firstProductDescription";
     public static final String FIRST_FAQ_QUESTION = "firstFaqQuestion";
     public static final String SECOND_FAQ_QUESTION = "secondFaqQuestion";
     public static final String FIRST_FAQ_ANSWER = "firstFaqAnswer";
@@ -63,26 +60,57 @@ class FAQServiceImplTest {
 
         Long categoryId = categoryService.createCategory(categoryDto).getId();
 
-        ProductDto firstTestProduct = getProductDto(FIRST_PRODUCT_NAME, PRODUCT_DESCRIPTION,
+        ProductDto testProduct = getProductDto(FIRST_PRODUCT_NAME, FIRST_PRODUCT_DESCRIPTION,
                 PRODUCT_PRICE, categoryId);
 
-        Long firstProductId = productService.addProduct(firstTestProduct).getId();
+        Long productId = productService.addProduct(testProduct).getId();
 
-        FAQDto faqDto = getFaqDto(firstProductId);
+        FAQDto testFAQ = getFaqDto(FIRST_FAQ_QUESTION, FIRST_FAQ_ANSWER, productId);
 
-        FAQEntity faq = faqService.createFAQ(faqDto);
+        FAQEntity createdFAQ = faqService.createFAQ(testFAQ);
 
-        Assertions.assertNotNull(faq);
-        Assertions.assertEquals(faqDto.getAnswer(), faq.getAnswer());
-        Assertions.assertEquals(faqDto.getQuestion(), faq.getQuestion());
-        Assertions.assertEquals(faqDto.getProductId(), faq.getProduct().getId());
+        Assertions.assertNotNull(createdFAQ);
+        Assertions.assertEquals(testFAQ.getAnswer(), createdFAQ.getAnswer());
+        Assertions.assertEquals(testFAQ.getQuestion(), createdFAQ.getQuestion());
+        Assertions.assertEquals(testFAQ.getProductId(), createdFAQ.getProduct().getId());
     }
 
-    private static FAQDto getFaqDto(Long firstProductId) {
+    @Test
+    void testGetAllFaqByProductId () throws IOException {
+        CategoryDto categoryDto = getCategoryDto();
+        Long categoryId = categoryService.createCategory(categoryDto).getId();
+
+        ProductDto testProduct = getProductDto(FIRST_PRODUCT_NAME, FIRST_PRODUCT_DESCRIPTION,
+                PRODUCT_PRICE, categoryId);
+
+        Long testProductId = productService.addProduct(testProduct).getId();
+
+        FAQDto firstTestFAQ = getFaqDto(FIRST_FAQ_QUESTION, FIRST_FAQ_ANSWER, testProductId);
+        FAQDto secondTestFAQ = getFaqDto(SECOND_FAQ_QUESTION, SECOND_FAQ_ANSWER, testProductId);
+
+        FAQEntity firstCreatedFAQ = faqService.createFAQ(firstTestFAQ);
+        FAQEntity secondCreatedFAQ = faqService.createFAQ(secondTestFAQ);
+
+        FAQDto firstReturnedFAQ = faqService.getAllFaqByProductId(testProductId).get(0);
+        FAQDto secondReturnedFAQ = faqService.getAllFaqByProductId(testProductId).get(1);
+
+        Assertions.assertNotNull(firstReturnedFAQ);
+        Assertions.assertEquals(firstCreatedFAQ.getId(), firstReturnedFAQ.getId());
+        Assertions.assertEquals(firstCreatedFAQ.getQuestion(), firstReturnedFAQ.getQuestion());
+        Assertions.assertEquals(firstCreatedFAQ.getAnswer(), firstReturnedFAQ.getAnswer());
+
+
+        Assertions.assertNotNull(secondReturnedFAQ);
+        Assertions.assertEquals(secondCreatedFAQ.getId(), secondReturnedFAQ.getId());
+        Assertions.assertEquals(secondCreatedFAQ.getQuestion(), secondReturnedFAQ.getQuestion());
+        Assertions.assertEquals(secondCreatedFAQ.getAnswer(), secondReturnedFAQ.getAnswer());
+    }
+
+    private static FAQDto getFaqDto(String question, String answer,Long productId) {
         return new FAQDto()
-                .setQuestion(FIRST_FAQ_QUESTION)
-                .setAnswer(FIRST_FAQ_ANSWER)
-                .setProductId(firstProductId);
+                .setQuestion(question)
+                .setAnswer(answer)
+                .setProductId(productId);
     }
 
     private static ProductDto getProductDto(String name, String description,
@@ -99,13 +127,6 @@ class FAQServiceImplTest {
         return new CategoryDto()
                 .setName(CATEGORY_NAME)
                 .setDescription(CATEGORY_DESCRIPTION);
-    }
-
-    @Test
-    void testGetAllFAQs () {
-
-
-
     }
 
 
