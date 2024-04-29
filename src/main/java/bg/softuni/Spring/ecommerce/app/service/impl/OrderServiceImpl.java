@@ -48,7 +48,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Long addProductToCart(AddProductInCartDto addProductInCardDto) {
+    public Long addCartItemToActiveOrder(AddProductInCartDto addProductInCardDto) {
 
         UserEntity user = userService.getUserById(addProductInCardDto.getUserId());
 
@@ -60,13 +60,8 @@ public class OrderServiceImpl implements OrderService {
 
         ProductEntity product = productService.getProductById(addProductInCardDto.getProductId());
 
-
-        CartItemEntity cartItem = new CartItemEntity()
-                .setProduct(product)
-                .setPrice(product.getPrice())
-                .setQuantity(1L)
-                .setUser(user)
-                .setOrder(activeOrder);
+        CartItemEntity cartItem = cartItemService.createCartItem(product, product.getPrice(),
+                1L, user, activeOrder);
 
         CartItemEntity updatedCart = cartItemService.saveCartEntity(cartItem);
 
