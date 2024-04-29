@@ -9,5 +9,5 @@ public interface FAQService {
 
     FAQEntity createFAQ(FAQDto faqDto);
 
-    List<FAQDto> getAllFaq(Long productId);
+    List<FAQDto> getAllFaqByProductId(Long productId);
 }
