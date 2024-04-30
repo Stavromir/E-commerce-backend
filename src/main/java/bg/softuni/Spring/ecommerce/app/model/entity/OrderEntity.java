@@ -130,7 +130,7 @@ public class OrderEntity extends BaseEntity {
         return this;
     }
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
     public List<CartItemEntity> getCartItems() {
         return cartItems;
     }
