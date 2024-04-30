@@ -6,7 +6,7 @@ import bg.softuni.Spring.ecommerce.app.model.entity.UserEntity;
 
 public interface UserService {
 
-    UserDto createUser(SignupRequestDto signupRequest);
+    Long createUser(SignupRequestDto signupRequest);
 
     boolean hasUserWithEmail(String email);
 

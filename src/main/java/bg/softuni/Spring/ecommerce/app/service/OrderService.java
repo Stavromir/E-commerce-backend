@@ -13,9 +13,7 @@ public interface OrderService {
 
     void createEmptyOrder(UserEntity user);
 
-    Long addProductToCart (AddProductInCartDto addProductInCardDto);
-
-    boolean isCartItemPresent(AddProductInCartDto addProductInCardDto, Long activeOrderId);
+    Long addCartItemToActiveOrder(AddProductInCartDto addProductInCardDto);
 
     OrderDto getCartByUserId(Long userId);
 
