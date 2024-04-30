@@ -54,30 +54,22 @@ public class OrderServiceImpl implements OrderService {
 
         OrderEntity activeOrder = getOrderWithStatusPending(addProductInCardDto.getUserId());
 
-        if (isCartItemPresent(addProductInCardDto, activeOrder.getId())) {
-            throw new IllegalArgumentException("Product is already in cart!");
-        }
-
         ProductEntity product = productService.getProductById(addProductInCardDto.getProductId());
 
         CartItemEntity cartItem = cartItemService.createCartItem(product, product.getPrice(),
                 1L, user, activeOrder);
 
-        CartItemEntity updatedCart = cartItemService.saveCartEntity(cartItem);
+        CartItemEntity savedCartItem = cartItemService.saveCartEntity(cartItem);
 
         activeOrder.setTotalAmount(activeOrder.getTotalAmount() + cartItem.getPrice());
         activeOrder.setAmount(activeOrder.getAmount() + cartItem.getPrice());
-        activeOrder.getCartItems().add(updatedCart);
+        activeOrder.getCartItems().add(savedCartItem);
 
         orderRepository.save(activeOrder);
 
-        return updatedCart.getId();
+        return savedCartItem.getId();
     }
 
-    @Override
-    public boolean isCartItemPresent(AddProductInCartDto addProductInCardDto, Long activeOrderId) {
-        return cartItemService.isCartItemPresentInOrder(addProductInCardDto, activeOrderId);
-    }
 
     @Override
     public OrderDto getCartByUserId(Long userId) {

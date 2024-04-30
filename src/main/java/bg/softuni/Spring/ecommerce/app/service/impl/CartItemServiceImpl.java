@@ -44,11 +44,11 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public boolean isCartItemPresentInOrder(AddProductInCartDto addProductInCardDto, Long orderId) {
+    public boolean isCartItemPresentInOrder(Long userId, Long productId, Long orderId) {
 
         return cartItemRepository.findByUserIdAndProductIdAndOrderId(
-                addProductInCardDto.getUserId(),
-                addProductInCardDto.getProductId(),
+                userId,
+                productId,
                 orderId)
                 .isPresent();
     }
@@ -61,6 +61,11 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     public CartItemEntity createCartItem(ProductEntity product, Long price, Long quantity,
                                          UserEntity user, OrderEntity order) {
+
+        if (isCartItemPresentInOrder(user.getId(), product.getId(), order.getId())) {
+            throw new IllegalArgumentException("Product is already in cart!");
+        }
+
         return  new CartItemEntity()
                 .setProduct(product)
                 .setPrice(product.getPrice())

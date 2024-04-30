@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto createUser(SignupRequestDto signupRequest) {
+    public Long createUser(SignupRequestDto signupRequest) {
 
         UserEntity user = new UserEntity()
                 .setEmail(signupRequest.getEmail())
@@ -50,10 +50,7 @@ public class UserServiceImpl implements UserService {
 
         orderService.createEmptyOrder(user);
 
-        UserDto userDto = new UserDto()
-                .setId(savedUser.getId());
-
-        return userDto;
+        return savedUser.getId();
     }
 
     @Override
