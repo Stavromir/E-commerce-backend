@@ -13,7 +13,7 @@ public interface CartItemService {
 
     CartItemEntity saveCartEntity(CartItemEntity cartItemEntity);
 
-    CartItemEntity createCartItem(ProductEntity product, Long price, Long quantity, UserEntity user, OrderEntity order);
+    CartItemEntity createCartItem(ProductEntity product, UserEntity user, OrderEntity order);
 
     CartItemDto mapToCartItemDto(CartItemEntity updatedCart);
 
