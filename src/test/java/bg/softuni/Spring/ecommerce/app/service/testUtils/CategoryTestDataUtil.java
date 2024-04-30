@@ -11,7 +11,6 @@ public class CategoryTestDataUtil {
     @Autowired
     private CategoryRepository categoryRepository;
 
-
     public CategoryEntity createCategory () {
         CategoryEntity category = new CategoryEntity()
                 .setName("category")

@@ -29,11 +29,13 @@ public class UserTestDataUtil {
 
         byte[] img = HexFormat.of().parseHex("e04f");
 
-        return new UserEntity()
+        UserEntity user = new UserEntity()
                 .setName("User")
                 .setEmail(email)
                 .setPassword("testPass")
                 .setRole(userRoleEnum)
                 .setImg(img);
+
+        return userRepository.save(user);
     }
 }
