@@ -23,6 +23,8 @@ import static org.mockito.Mockito.*;
 class CartItemServiceTest {
 
     public static final Long PRODUCT_ID = 1L;
+    public static final Long PRODUCT_PRICE = 1000L;
+    public static final Long CART_ITEM_QUANTITY = 1L;
     public static final Long ORDER_ID = 2L;
     public static final Long USER_ID = 3L;
 
@@ -79,7 +81,8 @@ class CartItemServiceTest {
 
         CartItemEntity testCartItem = createTestCartItem();
 
-        assertFalse(cartItemServiceToTest.isCartItemPresentInOrder(productInCartDto, testCartItem.getOrder().getId()));
+        assertFalse(cartItemServiceToTest.isCartItemPresentInOrder(USER_ID, PRODUCT_ID,
+                testCartItem.getOrder().getId()));
         verify(cartItemRepository, times(1))
                 .findByUserIdAndProductIdAndOrderId(anyLong(), anyLong(), anyLong());
     }
@@ -93,7 +96,8 @@ class CartItemServiceTest {
         when(cartItemRepository.findByUserIdAndProductIdAndOrderId(anyLong(), anyLong(), anyLong()))
                 .thenReturn(Optional.of(testCartItem));
 
-        assertTrue(cartItemServiceToTest.isCartItemPresentInOrder(productInCartDto, testCartItem.getOrder().getId()));
+        assertTrue(cartItemServiceToTest.isCartItemPresentInOrder(USER_ID, PRODUCT_ID,
+                testCartItem.getOrder().getId()));
         verify(cartItemRepository, times(1))
                 .findByUserIdAndProductIdAndOrderId(anyLong(), anyLong(), anyLong());
     }
@@ -115,6 +119,37 @@ class CartItemServiceTest {
 
     }
 
+    @Test
+    void testCreateAlreadyExistingCartItem() {
+
+        CartItemEntity testCartItem = createTestCartItem();
+
+        when(cartItemRepository.findByUserIdAndProductIdAndOrderId(anyLong(), anyLong(), anyLong()))
+                .thenReturn(Optional.of(testCartItem));
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> cartItemServiceToTest.createCartItem(testCartItem.getProduct(),
+                        testCartItem.getUser(), testCartItem.getOrder())
+        );
+    }
+
+    @Test
+    void testCartItem() {
+
+        CartItemEntity testCartItem = createTestCartItem();
+
+        CartItemEntity createdCartItem = cartItemServiceToTest.createCartItem(testCartItem.getProduct(),
+                testCartItem.getUser(), testCartItem.getOrder());
+
+        assertNotNull(createdCartItem);
+        assertEquals(testCartItem.getProduct().getId(), createdCartItem.getProduct().getId());
+        assertEquals(testCartItem.getPrice(), createdCartItem.getPrice());
+        assertEquals(testCartItem.getQuantity(), createdCartItem.getQuantity());
+        assertEquals(testCartItem.getUser().getId(), createdCartItem.getUser().getId());
+        assertEquals(testCartItem.getOrder().getId(), createdCartItem.getOrder().getId());
+    }
+
     private AddProductInCartDto createProductInCardDto() {
         return new AddProductInCartDto()
                 .setUserId(USER_ID)
@@ -124,6 +159,7 @@ class CartItemServiceTest {
     private CartItemEntity createTestCartItem() {
         ProductEntity testProduct = new ProductEntity();
         testProduct.setId(PRODUCT_ID);
+        testProduct.setPrice(PRODUCT_PRICE);
         OrderEntity testOrder = new OrderEntity();
         testOrder.setId(ORDER_ID);
         UserEntity testUser = new UserEntity();
@@ -132,6 +168,8 @@ class CartItemServiceTest {
         return new CartItemEntity()
                 .setProduct(testProduct)
                 .setOrder(testOrder)
-                .setUser(testUser);
+                .setUser(testUser)
+                .setQuantity(CART_ITEM_QUANTITY)
+                .setPrice(testProduct.getPrice());
     }
 }

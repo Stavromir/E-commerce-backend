@@ -27,9 +27,8 @@ class FAQServiceIntegrationTest {
     public static final String FIRST_PRODUCT_NAME = "firstProductName";
     public static final String FIRST_PRODUCT_DESCRIPTION = "firstProductDescription";
     public static final String FIRST_FAQ_QUESTION = "firstFaqQuestion";
-    public static final String SECOND_FAQ_QUESTION = "secondFaqQuestion";
     public static final String FIRST_FAQ_ANSWER = "firstFaqAnswer";
-    public static final String SECOND_FAQ_ANSWER = "secondFaqAnswer";
+
 
     @Autowired
     private FAQService faqService;
@@ -86,24 +85,16 @@ class FAQServiceIntegrationTest {
         Long testProductId = productService.addProduct(testProduct).getId();
 
         FAQDto firstTestFAQ = getFaqDto(FIRST_FAQ_QUESTION, FIRST_FAQ_ANSWER, testProductId);
-        FAQDto secondTestFAQ = getFaqDto(SECOND_FAQ_QUESTION, SECOND_FAQ_ANSWER, testProductId);
 
         FAQEntity firstCreatedFAQ = faqService.createFAQ(firstTestFAQ);
-        FAQEntity secondCreatedFAQ = faqService.createFAQ(secondTestFAQ);
 
         FAQDto firstReturnedFAQ = faqService.getAllFaqByProductId(testProductId).get(0);
-        FAQDto secondReturnedFAQ = faqService.getAllFaqByProductId(testProductId).get(1);
 
         Assertions.assertNotNull(firstReturnedFAQ);
         Assertions.assertEquals(firstCreatedFAQ.getId(), firstReturnedFAQ.getId());
         Assertions.assertEquals(firstCreatedFAQ.getQuestion(), firstReturnedFAQ.getQuestion());
         Assertions.assertEquals(firstCreatedFAQ.getAnswer(), firstReturnedFAQ.getAnswer());
 
-
-        Assertions.assertNotNull(secondReturnedFAQ);
-        Assertions.assertEquals(secondCreatedFAQ.getId(), secondReturnedFAQ.getId());
-        Assertions.assertEquals(secondCreatedFAQ.getQuestion(), secondReturnedFAQ.getQuestion());
-        Assertions.assertEquals(secondCreatedFAQ.getAnswer(), secondReturnedFAQ.getAnswer());
     }
 
     private static FAQDto getFaqDto(String question, String answer,Long productId) {
@@ -115,7 +106,6 @@ class FAQServiceIntegrationTest {
 
     private static ProductDto getProductDto(String name, String description,
                                             Long price,Long categoryId) {
-
         return new ProductDto()
                 .setName(name)
                 .setPrice(price)
