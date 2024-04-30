@@ -25,7 +25,7 @@ public class CustomerOrderController {
     @PostMapping("/carts")
     public ResponseEntity<Long> addProductToCart(@RequestBody AddProductInCartDto addProductInCardDto) {
 
-        Long cartItemId = orderService.addProductToCart(addProductInCardDto);
+        Long cartItemId = orderService.addCartItemToActiveOrder(addProductInCardDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(cartItemId);
 
     }
