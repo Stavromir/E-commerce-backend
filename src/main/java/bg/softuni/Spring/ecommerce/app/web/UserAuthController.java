@@ -82,8 +82,8 @@ public class UserAuthController {
             return new ResponseEntity<>("User already exists", HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserDto userDTO = userService.createUser(signupRequest);
-        return new ResponseEntity<>(userDTO, HttpStatus.OK);
+        Long userId = userService.createUser(signupRequest);
+        return new ResponseEntity<>(userId, HttpStatus.OK);
     }
 }
 
