@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class CartItemServiceImpl implements CartItemService {
 
+    public static final Long INITIAL_CART_ITEM_QUANTITY = 1L;
+
 
     private final CartItemRepository cartItemRepository;
 
@@ -59,8 +61,7 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public CartItemEntity createCartItem(ProductEntity product, Long price, Long quantity,
-                                         UserEntity user, OrderEntity order) {
+    public CartItemEntity createCartItem(ProductEntity product, UserEntity user, OrderEntity order) {
 
         if (isCartItemPresentInOrder(user.getId(), product.getId(), order.getId())) {
             throw new IllegalArgumentException("Product is already in cart!");
@@ -69,7 +70,7 @@ public class CartItemServiceImpl implements CartItemService {
         return  new CartItemEntity()
                 .setProduct(product)
                 .setPrice(product.getPrice())
-                .setQuantity(1L)
+                .setQuantity(INITIAL_CART_ITEM_QUANTITY)
                 .setUser(user)
                 .setOrder(order);
     }
