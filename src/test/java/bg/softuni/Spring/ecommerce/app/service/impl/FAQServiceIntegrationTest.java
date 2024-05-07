@@ -4,11 +4,15 @@ package bg.softuni.Spring.ecommerce.app.service.impl;
 import bg.softuni.Spring.ecommerce.app.model.dto.CategoryDto;
 import bg.softuni.Spring.ecommerce.app.model.dto.FAQDto;
 import bg.softuni.Spring.ecommerce.app.model.dto.ProductDto;
+import bg.softuni.Spring.ecommerce.app.model.entity.CategoryEntity;
 import bg.softuni.Spring.ecommerce.app.model.entity.FAQEntity;
+import bg.softuni.Spring.ecommerce.app.model.entity.ProductEntity;
 import bg.softuni.Spring.ecommerce.app.repository.FAQRepository;
 import bg.softuni.Spring.ecommerce.app.service.CategoryService;
 import bg.softuni.Spring.ecommerce.app.service.FAQService;
 import bg.softuni.Spring.ecommerce.app.service.ProductService;
+import bg.softuni.Spring.ecommerce.app.service.testUtils.CategoryTestDataUtil;
+import bg.softuni.Spring.ecommerce.app.service.testUtils.ProductTestDataUtil;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,6 +45,12 @@ class FAQServiceIntegrationTest {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private CategoryTestDataUtil categoryTestDataUtil;
+
+    @Autowired
+    private ProductTestDataUtil productTestDataUtil;
 
     @BeforeEach
     void SetUp() {
@@ -76,13 +86,9 @@ class FAQServiceIntegrationTest {
 
     @Test
     void testGetAllFaqByProductId () throws IOException {
-        CategoryDto categoryDto = getCategoryDto();
-        Long categoryId = categoryService.createCategory(categoryDto).getId();
 
-        ProductDto testProduct = getProductDto(FIRST_PRODUCT_NAME, FIRST_PRODUCT_DESCRIPTION,
-                PRODUCT_PRICE, categoryId);
-
-        Long testProductId = productService.addProduct(testProduct).getId();
+        ProductEntity testProduct = productTestDataUtil.createProduct();
+        Long testProductId = testProduct.getId();
 
         FAQDto firstTestFAQ = getFaqDto(FIRST_FAQ_QUESTION, FIRST_FAQ_ANSWER, testProductId);
 
