@@ -12,6 +12,8 @@ import java.util.HexFormat;
 @Component
 public class UserTestDataUtil {
 
+    public static final String IMG_HEX = "e04f";
+
     @Autowired
     private UserRepository userRepository;
 
@@ -27,7 +29,7 @@ public class UserTestDataUtil {
 
     private UserEntity createUser(String email, UserRoleEnum userRoleEnum) {
 
-        byte[] img = HexFormat.of().parseHex("e04f");
+        byte[] img = HexFormat.of().parseHex(IMG_HEX);
 
         UserEntity user = new UserEntity()
                 .setName("User")
