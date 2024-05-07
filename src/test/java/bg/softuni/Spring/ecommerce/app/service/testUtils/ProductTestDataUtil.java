@@ -12,6 +12,9 @@ import java.util.HexFormat;
 public class ProductTestDataUtil {
 
     public static final String IMG_HEX = "e05f";
+    public static final String PRODUCT_NAME = "testProduct";
+    public static final String PRODUCT_DESCRIPTION = "testDescription";
+    public static final Long PRODUCT_PRICE = 1000L;
 
     @Autowired
     private ProductRepository productRepository;
@@ -25,9 +28,9 @@ public class ProductTestDataUtil {
         CategoryEntity category = categoryTestDataUtil.createCategory();
 
         ProductEntity product = new ProductEntity()
-                .setName("product")
-                .setDescription("productDescription")
-                .setPrice(1000L)
+                .setName(PRODUCT_NAME)
+                .setDescription(PRODUCT_DESCRIPTION)
+                .setPrice(PRODUCT_PRICE)
                 .setImg(img)
                 .setCategory(category);
 
