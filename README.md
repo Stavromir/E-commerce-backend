@@ -30,6 +30,7 @@ This is a Java-based e-commerce web application built using the Spring framework
 - MySQL: A popular relational database management system used for data storage.
 - Hibernate: Object-relational mapping (ORM) library for simplifying database interactions in Java applications.
 - JWT (JSON Web Tokens): A standard for securely transmitting information between parties as a JSON object.
+- JUnit : open-source testing framework used to perform unit testing.
 
 ## Contributors
 
