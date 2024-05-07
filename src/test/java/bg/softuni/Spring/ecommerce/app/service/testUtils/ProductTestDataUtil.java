@@ -39,5 +39,6 @@ public class ProductTestDataUtil {
 
     public void clearAllTestData() {
         productRepository.deleteAll();
+        categoryTestDataUtil.cleanAllTestData();
     }
 }
