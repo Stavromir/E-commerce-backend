@@ -10,6 +10,18 @@ This is a Java-based e-commerce web application built using the Spring framework
 - Services: Implement business logic and handle transactions.
 - RestControllers: Expose RESTful endpoints for client-server communication.
 
+## Testing
+
+### Unit Tests
+
+Unit tests are designed to test individual components or units of your code in isolation.
+They verify that each unit behaves as expected. You can run unit tests using JUnit or another testing framework.
+
+### Integration Tests
+
+Integration tests focus on testing interactions between different components or modules of your system.
+They verify that these components work together correctly.
+
 ## Setup
 
 1. Clone the repository.
