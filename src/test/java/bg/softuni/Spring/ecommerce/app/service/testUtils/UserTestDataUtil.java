@@ -13,6 +13,8 @@ import java.util.HexFormat;
 public class UserTestDataUtil {
 
     public static final String IMG_HEX = "e04f";
+    public static final String USERNAME = "testUser";
+    public static final String USER_PASSWORD = "testPassword";
 
     @Autowired
     private UserRepository userRepository;
@@ -32,9 +34,9 @@ public class UserTestDataUtil {
         byte[] img = HexFormat.of().parseHex(IMG_HEX);
 
         UserEntity user = new UserEntity()
-                .setName("User")
+                .setName(USERNAME)
                 .setEmail(email)
-                .setPassword("testPass")
+                .setPassword(USER_PASSWORD)
                 .setRole(userRoleEnum)
                 .setImg(img);
 
