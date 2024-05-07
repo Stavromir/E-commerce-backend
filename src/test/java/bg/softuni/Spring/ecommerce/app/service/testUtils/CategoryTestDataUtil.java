@@ -8,13 +8,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class CategoryTestDataUtil {
 
+    public static final String CATEGORY_NAME = "testCategory";
+    public static final String CATEGORY_DESCRIPTION = "testDescription";
+
     @Autowired
     private CategoryRepository categoryRepository;
 
     public CategoryEntity createCategory () {
         CategoryEntity category = new CategoryEntity()
-                .setName("category")
-                .setDescription("categoryDescription");
+                .setName(CATEGORY_NAME)
+                .setDescription(CATEGORY_DESCRIPTION);
 
         return categoryRepository.save(category);
     }
