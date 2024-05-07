@@ -33,7 +33,7 @@ public class CustomerOrderController {
     @GetMapping("/carts/{userId}")
     public ResponseEntity<OrderDto> getCartByUserId(@PathVariable Long userId) {
 
-        OrderDto cartByUserId = orderService.getCartByUserId(userId);
+        OrderDto cartByUserId = orderService.getPendingOrderByUserId(userId);
         return ResponseEntity.ok(cartByUserId);
     }
 
