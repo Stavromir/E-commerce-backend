@@ -36,4 +36,8 @@ public class ProductTestDataUtil {
 
         return productRepository.save(product);
     }
+
+    public void ClearAllTestData() {
+        productRepository.deleteAll();
+    }
 }

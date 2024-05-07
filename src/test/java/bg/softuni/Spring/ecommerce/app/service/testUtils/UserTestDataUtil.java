@@ -41,4 +41,8 @@ public class UserTestDataUtil {
 
         return userRepository.save(user);
     }
+
+    public void ClearAllTestData() {
+        userRepository.deleteAll();
+    }
 }

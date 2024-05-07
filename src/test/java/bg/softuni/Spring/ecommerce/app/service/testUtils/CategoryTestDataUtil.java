@@ -21,4 +21,8 @@ public class CategoryTestDataUtil {
 
         return categoryRepository.save(category);
     }
+
+    public void CleanAllTestData() {
+        categoryRepository.deleteAll();
+    }
 }
