@@ -6,7 +6,6 @@ import bg.softuni.Spring.ecommerce.app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.sql.Array;
 import java.util.HexFormat;
 
 @Component
