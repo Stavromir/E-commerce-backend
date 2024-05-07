@@ -22,7 +22,7 @@ public class CategoryTestDataUtil {
         return categoryRepository.save(category);
     }
 
-    public void CleanAllTestData() {
+    public void cleanAllTestData() {
         categoryRepository.deleteAll();
     }
 }
