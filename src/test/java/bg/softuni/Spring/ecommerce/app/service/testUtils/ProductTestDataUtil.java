@@ -11,6 +11,8 @@ import java.util.HexFormat;
 @Component
 public class ProductTestDataUtil {
 
+    public static final String IMG_HEX = "e05f";
+
     @Autowired
     private ProductRepository productRepository;
 
@@ -19,7 +21,7 @@ public class ProductTestDataUtil {
 
 
     public ProductEntity createProduct() {
-        byte[] img = HexFormat.of().parseHex("e05f");
+        byte[] img = HexFormat.of().parseHex(IMG_HEX);
         CategoryEntity category = categoryTestDataUtil.createCategory();
 
         ProductEntity product = new ProductEntity()
