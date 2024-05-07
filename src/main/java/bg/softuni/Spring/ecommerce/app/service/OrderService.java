@@ -15,7 +15,7 @@ public interface OrderService {
 
     Long addCartItemToActiveOrder(AddProductInCartDto addProductInCardDto);
 
-    OrderDto getCartByUserId(Long userId);
+    OrderDto getPendingOrderByUserId(Long userId);
 
     OrderDto applyCoupon(Long userId, String code);
 

@@ -70,11 +70,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDto getCartByUserId(Long userId) {
-        OrderEntity activeOrder = getOrderWithStatusPending(userId);
-        OrderDto orderDto = mapToOrderDto(activeOrder);
+    public OrderDto getPendingOrderByUserId(Long userId) {
 
-        return orderDto;
+        OrderEntity activeOrder = getOrderWithStatusPending(userId);
+        return mapToOrderDto(activeOrder);
     }
 
 
@@ -96,7 +95,7 @@ public class OrderServiceImpl implements OrderService {
 
         orderRepository.save(activeOrder);
 
-        OrderDto orderDto = getCartByUserId(userId);
+        OrderDto orderDto = getPendingOrderByUserId(userId);
 
         return orderDto;
     }
