@@ -41,11 +41,13 @@ class FAQServiceIntegrationTest {
     @BeforeEach
     void SetUp() {
         faqRepository.deleteAll();
+        productTestDataUtil.clearAllTestData();
     }
 
     @AfterEach
     void tearDown() {
         faqRepository.deleteAll();
+        productTestDataUtil.clearAllTestData();
     }
 
     @Test

@@ -9,7 +9,9 @@ import bg.softuni.Spring.ecommerce.app.repository.OrderRepository;
 import bg.softuni.Spring.ecommerce.app.service.OrderService;
 import bg.softuni.Spring.ecommerce.app.service.testUtils.ProductTestDataUtil;
 import bg.softuni.Spring.ecommerce.app.service.testUtils.UserTestDataUtil;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,9 +31,23 @@ class OrderServiceIntegrationTest {
     @Autowired
     private ProductTestDataUtil productTestDataUtil;
 
+    @BeforeEach
+    void setUp() {
+        orderRepository.deleteAll();
+        userTestDataUtil.clearAllTestData();
+        productTestDataUtil.clearAllTestData();
+    }
+
+    @AfterEach
+    void tearDown() {
+        orderRepository.deleteAll();
+        userTestDataUtil.clearAllTestData();
+        productTestDataUtil.clearAllTestData();
+    }
+
 
     @Test
-    void testAddCartItemToOrder () {
+    void testAddCartItemToOrder() {
         UserEntity testUser = userTestDataUtil.createTestUser(USER_EMAIL);
         ProductEntity testProduct = productTestDataUtil.createProduct();
 
