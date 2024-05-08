@@ -108,15 +108,17 @@ public class OrderServiceImpl implements OrderService {
                 .findByProductIdAndOrderIdAndUserID(addProductInCardDto, activeOrder.getId());
 
         cartItem.setQuantity(cartItem.getQuantity() + 1);
+        cartItemService.saveCartEntity(cartItem);
+
         activeOrder.setTotalAmount(activeOrder.getTotalAmount() + cartItem.getPrice());
 
         if (activeOrder.getCoupon() != null) {
+            orderRepository.save(activeOrder);
             applyCoupon(addProductInCardDto.getUserId(), activeOrder.getCoupon().getCode());
-        } else {
-            activeOrder.setAmount(activeOrder.getAmount() + cartItem.getPrice());
+            return activeOrder.getId();
         }
 
-        cartItemService.saveCartEntity(cartItem);
+        activeOrder.setAmount(activeOrder.getAmount() + cartItem.getPrice());
         orderRepository.save(activeOrder);
         return activeOrder.getId();
     }
