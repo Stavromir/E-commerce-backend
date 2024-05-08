@@ -2,6 +2,7 @@ package bg.softuni.Spring.ecommerce.app.service.impl;
 
 import bg.softuni.Spring.ecommerce.app.model.dto.AddProductInCartDto;
 import bg.softuni.Spring.ecommerce.app.model.dto.OrderDto;
+import bg.softuni.Spring.ecommerce.app.model.dto.PlaceOrderDto;
 import bg.softuni.Spring.ecommerce.app.model.entity.*;
 import bg.softuni.Spring.ecommerce.app.model.enums.OrderStatusEnum;
 import bg.softuni.Spring.ecommerce.app.repository.OrderRepository;
@@ -11,19 +12,33 @@ import bg.softuni.Spring.ecommerce.app.service.testUtils.CouponTestDataUtil;
 import bg.softuni.Spring.ecommerce.app.service.testUtils.OrderTestDataUtil;
 import bg.softuni.Spring.ecommerce.app.service.testUtils.ProductTestDataUtil;
 import bg.softuni.Spring.ecommerce.app.service.testUtils.UserTestDataUtil;
+import bg.softuni.Spring.ecommerce.app.utils.DateTime;
+import bg.softuni.Spring.ecommerce.app.utils.RandomUUID;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.util.Date;
+import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static org.mockito.Mockito.mock;
 
 
 @SpringBootTest
 class OrderServiceIntegrationTest {
+
+    public static final String ORDER_ADDRESS = "testAddress";
+    public static final String ORDER_DESCRIPTION = "testDescription";
+
 
     @Autowired
     private OrderRepository orderRepository;
@@ -35,6 +50,11 @@ class OrderServiceIntegrationTest {
     private OrderTestDataUtil orderTestDataUtil;
     @Autowired
     private CouponTestDataUtil couponTestDataUtil;
+
+    @MockBean
+    private DateTime dateTime;
+    @MockBean
+    private RandomUUID randomUUID;
 
     @BeforeEach
     void setUp() {
@@ -198,6 +218,37 @@ class OrderServiceIntegrationTest {
         Assertions.assertEquals(testCartItem.getQuantity() - 1, savedCartItem.getQuantity());
         Assertions.assertEquals(testOrder.getTotalAmount() / 2, savedOrder.getTotalAmount());
         Assertions.assertEquals(testOrder.getAmount() / 2, savedOrder.getAmount());
+    }
+
+    @Test
+    void testPlaceOrder() {
+
+        Date mockedDate = new Date();
+        Mockito.when(dateTime.getDate()).thenReturn(mockedDate);
+
+        UUID mockedUUID = UUID.randomUUID();
+        Mockito.when(randomUUID.createRandomUUID()).thenReturn(mockedUUID);
+
+        OrderEntity emptyOrder = orderTestDataUtil.createEmptyOrder();
+
+        PlaceOrderDto placeOrderDto = new PlaceOrderDto()
+                .setUserId(emptyOrder.getUser().getId())
+                .setAddress(ORDER_ADDRESS)
+                .setOrderDescription(ORDER_DESCRIPTION);
+
+        orderService.placeOrder(placeOrderDto);
+
+        OrderEntity savedOrder = orderRepository.findById(emptyOrder.getId()).get();
+        OrderEntity newEmptyOrder = orderRepository.
+                findByUserIdAndOrderStatus(emptyOrder.getUser().getId(), OrderStatusEnum.PENDING).get();
+
+        Assertions.assertEquals(ORDER_DESCRIPTION, savedOrder.getOrderDescription());
+        Assertions.assertEquals(OrderStatusEnum.PLACED, savedOrder.getOrderStatus());
+        Assertions.assertEquals(ORDER_ADDRESS, savedOrder.getAddress());
+        Assertions.assertEquals(mockedUUID, savedOrder.getTrackingId());
+        Assertions.assertEquals(mockedDate.toInstant(), savedOrder.getDate().toInstant());
+
+        Assertions.assertNotNull(newEmptyOrder);
     }
 
     private static AddProductInCartDto getAddProductInCartDto(Long testProductId, Long testUserId) {
