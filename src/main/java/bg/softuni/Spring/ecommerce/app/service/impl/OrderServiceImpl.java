@@ -203,7 +203,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDto> getUserPlacedOrders(Long userId) {
-        List<OrderEntity> allPlacedUserOrders = orderRepository.findAllByUserIdAndOrderStatusIn(userId, List.of(OrderStatusEnum.PLACED,
+        List<OrderEntity> allPlacedUserOrders = orderRepository.findAllByUserIdAndOrderStatusIn(userId,
+                List.of(OrderStatusEnum.PLACED,
                 OrderStatusEnum.SHIPPED, OrderStatusEnum.DELIVERED));
 
         return allPlacedUserOrders
