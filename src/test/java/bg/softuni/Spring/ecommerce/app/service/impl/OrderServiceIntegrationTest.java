@@ -118,25 +118,46 @@ class OrderServiceIntegrationTest {
         orderRepository.save(testOrder);
 
         Long testUserId = testOrder.getUser().getId();
-        CartItemEntity cartItem = testOrder.getCartItems().get(0);
-        Long testProductId = cartItem.getProduct().getId();
+        CartItemEntity testCartItem = testOrder.getCartItems().get(0);
+        Long testProductId = testCartItem.getProduct().getId();
 
-        AddProductInCartDto addProductInCartDto = new AddProductInCartDto()
-                .setProductId(testProductId)
-                .setUserId(testUserId);
+        AddProductInCartDto addProductInCartDto =
+                getAddProductInCartDto(testProductId, testUserId);
 
         orderService.increaseProductQuantity(addProductInCartDto);
 
         OrderEntity savedOrder = orderRepository.findById(testOrder.getId()).get();
         CartItemEntity savedCartItem = savedOrder.getCartItems().get(0);
 
-        Assertions.assertEquals(cartItem.getQuantity() + 1, savedCartItem.getQuantity());
+        Assertions.assertEquals(testCartItem.getQuantity() + 1, savedCartItem.getQuantity());
         Assertions.assertEquals(testOrder.getTotalAmount() * 2, savedOrder.getTotalAmount());
         Assertions.assertEquals(1800, savedOrder.getAmount());
     }
 
+    private static AddProductInCartDto getAddProductInCartDto(Long testProductId, Long testUserId) {
+        return new AddProductInCartDto()
+                .setProductId(testProductId)
+                .setUserId(testUserId);
+    }
+
     @Test
     void testIncreaseProductQuantityWithoutCoupon() {
+        OrderEntity testOrder = orderTestDataUtil.createFilledOrder();
 
+        Long testUserId = testOrder.getUser().getId();
+        CartItemEntity testCartItem = testOrder.getCartItems().get(0);
+        Long testProductId = testCartItem.getProduct().getId();
+
+        AddProductInCartDto addProductInCartDto =
+                getAddProductInCartDto(testProductId, testUserId);
+
+        orderService.increaseProductQuantity(addProductInCartDto);
+
+        OrderEntity savedOrder = orderRepository.findById(testOrder.getId()).get();
+        CartItemEntity savedCartItem = savedOrder.getCartItems().get(0);
+
+        Assertions.assertEquals(testCartItem.getQuantity() + 1, savedCartItem.getQuantity());
+        Assertions.assertEquals(testOrder.getTotalAmount() * 2, savedOrder.getTotalAmount());
+        Assertions.assertEquals(testOrder.getAmount() * 2, savedOrder.getAmount());
     }
 }
