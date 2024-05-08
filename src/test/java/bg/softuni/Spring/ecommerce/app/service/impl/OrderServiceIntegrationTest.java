@@ -134,4 +134,9 @@ class OrderServiceIntegrationTest {
         Assertions.assertEquals(testOrder.getTotalAmount() * 2, savedOrder.getTotalAmount());
         Assertions.assertEquals(1800, savedOrder.getAmount());
     }
+
+    @Test
+    void testIncreaseProductQuantityWithoutCoupon() {
+
+    }
 }
