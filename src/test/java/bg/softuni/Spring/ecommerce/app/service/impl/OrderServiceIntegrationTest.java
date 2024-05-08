@@ -27,6 +27,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -38,6 +39,8 @@ class OrderServiceIntegrationTest {
 
     public static final String ORDER_ADDRESS = "testAddress";
     public static final String ORDER_DESCRIPTION = "testDescription";
+    public static final String ORDER_STATUS_SHIPPED = "Shipped";
+    public static final String ORDER_STATUS_DELIVERED = "Delivered";
 
 
     @Autowired
@@ -249,6 +252,71 @@ class OrderServiceIntegrationTest {
         Assertions.assertEquals(mockedDate.toInstant(), savedOrder.getDate().toInstant());
 
         Assertions.assertNotNull(newEmptyOrder);
+    }
+
+    @Test
+    void testGetAllPlacedOrdersStatusPlaced() {
+        OrderEntity testOrder = orderTestDataUtil.createFilledOrderStatusPlaced();
+
+        List<OrderDto> allPlacedOrders = orderService.getAllPlacedOrders();
+        Assertions.assertEquals(1, allPlacedOrders.size());
+        Assertions.assertEquals(testOrder.getOrderStatus(), allPlacedOrders.get(0).getOrderStatus());
+    }
+
+    @Test
+    void testGetAllPlacedOrdersStatusDelivered() {
+        OrderEntity testOrder = orderTestDataUtil.createFilledOrderStatusDelivered();
+
+        List<OrderDto> allPlacedOrders = orderService.getAllPlacedOrders();
+        Assertions.assertEquals(1, allPlacedOrders.size());
+        Assertions.assertEquals(testOrder.getOrderStatus(), allPlacedOrders.get(0).getOrderStatus());
+    }
+
+    @Test
+    void testGetAllPlacedOrdersStatusShipped() {
+        OrderEntity testOrder = orderTestDataUtil.createFilledOrderStatusShipped();
+
+        List<OrderDto> allPlacedOrders = orderService.getAllPlacedOrders();
+        Assertions.assertEquals(1, allPlacedOrders.size());
+        Assertions.assertEquals(testOrder.getOrderStatus(), allPlacedOrders.get(0).getOrderStatus());
+    }
+
+    @Test
+    void testChangeOrderStatusToShipped() {
+        OrderEntity testOrder = orderTestDataUtil.createFilledOrderStatusPlaced();
+
+        orderService.changeOrderStatus(testOrder.getId(), ORDER_STATUS_SHIPPED);
+        OrderEntity savedOrder = orderRepository.findById(testOrder.getId()).get();
+
+        Assertions.assertEquals(OrderStatusEnum.SHIPPED, savedOrder.getOrderStatus());
+    }
+
+    @Test
+    void testChangeOrderStatusToDelivered() {
+        OrderEntity testOrder = orderTestDataUtil.createFilledOrderStatusPlaced();
+
+        orderService.changeOrderStatus(testOrder.getId(), ORDER_STATUS_DELIVERED);
+        OrderEntity savedOrder = orderRepository.findById(testOrder.getId()).get();
+
+        Assertions.assertEquals(OrderStatusEnum.DELIVERED, savedOrder.getOrderStatus());
+    }
+
+    @Test
+    void testChangeOrderStatusThrowExcOrderNotExist() {
+        Assertions.assertThrows(
+                ObjectNotFoundException.class,
+                () -> orderService.changeOrderStatus(100L, "STATUS")
+        );
+    }
+
+    @Test
+    void testChangeOrderStatusThrowExcInvalidStatus() {
+        OrderEntity testOrder = orderTestDataUtil.createFilledOrderStatusPlaced();
+
+        Assertions.assertThrows(
+                ObjectNotFoundException.class,
+                () -> orderService.changeOrderStatus(testOrder.getId(), "wrongStatus")
+        );
     }
 
     private static AddProductInCartDto getAddProductInCartDto(Long testProductId, Long testUserId) {
