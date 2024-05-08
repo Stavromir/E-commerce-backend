@@ -1,4 +1,4 @@
-package bg.softuni.Spring.ecommerce.app.utils;
+package bg.softuni.Spring.ecommerce.app.utils.impl;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
