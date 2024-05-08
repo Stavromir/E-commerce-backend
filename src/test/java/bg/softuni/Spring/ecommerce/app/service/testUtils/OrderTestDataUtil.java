@@ -6,6 +6,7 @@ import bg.softuni.Spring.ecommerce.app.repository.CartItemRepository;
 import bg.softuni.Spring.ecommerce.app.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import java.util.List;
 
 @Component
@@ -41,40 +42,49 @@ public class OrderTestDataUtil {
     }
 
     public OrderEntity createFilledOrderInitialQuantity() {
-        ProductEntity testProduct = productTestDataUtil.createProduct();
-
-        OrderEntity emptyOrder = createEmptyOrder();
-
-        CartItemEntity testCertItem = getCartItemEntity(emptyOrder,
-                testProduct, INITIAL_PRODUCT_QUANTITY);
-
-        CartItemEntity savedCartItem = cartItemRepository.save(testCertItem);
-
-        List<CartItemEntity> cartItemEntities = List.of(savedCartItem);
-
-        OrderEntity filledOrder = emptyOrder
-                .setAmount(testProduct.getPrice())
-                .setTotalAmount(testProduct.getPrice())
-                .setCartItems(cartItemEntities);
-
-        return orderRepository.save(filledOrder);
+        return createFilledOrder(INITIAL_PRODUCT_QUANTITY);
     }
 
     public OrderEntity createFilledOrderIncreasedQuantity() {
+        return createFilledOrder(INCREASED_PRODUCT_QUANTITY);
+    }
+
+    public OrderEntity createFilledOrderStatusPlaced() {
+        OrderEntity order = createEmptyOrder()
+                .setOrderStatus(OrderStatusEnum.PLACED);
+
+        return orderRepository.save(order);
+    }
+
+    public OrderEntity createFilledOrderStatusDelivered() {
+        OrderEntity order = createEmptyOrder()
+                .setOrderStatus(OrderStatusEnum.DELIVERED);
+
+        return orderRepository.save(order);
+    }
+
+    public OrderEntity createFilledOrderStatusShipped() {
+        OrderEntity order = createEmptyOrder()
+                .setOrderStatus(OrderStatusEnum.SHIPPED);
+
+        return orderRepository.save(order);
+    }
+
+    private OrderEntity createFilledOrder(Long productQuantity) {
         ProductEntity testProduct = productTestDataUtil.createProduct();
 
         OrderEntity emptyOrder = createEmptyOrder();
 
         CartItemEntity testCertItem = getCartItemEntity(emptyOrder,
-                testProduct, INCREASED_PRODUCT_QUANTITY);
+                testProduct, productQuantity);
 
         CartItemEntity savedCartItem = cartItemRepository.save(testCertItem);
 
         List<CartItemEntity> cartItemEntities = List.of(savedCartItem);
 
         OrderEntity filledOrder = emptyOrder
-                .setAmount(testProduct.getPrice() * 2)
-                .setTotalAmount(testProduct.getPrice() * 2)
+                .setAmount(testProduct.getPrice() * productQuantity)
+                .setTotalAmount(testProduct.getPrice() * productQuantity)
                 .setCartItems(cartItemEntities);
 
         return orderRepository.save(filledOrder);
