@@ -2,11 +2,9 @@ package bg.softuni.Spring.ecommerce.app.web;
 
 import bg.softuni.Spring.ecommerce.app.model.dto.SignupRequestDto;
 import bg.softuni.Spring.ecommerce.app.model.dto.UserAuthenticationRequestDto;
-import bg.softuni.Spring.ecommerce.app.model.dto.UserDto;
 import bg.softuni.Spring.ecommerce.app.model.entity.UserEntity;
-import bg.softuni.Spring.ecommerce.app.repository.UserRepository;
 import bg.softuni.Spring.ecommerce.app.service.UserService;
-import bg.softuni.Spring.ecommerce.app.utils.JwtUtil;
+import bg.softuni.Spring.ecommerce.app.utils.impl.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.util.Optional;
 
 @RestController
 public class UserAuthController {
