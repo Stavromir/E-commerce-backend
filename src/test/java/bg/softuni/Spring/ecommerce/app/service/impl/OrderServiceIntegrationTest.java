@@ -179,6 +179,27 @@ class OrderServiceIntegrationTest {
         Assertions.assertEquals(900, savedOrder.getAmount());
     }
 
+    @Test
+    void testDecreaseProductQuantityWithoutCoupon() {
+        OrderEntity testOrder = orderTestDataUtil.createFilledOrderIncreasedQuantity();
+
+        Long testUserId = testOrder.getUser().getId();
+        CartItemEntity testCartItem = testOrder.getCartItems().get(0);
+        Long testProductId = testCartItem.getProduct().getId();
+
+        AddProductInCartDto addProductInCartDto =
+                getAddProductInCartDto(testProductId, testUserId);
+
+        orderService.decreaseProductQuantity(addProductInCartDto);
+
+        OrderEntity savedOrder = orderRepository.findById(testOrder.getId()).get();
+        CartItemEntity savedCartItem = savedOrder.getCartItems().get(0);
+
+        Assertions.assertEquals(testCartItem.getQuantity() - 1, savedCartItem.getQuantity());
+        Assertions.assertEquals(testOrder.getTotalAmount() / 2, savedOrder.getTotalAmount());
+        Assertions.assertEquals(testOrder.getAmount() / 2, savedOrder.getAmount());
+    }
+
     private static AddProductInCartDto getAddProductInCartDto(Long testProductId, Long testUserId) {
         return new AddProductInCartDto()
                 .setProductId(testProductId)
