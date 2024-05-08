@@ -2,13 +2,11 @@ package bg.softuni.Spring.ecommerce.app.service.impl;
 
 import bg.softuni.Spring.ecommerce.app.model.dto.AddProductInCartDto;
 import bg.softuni.Spring.ecommerce.app.model.dto.OrderDto;
-import bg.softuni.Spring.ecommerce.app.model.entity.CouponEntity;
-import bg.softuni.Spring.ecommerce.app.model.entity.OrderEntity;
-import bg.softuni.Spring.ecommerce.app.model.entity.ProductEntity;
-import bg.softuni.Spring.ecommerce.app.model.entity.UserEntity;
+import bg.softuni.Spring.ecommerce.app.model.entity.*;
 import bg.softuni.Spring.ecommerce.app.model.enums.OrderStatusEnum;
 import bg.softuni.Spring.ecommerce.app.repository.OrderRepository;
 import bg.softuni.Spring.ecommerce.app.service.OrderService;
+import bg.softuni.Spring.ecommerce.app.service.exception.ObjectNotFoundException;
 import bg.softuni.Spring.ecommerce.app.service.testUtils.CouponTestDataUtil;
 import bg.softuni.Spring.ecommerce.app.service.testUtils.OrderTestDataUtil;
 import bg.softuni.Spring.ecommerce.app.service.testUtils.ProductTestDataUtil;
@@ -17,8 +15,11 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.stream.Collectors;
 
 
 @SpringBootTest
@@ -73,7 +74,7 @@ class OrderServiceIntegrationTest {
     }
 
     @Test
-    void testApplyCoupon() {
+    void testApplyValidCoupon() {
         CouponEntity testCoupon = couponTestDataUtil.createValidCouponEntity();
         OrderEntity filledOrder = orderTestDataUtil.createFilledOrder();
 
@@ -93,5 +94,44 @@ class OrderServiceIntegrationTest {
         Assertions.assertEquals(amountAfterCouponApply, orderAfterCouponApply.getAmount());
         Assertions.assertEquals(filledOrder.getTotalAmount(), orderAfterCouponApply.getTotalAmount());
         Assertions.assertEquals(discountAfterCouponApply, orderAfterCouponApply.getDiscount());
+    }
+
+    @Test
+    void testApplyExpiredCouponThrowExc() {
+        CouponEntity testCoupon = couponTestDataUtil.createExpiredCouponEntity();
+        OrderEntity filledOrder = orderTestDataUtil.createFilledOrder();
+
+        Long testUserId = filledOrder.getUser().getId();
+        String couponCode = testCoupon.getCode();
+
+        Assertions.assertThrows(
+                ObjectNotFoundException.class,
+                () -> orderService.applyCoupon(testUserId, couponCode)
+        );
+    }
+
+    @Test
+    void testIncreaseProductQuantityWithCoupon() {
+        CouponEntity testCoupon = couponTestDataUtil.createValidCouponEntity();
+        OrderEntity filledOrder = orderTestDataUtil.createFilledOrder();
+        filledOrder.setCoupon(testCoupon);
+        orderRepository.save(filledOrder);
+
+        Long testUserId = filledOrder.getUser().getId();
+        CartItemEntity cartItem = filledOrder.getCartItems().get(0);
+        Long testProductId = cartItem.getProduct().getId();
+
+        AddProductInCartDto addProductInCartDto = new AddProductInCartDto()
+                .setProductId(testProductId)
+                .setUserId(testUserId);
+
+        orderService.increaseProductQuantity(addProductInCartDto);
+
+        OrderEntity savedOrder = orderRepository.findById(filledOrder.getId()).get();
+        CartItemEntity savedCartItem = savedOrder.getCartItems().get(0);
+
+        Assertions.assertEquals(cartItem.getQuantity() + 1, savedCartItem.getQuantity());
+        Assertions.assertEquals(filledOrder.getTotalAmount() * 2, savedOrder.getTotalAmount());
+        Assertions.assertEquals(1800, savedOrder.getAmount());
     }
 }

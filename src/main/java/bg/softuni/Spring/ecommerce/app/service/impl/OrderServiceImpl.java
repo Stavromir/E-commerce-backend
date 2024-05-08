@@ -116,6 +116,7 @@ public class OrderServiceImpl implements OrderService {
             activeOrder.setAmount(activeOrder.getAmount() + cartItem.getPrice());
         }
 
+        cartItemService.saveCartEntity(cartItem);
         orderRepository.save(activeOrder);
         return activeOrder.getId();
     }
@@ -136,6 +137,7 @@ public class OrderServiceImpl implements OrderService {
             activeOrder.setAmount(activeOrder.getAmount() - cartItem.getPrice());
         }
 
+        cartItemService.saveCartEntity(cartItem);
         orderRepository.save(activeOrder);
         return activeOrder.getId();
     }

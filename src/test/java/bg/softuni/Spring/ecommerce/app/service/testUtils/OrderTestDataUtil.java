@@ -1,10 +1,8 @@
 package bg.softuni.Spring.ecommerce.app.service.testUtils;
 
-import bg.softuni.Spring.ecommerce.app.model.entity.CartItemEntity;
-import bg.softuni.Spring.ecommerce.app.model.entity.OrderEntity;
-import bg.softuni.Spring.ecommerce.app.model.entity.ProductEntity;
-import bg.softuni.Spring.ecommerce.app.model.entity.UserEntity;
+import bg.softuni.Spring.ecommerce.app.model.entity.*;
 import bg.softuni.Spring.ecommerce.app.model.enums.OrderStatusEnum;
+import bg.softuni.Spring.ecommerce.app.repository.CartItemRepository;
 import bg.softuni.Spring.ecommerce.app.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,11 +15,15 @@ public class OrderTestDataUtil {
 
     @Autowired
     private OrderRepository orderRepository;
+    @Autowired
+    private CartItemRepository cartItemRepository;
 
     @Autowired
     private UserTestDataUtil userTestDataUtil;
     @Autowired
     private ProductTestDataUtil productTestDataUtil;
+    @Autowired
+    private CouponTestDataUtil couponTestDataUtil;
 
     public OrderEntity createEmptyOrder() {
         UserEntity testUser = userTestDataUtil.createTestUser(USER_EMAIL);
@@ -41,12 +43,16 @@ public class OrderTestDataUtil {
 
         OrderEntity emptyOrder = createEmptyOrder();
 
-        List<CartItemEntity> cartItemEntities = List.of(new CartItemEntity()
+        CartItemEntity testCertItem = new CartItemEntity()
                 .setUser(emptyOrder.getUser())
                 .setOrder(emptyOrder)
                 .setPrice(testProduct.getPrice())
                 .setQuantity(1L)
-                .setProduct(testProduct));
+                .setProduct(testProduct);
+
+        CartItemEntity savedCartItem = cartItemRepository.save(testCertItem);
+
+        List<CartItemEntity> cartItemEntities = List.of(savedCartItem);
 
         OrderEntity filledOrder = emptyOrder
                 .setAmount(testProduct.getPrice())
@@ -58,8 +64,10 @@ public class OrderTestDataUtil {
 
     public void clearAllTestData() {
         orderRepository.deleteAll();
+        cartItemRepository.deleteAll();
         userTestDataUtil.clearAllTestData();
         productTestDataUtil.clearAllTestData();
+        couponTestDataUtil.clearAllTestData();
     }
 
 
