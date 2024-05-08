@@ -6,6 +6,8 @@ import bg.softuni.Spring.ecommerce.app.model.enums.OrderStatusEnum;
 import bg.softuni.Spring.ecommerce.app.repository.OrderRepository;
 import bg.softuni.Spring.ecommerce.app.service.*;
 import bg.softuni.Spring.ecommerce.app.service.exception.ObjectNotFoundException;
+import bg.softuni.Spring.ecommerce.app.utils.DateTime;
+import bg.softuni.Spring.ecommerce.app.utils.RandomUUID;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -21,17 +23,23 @@ public class OrderServiceImpl implements OrderService {
     private final ProductService productService;
     private final UserService userService;
     private final CouponService couponService;
+    private final DateTime dateTime;
+    private final RandomUUID randomUUID;
 
     public OrderServiceImpl(OrderRepository orderRepository,
                             CartItemService cartItemService,
                             ProductService productService,
                             @Lazy UserService userService,
-                            CouponService couponService) {
+                            CouponService couponService,
+                            DateTime dateTime,
+                            RandomUUID randomUUID) {
         this.orderRepository = orderRepository;
         this.cartItemService = cartItemService;
         this.productService = productService;
         this.userService = userService;
         this.couponService = couponService;
+        this.dateTime = dateTime;
+        this.randomUUID = randomUUID;
     }
 
     @Override
@@ -155,8 +163,8 @@ public class OrderServiceImpl implements OrderService {
         activeOrder.setOrderDescription(placeOrderDto.getOrderDescription());
         activeOrder.setOrderStatus(OrderStatusEnum.PLACED);
         activeOrder.setAddress(placeOrderDto.getAddress());
-        activeOrder.setDate(new Date());
-        activeOrder.setTrackingId(UUID.randomUUID());
+        activeOrder.setDate(dateTime.getDate());
+        activeOrder.setTrackingId(randomUUID.createRandomUUID());
 
         orderRepository.save(activeOrder);
 
