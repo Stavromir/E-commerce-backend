@@ -113,12 +113,12 @@ class OrderServiceIntegrationTest {
     @Test
     void testIncreaseProductQuantityWithCoupon() {
         CouponEntity testCoupon = couponTestDataUtil.createValidCouponEntity();
-        OrderEntity filledOrder = orderTestDataUtil.createFilledOrder();
-        filledOrder.setCoupon(testCoupon);
-        orderRepository.save(filledOrder);
+        OrderEntity testOrder = orderTestDataUtil.createFilledOrder();
+        testOrder.setCoupon(testCoupon);
+        orderRepository.save(testOrder);
 
-        Long testUserId = filledOrder.getUser().getId();
-        CartItemEntity cartItem = filledOrder.getCartItems().get(0);
+        Long testUserId = testOrder.getUser().getId();
+        CartItemEntity cartItem = testOrder.getCartItems().get(0);
         Long testProductId = cartItem.getProduct().getId();
 
         AddProductInCartDto addProductInCartDto = new AddProductInCartDto()
@@ -127,11 +127,11 @@ class OrderServiceIntegrationTest {
 
         orderService.increaseProductQuantity(addProductInCartDto);
 
-        OrderEntity savedOrder = orderRepository.findById(filledOrder.getId()).get();
+        OrderEntity savedOrder = orderRepository.findById(testOrder.getId()).get();
         CartItemEntity savedCartItem = savedOrder.getCartItems().get(0);
 
         Assertions.assertEquals(cartItem.getQuantity() + 1, savedCartItem.getQuantity());
-        Assertions.assertEquals(filledOrder.getTotalAmount() * 2, savedOrder.getTotalAmount());
+        Assertions.assertEquals(testOrder.getTotalAmount() * 2, savedOrder.getTotalAmount());
         Assertions.assertEquals(1800, savedOrder.getAmount());
     }
 }
