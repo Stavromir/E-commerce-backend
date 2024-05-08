@@ -12,6 +12,8 @@ import java.util.List;
 public class OrderTestDataUtil {
 
     public static final String USER_EMAIL = "user@email.com";
+    public static final Long INITIAL_PRODUCT_QUANTITY = 1L;
+    public static final Long INCREASED_PRODUCT_QUANTITY = 2L;
 
     @Autowired
     private OrderRepository orderRepository;
@@ -38,17 +40,13 @@ public class OrderTestDataUtil {
         return orderRepository.save(emptyOrder);
     }
 
-    public OrderEntity createFilledOrder() {
+    public OrderEntity createFilledOrderInitialQuantity() {
         ProductEntity testProduct = productTestDataUtil.createProduct();
 
         OrderEntity emptyOrder = createEmptyOrder();
 
-        CartItemEntity testCertItem = new CartItemEntity()
-                .setUser(emptyOrder.getUser())
-                .setOrder(emptyOrder)
-                .setPrice(testProduct.getPrice())
-                .setQuantity(1L)
-                .setProduct(testProduct);
+        CartItemEntity testCertItem = getCartItemEntity(emptyOrder,
+                testProduct, INITIAL_PRODUCT_QUANTITY);
 
         CartItemEntity savedCartItem = cartItemRepository.save(testCertItem);
 
@@ -60,6 +58,37 @@ public class OrderTestDataUtil {
                 .setCartItems(cartItemEntities);
 
         return orderRepository.save(filledOrder);
+    }
+
+    public OrderEntity createFilledOrderIncreasedQuantity() {
+        ProductEntity testProduct = productTestDataUtil.createProduct();
+
+        OrderEntity emptyOrder = createEmptyOrder();
+
+        CartItemEntity testCertItem = getCartItemEntity(emptyOrder,
+                testProduct, INCREASED_PRODUCT_QUANTITY);
+
+        CartItemEntity savedCartItem = cartItemRepository.save(testCertItem);
+
+        List<CartItemEntity> cartItemEntities = List.of(savedCartItem);
+
+        OrderEntity filledOrder = emptyOrder
+                .setAmount(testProduct.getPrice() * 2)
+                .setTotalAmount(testProduct.getPrice() * 2)
+                .setCartItems(cartItemEntities);
+
+        return orderRepository.save(filledOrder);
+    }
+
+    private static CartItemEntity getCartItemEntity(OrderEntity emptyOrder,
+                                                    ProductEntity testProduct,
+                                                    Long productQuantity) {
+        return new CartItemEntity()
+                .setUser(emptyOrder.getUser())
+                .setOrder(emptyOrder)
+                .setPrice(testProduct.getPrice())
+                .setQuantity(productQuantity)
+                .setProduct(testProduct);
     }
 
     public void clearAllTestData() {
