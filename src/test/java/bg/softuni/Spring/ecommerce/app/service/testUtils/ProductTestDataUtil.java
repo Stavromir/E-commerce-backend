@@ -1,5 +1,6 @@
 package bg.softuni.Spring.ecommerce.app.service.testUtils;
 
+import bg.softuni.Spring.ecommerce.app.model.dto.AddProductInCartDto;
 import bg.softuni.Spring.ecommerce.app.model.entity.CategoryEntity;
 import bg.softuni.Spring.ecommerce.app.model.entity.ProductEntity;
 import bg.softuni.Spring.ecommerce.app.repository.ProductRepository;
