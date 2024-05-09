@@ -13,19 +13,31 @@ public class UserTestDataUtil {
 
     public static final String IMG_HEX = "e04f";
     public static final String USERNAME = "testUser";
+    public static final String TEST_USER_EMAIL = "test@email.com";
+    public static final String ADMIN_USER_EMAIL = "test@email.com";
     public static final String USER_PASSWORD = "testPassword";
 
     @Autowired
     private UserRepository userRepository;
 
+    private UserEntity testUserEntity;
+    private UserEntity adminUserEntity;
 
-    public UserEntity createTestUser (String email) {
-        return createUser(email, UserRoleEnum.CUSTOMER);
+    private UserTestDataUtil() {
+    }
+
+    public UserEntity createTestUser () {
+        if (testUserEntity == null) {
+            testUserEntity = createUser(TEST_USER_EMAIL, UserRoleEnum.CUSTOMER);
+        }
+        return testUserEntity;
     }
 
     public UserEntity createTestAdmin(String email) {
-        return createUser(email, UserRoleEnum.ADMIN);
-
+        if (adminUserEntity == null) {
+            adminUserEntity = createUser(email, UserRoleEnum.ADMIN);
+        }
+        return adminUserEntity;
     }
 
     private UserEntity createUser(String email, UserRoleEnum userRoleEnum) {

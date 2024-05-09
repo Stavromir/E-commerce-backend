@@ -13,7 +13,7 @@ import java.util.List;
 @Component
 public class OrderTestDataUtil {
 
-    public static final String USER_EMAIL = "user@email.com";
+//    public static final String USER_EMAIL = "user@email.com";
     public static final Long INITIAL_PRODUCT_QUANTITY = 1L;
     public static final Long INCREASED_PRODUCT_QUANTITY = 2L;
 
@@ -32,7 +32,7 @@ public class OrderTestDataUtil {
     private RandomUUID randomUUID;
 
     public OrderEntity createEmptyOrder() {
-        UserEntity testUser = userTestDataUtil.createTestUser(USER_EMAIL);
+        UserEntity testUser = userTestDataUtil.createTestUser();
 
         OrderEntity emptyOrder = new OrderEntity()
                 .setAmount(0L)

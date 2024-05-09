@@ -26,24 +26,32 @@ public class ProductTestDataUtil {
 
     @Autowired
     private CategoryTestDataUtil categoryTestDataUtil;
+    @Autowired
+    private ReviewTestDataUtil reviewTestDataUtil;
+    @Autowired
+    private FAQTestDataUtil faqTestDataUtil;
 
     private CategoryEntity categoryEntity;
+    private ProductEntity productEntity;
 
     private ProductTestDataUtil() {
     }
 
     public ProductEntity createProduct() {
-        byte[] img = HexFormat.of().parseHex(IMG_HEX);
-        CategoryEntity category = getCategoryEntity();
+        if (productEntity == null) {
+            byte[] img = HexFormat.of().parseHex(IMG_HEX);
+            CategoryEntity category = getCategoryEntity();
 
-        ProductEntity product = new ProductEntity()
-                .setName(PRODUCT_NAME)
-                .setDescription(PRODUCT_DESCRIPTION)
-                .setPrice(PRODUCT_PRICE)
-                .setImg(img)
-                .setCategory(category);
+            ProductEntity product = new ProductEntity()
+                    .setName(PRODUCT_NAME)
+                    .setDescription(PRODUCT_DESCRIPTION)
+                    .setPrice(PRODUCT_PRICE)
+                    .setImg(img)
+                    .setCategory(category);
 
-        return productRepository.save(product);
+            productEntity = productRepository.save(product);
+        }
+        return productEntity;
     }
 
     public ProductDto createProductDto() {
@@ -73,5 +81,7 @@ public class ProductTestDataUtil {
     public void clearAllTestData() {
         productRepository.deleteAll();
         categoryTestDataUtil.cleanAllTestData();
+        reviewTestDataUtil.clearAllTestData();
+        faqTestDataUtil.clearAllTestData();
     }
 }
