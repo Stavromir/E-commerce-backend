@@ -5,6 +5,7 @@ import bg.softuni.Spring.ecommerce.app.model.entity.CouponEntity;
 import bg.softuni.Spring.ecommerce.app.repository.CouponRepository;
 import bg.softuni.Spring.ecommerce.app.service.CouponService;
 import bg.softuni.Spring.ecommerce.app.service.exception.ObjectNotFoundException;
+import bg.softuni.Spring.ecommerce.app.utils.DateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,6 +33,9 @@ class CouponServiceTest {
 
     @Mock
     private CouponRepository couponRepository;
+
+    @Mock
+    private DateTime dateTime;
 
 
     @BeforeEach
@@ -86,6 +90,8 @@ class CouponServiceTest {
 
     @Test
     void testFindByCode() {
+        when(dateTime.getDate()).thenReturn(COUPON_EXPIRATION_NOW_DATE);
+
         CouponEntity testCouponEntity = createCouponEntity();
 
         when(couponRepository.findByCode(anyString()))
@@ -106,8 +112,9 @@ class CouponServiceTest {
 
     @Test
     void testIsExpired () {
-        CouponEntity testCouponEntity = createCouponEntity()
-                .setExpirationDate(COUPON_EXPIRATION_PAST_DATE);
+        when(dateTime.getDate()).thenReturn(COUPON_EXPIRATION_PAST_DATE);
+
+        CouponEntity testCouponEntity = createCouponEntity();
 
         when(couponRepository.findByCode(anyString()))
                 .thenReturn(Optional.of(testCouponEntity));
@@ -117,8 +124,9 @@ class CouponServiceTest {
 
     @Test
     void testIsNotExpired() {
-        CouponEntity testCouponEntity = createCouponEntity()
-                .setExpirationDate(COUPON_EXPIRATION_FEATURE_DATE);
+        when(dateTime.getDate()).thenReturn(COUPON_EXPIRATION_FEATURE_DATE);
+
+        CouponEntity testCouponEntity = createCouponEntity();
 
         when(couponRepository.findByCode(anyString()))
                 .thenReturn(Optional.of(testCouponEntity));
@@ -131,7 +139,7 @@ class CouponServiceTest {
                 .setName(COUPON_NAME)
                 .setCode(COUPON_CODE)
                 .setDiscount(COUPON_DISCOUNT)
-                .setExpirationDate(COUPON_EXPIRATION_NOW_DATE);
+                .setExpirationDate(dateTime.getDate());
         coupon.setId(COUPON_ID);
         return coupon;
     }
@@ -141,7 +149,7 @@ class CouponServiceTest {
                 .setName(COUPON_NAME)
                 .setCode(COUPON_CODE)
                 .setDiscount(COUPON_DISCOUNT)
-                .setExpirationDate(COUPON_EXPIRATION_NOW_DATE);
+                .setExpirationDate(dateTime.getDate());
     }
 
 
