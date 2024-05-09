@@ -11,27 +11,19 @@ import bg.softuni.Spring.ecommerce.app.service.exception.ObjectNotFoundException
 import bg.softuni.Spring.ecommerce.app.service.testUtils.CouponTestDataUtil;
 import bg.softuni.Spring.ecommerce.app.service.testUtils.OrderTestDataUtil;
 import bg.softuni.Spring.ecommerce.app.service.testUtils.ProductTestDataUtil;
-import bg.softuni.Spring.ecommerce.app.service.testUtils.UserTestDataUtil;
 import bg.softuni.Spring.ecommerce.app.utils.DateTime;
 import bg.softuni.Spring.ecommerce.app.utils.RandomUUID;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
-
-import static org.mockito.Mockito.mock;
 
 
 @SpringBootTest
