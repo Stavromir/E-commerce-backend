@@ -4,6 +4,7 @@ import bg.softuni.Spring.ecommerce.app.model.entity.*;
 import bg.softuni.Spring.ecommerce.app.model.enums.OrderStatusEnum;
 import bg.softuni.Spring.ecommerce.app.repository.CartItemRepository;
 import bg.softuni.Spring.ecommerce.app.repository.OrderRepository;
+import bg.softuni.Spring.ecommerce.app.utils.RandomUUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -27,6 +28,8 @@ public class OrderTestDataUtil {
     private ProductTestDataUtil productTestDataUtil;
     @Autowired
     private CouponTestDataUtil couponTestDataUtil;
+    @Autowired
+    private RandomUUID randomUUID;
 
     public OrderEntity createEmptyOrder() {
         UserEntity testUser = userTestDataUtil.createTestUser(USER_EMAIL);
@@ -49,23 +52,30 @@ public class OrderTestDataUtil {
         return createFilledOrder(INCREASED_PRODUCT_QUANTITY);
     }
 
-    public OrderEntity createFilledOrderStatusPlaced() {
+    public OrderEntity createOrderWithStatusPlaced() {
         OrderEntity order = createEmptyOrder()
                 .setOrderStatus(OrderStatusEnum.PLACED);
 
         return orderRepository.save(order);
     }
 
-    public OrderEntity createFilledOrderStatusDelivered() {
+    public OrderEntity createOrderWithStatusDelivered() {
         OrderEntity order = createEmptyOrder()
                 .setOrderStatus(OrderStatusEnum.DELIVERED);
 
         return orderRepository.save(order);
     }
 
-    public OrderEntity createFilledOrderStatusShipped() {
+    public OrderEntity createOrderWithStatusShipped() {
         OrderEntity order = createEmptyOrder()
                 .setOrderStatus(OrderStatusEnum.SHIPPED);
+
+        return orderRepository.save(order);
+    }
+
+    public OrderEntity createOrderWithTrackingNumber() {
+        OrderEntity order = createEmptyOrder()
+                .setTrackingId(randomUUID.createRandomUUID());
 
         return orderRepository.save(order);
     }
