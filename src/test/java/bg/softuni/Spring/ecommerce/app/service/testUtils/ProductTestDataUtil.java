@@ -16,7 +16,9 @@ public class ProductTestDataUtil {
 
     public static final String IMG_HEX = "e05f";
     public static final String PRODUCT_NAME = "testProduct";
+    public static final String PRODUCT_NAME_UPDATED = "updatedProduct";
     public static final String PRODUCT_DESCRIPTION = "testDescription";
+    public static final String PRODUCT_DESCRIPTION_UPDATED = "updatedDescription";
     public static final Long PRODUCT_PRICE = 1000L;
 
     @Autowired
@@ -25,10 +27,14 @@ public class ProductTestDataUtil {
     @Autowired
     private CategoryTestDataUtil categoryTestDataUtil;
 
+    private CategoryEntity categoryEntity;
+
+    private ProductTestDataUtil() {
+    }
 
     public ProductEntity createProduct() {
         byte[] img = HexFormat.of().parseHex(IMG_HEX);
-        CategoryEntity category = categoryTestDataUtil.createCategory();
+        CategoryEntity category = getCategoryEntity();
 
         ProductEntity product = new ProductEntity()
                 .setName(PRODUCT_NAME)
@@ -41,13 +47,27 @@ public class ProductTestDataUtil {
     }
 
     public ProductDto createProductDto() {
-        CategoryEntity category = categoryTestDataUtil.createCategory();
+        CategoryEntity category = getCategoryEntity();
 
         return new ProductDto()
                 .setName(PRODUCT_NAME)
                 .setDescription(PRODUCT_DESCRIPTION)
                 .setPrice(PRODUCT_PRICE)
                 .setCategoryId(category.getId());
+    }
+
+    public ProductDto createUpdatedProductDto(Long productId) {
+        return createProductDto()
+                .setId(productId)
+                .setName(PRODUCT_NAME_UPDATED)
+                .setDescription(PRODUCT_DESCRIPTION_UPDATED);
+    }
+
+    private CategoryEntity getCategoryEntity() {
+        if (categoryEntity == null) {
+            categoryEntity = categoryTestDataUtil.createCategory();
+        }
+        return categoryEntity;
     }
 
     public void clearAllTestData() {
