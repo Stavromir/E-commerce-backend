@@ -28,8 +28,8 @@ public class AdminProductController {
     // @ModelAttribute не ми допада
     @PostMapping("/products")
     public ResponseEntity<ProductDto> addProduct (@ModelAttribute ProductDto productDto) throws IOException {
-        ProductDto productDto1 = productService.addProduct(productDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(productDto1);
+        ProductDto returnedProductDto = productService.addProduct(productDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(returnedProductDto);
     }
 
 
