@@ -21,12 +21,11 @@ public class UserTestDataUtil {
     private UserRepository userRepository;
 
     private UserEntity testUserEntity;
-    private UserEntity adminUserEntity;
 
     private UserTestDataUtil() {
     }
 
-    public UserEntity createTestUser () {
+    public UserEntity createTestUser() {
         if (testUserEntity == null) {
             testUserEntity = createUser(TEST_USER_EMAIL, UserRoleEnum.CUSTOMER);
         }
@@ -34,10 +33,7 @@ public class UserTestDataUtil {
     }
 
     public UserEntity createTestAdmin(String email) {
-        if (adminUserEntity == null) {
-            adminUserEntity = createUser(email, UserRoleEnum.ADMIN);
-        }
-        return adminUserEntity;
+        return createUser(email, UserRoleEnum.ADMIN);
     }
 
     private UserEntity createUser(String email, UserRoleEnum userRoleEnum) {

@@ -23,13 +23,8 @@ public class ProductTestDataUtil {
 
     @Autowired
     private ProductRepository productRepository;
-
     @Autowired
     private CategoryTestDataUtil categoryTestDataUtil;
-    @Autowired
-    private ReviewTestDataUtil reviewTestDataUtil;
-    @Autowired
-    private FAQTestDataUtil faqTestDataUtil;
 
     private CategoryEntity categoryEntity;
     private ProductEntity productEntity;
@@ -81,7 +76,5 @@ public class ProductTestDataUtil {
     public void clearAllTestData() {
         productRepository.deleteAll();
         categoryTestDataUtil.cleanAllTestData();
-        reviewTestDataUtil.clearAllTestData();
-        faqTestDataUtil.clearAllTestData();
     }
 }

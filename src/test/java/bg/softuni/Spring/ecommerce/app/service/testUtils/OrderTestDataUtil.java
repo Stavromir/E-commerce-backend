@@ -114,9 +114,6 @@ public class OrderTestDataUtil {
     public void clearAllTestData() {
         orderRepository.deleteAll();
         cartItemRepository.deleteAll();
-        userTestDataUtil.clearAllTestData();
-        productTestDataUtil.clearAllTestData();
-        couponTestDataUtil.clearAllTestData();
     }
 
 

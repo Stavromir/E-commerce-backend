@@ -5,6 +5,7 @@ import bg.softuni.Spring.ecommerce.app.model.entity.ReviewEntity;
 import bg.softuni.Spring.ecommerce.app.model.entity.UserEntity;
 import bg.softuni.Spring.ecommerce.app.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -15,8 +16,10 @@ public class ReviewTestDataUtil {
 
     @Autowired
     private ReviewRepository reviewRepository;
+
     @Autowired
     private ProductTestDataUtil productTestDataUtil;
+
     @Autowired
     private UserTestDataUtil userTestDataUtil;
 
@@ -25,11 +28,13 @@ public class ReviewTestDataUtil {
         ProductEntity testProduct = productTestDataUtil.createProduct();
         UserEntity testUser = userTestDataUtil.createTestUser();
 
-        return new ReviewEntity()
+        ReviewEntity reviewEntity = new ReviewEntity()
                 .setProduct(testProduct)
                 .setUser(testUser)
                 .setDescription(REVIEW_DESCRIPTION)
                 .setRating(REVIEW_RATING);
+
+        return reviewRepository.save(reviewEntity);
     }
 
 

@@ -43,6 +43,5 @@ public class FAQTestDataUtil {
 
     public void clearAllTestData() {
         faqRepository.deleteAll();
-        productTestDataUtil.clearAllTestData();
     }
 }
