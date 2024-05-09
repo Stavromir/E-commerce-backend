@@ -122,4 +122,20 @@ class ProductServiceImplTest {
         assertEquals(testProduct.getCategory().getName(), productDtoById.getCategoryName());
         assertEquals(testProduct.getCategory().getId(), productDtoById.getCategoryId());
     }
+
+    @Test
+    void testUpdateProduct() throws IOException {
+        ProductEntity testProduct = productTestDataUtil.createProduct();
+
+        ProductDto updatedProductDto = productTestDataUtil.createUpdatedProductDto(testProduct.getId());
+        productService.updateProduct(updatedProductDto);
+
+        Optional<ProductEntity> optionalProduct = productRepository
+                .findById(testProduct.getId());
+
+        assertTrue(optionalProduct.isPresent());
+        ProductEntity updatedProduct = optionalProduct.get();
+        assertEquals(updatedProductDto.getName(), updatedProduct.getName());
+        assertEquals(updatedProductDto.getDescription(), updatedProduct.getDescription());
+    }
 }
