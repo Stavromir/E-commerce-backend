@@ -1,15 +1,18 @@
 package bg.softuni.Spring.ecommerce.app.service.impl;
 
 import bg.softuni.Spring.ecommerce.app.model.dto.OrderProductsDto;
+import bg.softuni.Spring.ecommerce.app.model.dto.ProductDetailDto;
 import bg.softuni.Spring.ecommerce.app.model.dto.ProductDto;
-import bg.softuni.Spring.ecommerce.app.model.entity.CartItemEntity;
-import bg.softuni.Spring.ecommerce.app.model.entity.OrderEntity;
-import bg.softuni.Spring.ecommerce.app.model.entity.ProductEntity;
+import bg.softuni.Spring.ecommerce.app.model.entity.*;
 import bg.softuni.Spring.ecommerce.app.repository.ProductRepository;
 import bg.softuni.Spring.ecommerce.app.service.ProductService;
 import bg.softuni.Spring.ecommerce.app.service.exception.ObjectNotFoundException;
+import bg.softuni.Spring.ecommerce.app.service.testUtils.FAQTestDataUtil;
 import bg.softuni.Spring.ecommerce.app.service.testUtils.OrderTestDataUtil;
 import bg.softuni.Spring.ecommerce.app.service.testUtils.ProductTestDataUtil;
+import bg.softuni.Spring.ecommerce.app.service.testUtils.ReviewTestDataUtil;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,6 +35,27 @@ class ProductServiceImplTest {
     private ProductTestDataUtil productTestDataUtil;
     @Autowired
     private OrderTestDataUtil orderTestDataUtil;
+    @Autowired
+    private FAQTestDataUtil faqTestDataUtil;
+    @Autowired
+    private ReviewTestDataUtil reviewTestDataUtil;
+
+
+    @BeforeEach
+    void setUp() {
+        faqTestDataUtil.clearAllTestData();
+        reviewTestDataUtil.clearAllTestData();
+        productTestDataUtil.clearAllTestData();
+        orderTestDataUtil.clearAllTestData();
+    }
+
+    @AfterEach
+    void tearDown() {
+        faqTestDataUtil.clearAllTestData();
+        reviewTestDataUtil.clearAllTestData();
+        productTestDataUtil.clearAllTestData();
+        orderTestDataUtil.clearAllTestData();
+    }
 
 
     @Test
@@ -159,5 +183,23 @@ class ProductServiceImplTest {
         assertEquals(testProduct.getPrice(), productDtos.get(0).getPrice());
         assertEquals(cartItem.getQuantity(), productDtos.get(0).getQuantity());
         assertArrayEquals(testProduct.getImg(), productDtos.get(0).getByteImg());
+    }
+
+    @Test
+    void testGetProductDetailsById() {
+
+        ProductEntity testProduct = productTestDataUtil.createProduct();
+        ReviewEntity testReview = reviewTestDataUtil.createReviewEntity();
+        FAQEntity faqEntity = faqTestDataUtil.createFaqEntity();
+
+
+        ProductDetailDto productDetailsById = productService
+                .getProductDetailsById(testProduct.getId());
+
+        assertEquals(testProduct.getId(), productDetailsById.getProductDto().getId());
+        assertEquals(1, productDetailsById.getReviewDtos().size());
+        assertEquals(1, productDetailsById.getFaqDtos().size());
+        assertEquals(testReview.getId(), productDetailsById.getReviewDtos().get(0).getId());
+        assertEquals(faqEntity.getId(), productDetailsById.getFaqDtos().get(0).getId());
     }
 }
