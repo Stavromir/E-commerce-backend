@@ -1,13 +1,15 @@
 package bg.softuni.Spring.ecommerce.app.service.impl;
 
+import bg.softuni.Spring.ecommerce.app.model.dto.OrderProductsDto;
 import bg.softuni.Spring.ecommerce.app.model.dto.ProductDto;
+import bg.softuni.Spring.ecommerce.app.model.entity.CartItemEntity;
+import bg.softuni.Spring.ecommerce.app.model.entity.OrderEntity;
 import bg.softuni.Spring.ecommerce.app.model.entity.ProductEntity;
 import bg.softuni.Spring.ecommerce.app.repository.ProductRepository;
 import bg.softuni.Spring.ecommerce.app.service.ProductService;
 import bg.softuni.Spring.ecommerce.app.service.exception.ObjectNotFoundException;
 import bg.softuni.Spring.ecommerce.app.service.testUtils.OrderTestDataUtil;
 import bg.softuni.Spring.ecommerce.app.service.testUtils.ProductTestDataUtil;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -137,5 +139,25 @@ class ProductServiceImplTest {
         ProductEntity updatedProduct = optionalProduct.get();
         assertEquals(updatedProductDto.getName(), updatedProduct.getName());
         assertEquals(updatedProductDto.getDescription(), updatedProduct.getDescription());
+    }
+
+    @Test
+    void testGetOrderProductsDetailsByOrderId() {
+        OrderEntity testOrder = orderTestDataUtil.createFilledOrderInitialQuantity();
+        CartItemEntity cartItem = testOrder.getCartItems().get(0);
+        ProductEntity testProduct = cartItem.getProduct();
+
+        OrderProductsDto orderProductsDto = productService
+                .getOrderProductsDetailsByOrderId(testOrder.getId());
+
+        List<ProductDto> productDtos = orderProductsDto.getProductDtos();
+
+        assertEquals(testOrder.getAmount(), orderProductsDto.getOrderAmount());
+        assertEquals(1, productDtos.size());
+        assertEquals(testProduct.getId(), productDtos.get(0).getId());
+        assertEquals(testProduct.getName(), productDtos.get(0).getName());
+        assertEquals(testProduct.getPrice(), productDtos.get(0).getPrice());
+        assertEquals(cartItem.getQuantity(), productDtos.get(0).getQuantity());
+        assertArrayEquals(testProduct.getImg(), productDtos.get(0).getByteImg());
     }
 }
