@@ -89,4 +89,37 @@ class ProductServiceImplTest {
                 () -> productService.deleteProduct(101L)
         );
     }
+
+    @Test
+    void testGetProductById() {
+        ProductEntity testProduct = productTestDataUtil.createProduct();
+
+        ProductEntity returnedProduct = productService.getProductById(testProduct.getId());
+
+        assertNotNull(returnedProduct);
+        assertEquals(testProduct.getName(), returnedProduct.getName());
+    }
+
+    @Test
+    void testGetProductByIdThrowExc() {
+        assertThrows(
+                ObjectNotFoundException.class,
+                () -> productService.getProductById(101L)
+        );
+    }
+
+    @Test
+    void testGetProductDtoById() {
+        ProductEntity testProduct = productTestDataUtil.createProduct();
+
+        ProductDto productDtoById = productService.getProductDtoById(testProduct.getId());
+
+        assertNotNull(productDtoById);
+        assertEquals(testProduct.getId(), productDtoById.getId());
+        assertEquals(testProduct.getName(), productDtoById.getName());
+        assertEquals(testProduct.getPrice(), productDtoById.getPrice());
+        assertEquals(testProduct.getDescription(), productDtoById.getDescription());
+        assertEquals(testProduct.getCategory().getName(), productDtoById.getCategoryName());
+        assertEquals(testProduct.getCategory().getId(), productDtoById.getCategoryId());
+    }
 }
