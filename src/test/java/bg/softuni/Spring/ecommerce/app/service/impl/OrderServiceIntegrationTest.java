@@ -311,6 +311,35 @@ class OrderServiceIntegrationTest {
         );
     }
 
+    @Test
+    void testGetUserPlacedOrdersStatusPlaced() {
+        OrderEntity testOrder = orderTestDataUtil.createFilledOrderStatusPlaced();
+        Long userId = testOrder.getUser().getId();
+
+        List<OrderDto> userPlacedOrders = orderService.getUserPlacedOrders(userId);
+        Assertions.assertEquals(1, userPlacedOrders.size());
+        Assertions.assertEquals(OrderStatusEnum.PLACED, userPlacedOrders.get(0).getOrderStatus());
+    }
+    @Test
+    void testGetUserPlacedOrdersStatusDelivered() {
+        OrderEntity testOrder = orderTestDataUtil.createFilledOrderStatusDelivered();
+        Long userId = testOrder.getUser().getId();
+
+        List<OrderDto> userPlacedOrders = orderService.getUserPlacedOrders(userId);
+        Assertions.assertEquals(1, userPlacedOrders.size());
+        Assertions.assertEquals(OrderStatusEnum.DELIVERED, userPlacedOrders.get(0).getOrderStatus());
+    }
+
+    @Test
+    void testGetUserPlacedOrdersStatusShipped() {
+        OrderEntity testOrder = orderTestDataUtil.createFilledOrderStatusShipped();
+        Long userId = testOrder.getUser().getId();
+
+        List<OrderDto> userPlacedOrders = orderService.getUserPlacedOrders(userId);
+        Assertions.assertEquals(1, userPlacedOrders.size());
+        Assertions.assertEquals(OrderStatusEnum.SHIPPED, userPlacedOrders.get(0).getOrderStatus());
+    }
+
     private static AddProductInCartDto getAddProductInCartDto(Long testProductId, Long testUserId) {
         return new AddProductInCartDto()
                 .setProductId(testProductId)
