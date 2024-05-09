@@ -43,7 +43,6 @@ public class ProductServiceImpl implements ProductService {
         ProductEntity savedProduct = productRepository.save(productEntity);
 
         return mapToProductDto(savedProduct);
-
     }
 
     @Override
@@ -139,8 +138,8 @@ public class ProductServiceImpl implements ProductService {
         return new ProductDto()
                 .setId(savedProduct.getId())
                 .setName(savedProduct.getName())
-                .setDescription(savedProduct.getDescription())
                 .setPrice(savedProduct.getPrice())
+                .setDescription(savedProduct.getDescription())
                 .setByteImg(savedProduct.getImg())
                 .setCategoryId(savedProduct.getCategory().getId())
                 .setCategoryName(savedProduct.getCategory().getName());
