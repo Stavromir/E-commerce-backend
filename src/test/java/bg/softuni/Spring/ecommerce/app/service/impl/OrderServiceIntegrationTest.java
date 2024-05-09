@@ -248,7 +248,7 @@ class OrderServiceIntegrationTest {
 
     @Test
     void testGetAllPlacedOrdersStatusPlaced() {
-        OrderEntity testOrder = orderTestDataUtil.createFilledOrderStatusPlaced();
+        OrderEntity testOrder = orderTestDataUtil.createOrderWithStatusPlaced();
 
         List<OrderDto> allPlacedOrders = orderService.getAllPlacedOrders();
         Assertions.assertEquals(1, allPlacedOrders.size());
@@ -257,7 +257,7 @@ class OrderServiceIntegrationTest {
 
     @Test
     void testGetAllPlacedOrdersStatusDelivered() {
-        OrderEntity testOrder = orderTestDataUtil.createFilledOrderStatusDelivered();
+        OrderEntity testOrder = orderTestDataUtil.createOrderWithStatusDelivered();
 
         List<OrderDto> allPlacedOrders = orderService.getAllPlacedOrders();
         Assertions.assertEquals(1, allPlacedOrders.size());
@@ -266,7 +266,7 @@ class OrderServiceIntegrationTest {
 
     @Test
     void testGetAllPlacedOrdersStatusShipped() {
-        OrderEntity testOrder = orderTestDataUtil.createFilledOrderStatusShipped();
+        OrderEntity testOrder = orderTestDataUtil.createOrderWithStatusShipped();
 
         List<OrderDto> allPlacedOrders = orderService.getAllPlacedOrders();
         Assertions.assertEquals(1, allPlacedOrders.size());
@@ -275,7 +275,7 @@ class OrderServiceIntegrationTest {
 
     @Test
     void testChangeOrderStatusToShipped() {
-        OrderEntity testOrder = orderTestDataUtil.createFilledOrderStatusPlaced();
+        OrderEntity testOrder = orderTestDataUtil.createOrderWithStatusPlaced();
 
         orderService.changeOrderStatus(testOrder.getId(), ORDER_STATUS_SHIPPED);
         OrderEntity savedOrder = orderRepository.findById(testOrder.getId()).get();
@@ -285,7 +285,7 @@ class OrderServiceIntegrationTest {
 
     @Test
     void testChangeOrderStatusToDelivered() {
-        OrderEntity testOrder = orderTestDataUtil.createFilledOrderStatusPlaced();
+        OrderEntity testOrder = orderTestDataUtil.createOrderWithStatusPlaced();
 
         orderService.changeOrderStatus(testOrder.getId(), ORDER_STATUS_DELIVERED);
         OrderEntity savedOrder = orderRepository.findById(testOrder.getId()).get();
@@ -303,7 +303,7 @@ class OrderServiceIntegrationTest {
 
     @Test
     void testChangeOrderStatusThrowExcInvalidStatus() {
-        OrderEntity testOrder = orderTestDataUtil.createFilledOrderStatusPlaced();
+        OrderEntity testOrder = orderTestDataUtil.createOrderWithStatusPlaced();
 
         Assertions.assertThrows(
                 ObjectNotFoundException.class,
@@ -313,7 +313,7 @@ class OrderServiceIntegrationTest {
 
     @Test
     void testGetUserPlacedOrdersStatusPlaced() {
-        OrderEntity testOrder = orderTestDataUtil.createFilledOrderStatusPlaced();
+        OrderEntity testOrder = orderTestDataUtil.createOrderWithStatusPlaced();
         Long userId = testOrder.getUser().getId();
 
         List<OrderDto> userPlacedOrders = orderService.getUserPlacedOrders(userId);
@@ -322,7 +322,7 @@ class OrderServiceIntegrationTest {
     }
     @Test
     void testGetUserPlacedOrdersStatusDelivered() {
-        OrderEntity testOrder = orderTestDataUtil.createFilledOrderStatusDelivered();
+        OrderEntity testOrder = orderTestDataUtil.createOrderWithStatusDelivered();
         Long userId = testOrder.getUser().getId();
 
         List<OrderDto> userPlacedOrders = orderService.getUserPlacedOrders(userId);
@@ -332,7 +332,7 @@ class OrderServiceIntegrationTest {
 
     @Test
     void testGetUserPlacedOrdersStatusShipped() {
-        OrderEntity testOrder = orderTestDataUtil.createFilledOrderStatusShipped();
+        OrderEntity testOrder = orderTestDataUtil.createOrderWithStatusShipped();
         Long userId = testOrder.getUser().getId();
 
         List<OrderDto> userPlacedOrders = orderService.getUserPlacedOrders(userId);
@@ -353,6 +353,27 @@ class OrderServiceIntegrationTest {
         Assertions.assertThrows(
                 ObjectNotFoundException.class,
                 () -> orderService.getOrderDtoById(101L)
+        );
+    }
+
+    @Test
+    void testSearchOrderByTrackingId() {
+        UUID mockedUUID = UUID.randomUUID();
+        Mockito.when(randomUUID.createRandomUUID()).thenReturn(mockedUUID);
+
+        OrderEntity testOrder = orderTestDataUtil.createOrderWithTrackingNumber();
+        OrderDto orderDto = orderService.searchOrderByTrackingId(mockedUUID);
+
+        Assertions.assertEquals(testOrder.getId(), orderDto.getId());
+    }
+
+    @Test
+    void testSearchOrderByTrackingIdThrowExc() {
+        UUID randomUUID = UUID.randomUUID();
+
+        Assertions.assertThrows(
+                ObjectNotFoundException.class,
+                () -> orderService.searchOrderByTrackingId(randomUUID)
         );
     }
 
