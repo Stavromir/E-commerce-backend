@@ -340,6 +340,22 @@ class OrderServiceIntegrationTest {
         Assertions.assertEquals(OrderStatusEnum.SHIPPED, userPlacedOrders.get(0).getOrderStatus());
     }
 
+    @Test
+    void testGetOrderDtoById() {
+        OrderEntity testOrder = orderTestDataUtil.createFilledOrderInitialQuantity();
+
+        OrderDto orderDtoById = orderService.getOrderDtoById(testOrder.getId());
+        Assertions.assertEquals(testOrder.getId(), orderDtoById.getId());
+    }
+
+    @Test
+    void testGetOrderDtoByIdThrowExc() {
+        Assertions.assertThrows(
+                ObjectNotFoundException.class,
+                () -> orderService.getOrderDtoById(101L)
+        );
+    }
+
     private static AddProductInCartDto getAddProductInCartDto(Long testProductId, Long testUserId) {
         return new AddProductInCartDto()
                 .setProductId(testProductId)
