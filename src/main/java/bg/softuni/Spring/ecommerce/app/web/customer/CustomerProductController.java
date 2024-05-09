@@ -1,6 +1,6 @@
 package bg.softuni.Spring.ecommerce.app.web.customer;
 
-import bg.softuni.Spring.ecommerce.app.model.dto.OrderedProductsDto;
+import bg.softuni.Spring.ecommerce.app.model.dto.OrderProductsDto;
 import bg.softuni.Spring.ecommerce.app.model.dto.ProductDetailDto;
 import bg.softuni.Spring.ecommerce.app.model.dto.ProductDto;
 import bg.softuni.Spring.ecommerce.app.service.ProductService;
@@ -36,9 +36,9 @@ public class CustomerProductController {
     }
 
     @GetMapping("/products/order/{orderId}")
-    public ResponseEntity<OrderedProductsDto> getOrderedProductsDetails(@PathVariable("orderId") Long orderId) {
+    public ResponseEntity<OrderProductsDto> getOrderedProductsDetails(@PathVariable("orderId") Long orderId) {
         return ResponseEntity
-                .ok(productService.getOrderedProductsDetailsByOrderId(orderId));
+                .ok(productService.getOrderProductsDetailsByOrderId(orderId));
     }
 
     @GetMapping("/products/{productId}")

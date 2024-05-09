@@ -95,11 +95,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public OrderedProductsDto getOrderedProductsDetailsByOrderId(Long id) {
+    public OrderProductsDto getOrderProductsDetailsByOrderId(Long id) {
         OrderDto orderById = orderService.getOrderDtoById(id);
         List<CartItemDto> cartItems = orderById.getCartItems();
 
-        OrderedProductsDto responseDto = new OrderedProductsDto();
+        OrderProductsDto responseDto = new OrderProductsDto();
         responseDto.setOrderAmount(orderById.getAmount());
         List<ProductDto> productDtos = new ArrayList<>();
 

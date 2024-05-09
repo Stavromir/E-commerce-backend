@@ -2,7 +2,7 @@ package bg.softuni.Spring.ecommerce.app.model.dto;
 
 import java.util.List;
 
-public class OrderedProductsDto {
+public class OrderProductsDto {
 
     private List<ProductDto> productDtos;
     private Long orderAmount;
@@ -11,7 +11,7 @@ public class OrderedProductsDto {
         return productDtos;
     }
 
-    public OrderedProductsDto setProductDtos(List<ProductDto> productDtos) {
+    public OrderProductsDto setProductDtos(List<ProductDto> productDtos) {
         this.productDtos = productDtos;
         return this;
     }
@@ -20,7 +20,7 @@ public class OrderedProductsDto {
         return orderAmount;
     }
 
-    public OrderedProductsDto setOrderAmount(Long orderAmount) {
+    public OrderProductsDto setOrderAmount(Long orderAmount) {
         this.orderAmount = orderAmount;
         return this;
     }
