@@ -43,7 +43,6 @@ public class UserServiceImpl implements UserService {
                 .setEmail(signupRequest.getEmail())
                 .setName(signupRequest.getName())
                 .setPassword(Pbkdf2PasswordEncoder.defaultsForSpringSecurity_v5_8().encode(signupRequest.getPassword()))
-//                .setPassword(new BCryptPasswordEncoder().encode(signupRequest.getPassword()))
                 .setRole(UserRoleEnum.CUSTOMER);
 
         UserEntity savedUser = userRepository.save(user);
