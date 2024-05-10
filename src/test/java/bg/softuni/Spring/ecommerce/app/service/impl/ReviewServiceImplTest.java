@@ -5,6 +5,8 @@ import bg.softuni.Spring.ecommerce.app.model.entity.ReviewEntity;
 import bg.softuni.Spring.ecommerce.app.repository.ReviewRepository;
 import bg.softuni.Spring.ecommerce.app.service.ReviewService;
 import bg.softuni.Spring.ecommerce.app.service.testUtils.ReviewTestDataUtil;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,6 +25,16 @@ class ReviewServiceImplTest {
     private ReviewTestDataUtil reviewTestDataUtil;
     @Autowired
     private ReviewService reviewService;
+
+    @BeforeEach
+    void setUp() {
+        reviewRepository.deleteAll();
+    }
+
+    @AfterEach
+    void tearDown() {
+        reviewRepository.deleteAll();
+    }
 
     @Test
     void testPostReview() throws IOException {
