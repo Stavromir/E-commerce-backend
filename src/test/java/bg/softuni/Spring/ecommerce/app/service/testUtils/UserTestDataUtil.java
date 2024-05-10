@@ -20,16 +20,16 @@ public class UserTestDataUtil {
     @Autowired
     private UserRepository userRepository;
 
-    private UserEntity testUserEntity;
+    private UserEntity userEntity;
 
     private UserTestDataUtil() {
     }
 
     public UserEntity createTestUser() {
-        if (testUserEntity == null) {
-            testUserEntity = createUser(TEST_USER_EMAIL, UserRoleEnum.CUSTOMER);
+        if (userEntity == null) {
+            userEntity = createUser(TEST_USER_EMAIL, UserRoleEnum.CUSTOMER);
         }
-        return testUserEntity;
+        return userEntity;
     }
 
     public UserEntity createTestAdmin(String email) {
@@ -51,6 +51,7 @@ public class UserTestDataUtil {
     }
 
     public void clearAllTestData() {
+        userEntity = null;
         userRepository.deleteAll();
     }
 }
