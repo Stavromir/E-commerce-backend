@@ -8,5 +8,5 @@ public interface WishListService {
 
     Long addProductToWishList(WishListDto wishListDto);
 
-    List<WishListDto> getAllProductsInWishList(Long userId);
+    List<WishListDto> getAllProductsInUserWishList(Long userId);
 }

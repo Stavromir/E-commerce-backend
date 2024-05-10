@@ -47,7 +47,7 @@ public class WishListServiceImpl implements WishListService {
     }
 
     @Override
-    public List<WishListDto> getAllProductsInWishList(Long userId) {
+    public List<WishListDto> getAllProductsInUserWishList(Long userId) {
         return wishListRepository.getAllByUserId(userId)
                 .stream()
                 .map(WishListServiceImpl::mapToWishListDto)

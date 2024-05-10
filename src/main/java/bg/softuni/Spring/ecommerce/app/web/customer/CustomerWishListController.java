@@ -2,7 +2,6 @@ package bg.softuni.Spring.ecommerce.app.web.customer;
 
 import bg.softuni.Spring.ecommerce.app.model.dto.WishListDto;
 import bg.softuni.Spring.ecommerce.app.service.WishListService;
-import bg.softuni.Spring.ecommerce.app.service.exception.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +28,7 @@ public class CustomerWishListController {
     @GetMapping("/wishlists/{userId}")
     public ResponseEntity<List<WishListDto>> getAllProductsInWishList(@PathVariable("userId") Long userId){
 
-            List<WishListDto> allProductsInWishList = wishListService.getAllProductsInWishList(userId);
+            List<WishListDto> allProductsInWishList = wishListService.getAllProductsInUserWishList(userId);
             return ResponseEntity.ok(allProductsInWishList);
     }
 }
