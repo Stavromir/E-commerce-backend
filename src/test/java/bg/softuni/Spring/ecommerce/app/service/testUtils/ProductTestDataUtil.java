@@ -29,8 +29,6 @@ public class ProductTestDataUtil {
     private CategoryEntity categoryEntity;
     private ProductEntity productEntity;
 
-    private ProductTestDataUtil() {
-    }
 
     public ProductEntity createProduct() {
         if (productEntity == null) {
@@ -74,6 +72,8 @@ public class ProductTestDataUtil {
     }
 
     public void clearAllTestData() {
+        categoryEntity = null;
+        productEntity = null;
         productRepository.deleteAll();
         categoryTestDataUtil.cleanAllTestData();
     }
