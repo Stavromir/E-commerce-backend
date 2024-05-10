@@ -27,8 +27,6 @@ public class OrderTestDataUtil {
     @Autowired
     private ProductTestDataUtil productTestDataUtil;
     @Autowired
-    private CouponTestDataUtil couponTestDataUtil;
-    @Autowired
     private RandomUUID randomUUID;
 
     public OrderEntity createEmptyOrder() {
@@ -112,8 +110,9 @@ public class OrderTestDataUtil {
     }
 
     public void clearAllTestData() {
-        orderRepository.deleteAll();
         cartItemRepository.deleteAll();
+        orderRepository.deleteAll();
+        userTestDataUtil.clearAllTestData();
     }
 
 
