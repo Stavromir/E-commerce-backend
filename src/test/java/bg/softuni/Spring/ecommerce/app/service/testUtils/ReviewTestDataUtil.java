@@ -1,5 +1,6 @@
 package bg.softuni.Spring.ecommerce.app.service.testUtils;
 
+import bg.softuni.Spring.ecommerce.app.model.dto.ReviewDto;
 import bg.softuni.Spring.ecommerce.app.model.entity.ProductEntity;
 import bg.softuni.Spring.ecommerce.app.model.entity.ReviewEntity;
 import bg.softuni.Spring.ecommerce.app.model.entity.UserEntity;
@@ -38,8 +39,20 @@ public class ReviewTestDataUtil {
     }
 
 
+    public ReviewDto createReviewDto() {
+        ProductEntity testProduct = productTestDataUtil.createProduct();
+        UserEntity testUser = userTestDataUtil.createTestUser();
+
+        return new ReviewDto()
+                .setProductId(testProduct.getId())
+                .setUserId(testUser.getId())
+                .setDescription(REVIEW_DESCRIPTION)
+                .setRating(REVIEW_RATING);
+    }
 
     public void clearAllTestData() {
         reviewRepository.deleteAll();
+        productTestDataUtil.clearAllTestData();
+        userTestDataUtil.clearAllTestData();
     }
 }
