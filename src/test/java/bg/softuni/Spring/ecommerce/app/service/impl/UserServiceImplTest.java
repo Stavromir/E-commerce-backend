@@ -2,6 +2,7 @@ package bg.softuni.Spring.ecommerce.app.service.impl;
 
 import bg.softuni.Spring.ecommerce.app.model.dto.SignupRequestDto;
 import bg.softuni.Spring.ecommerce.app.model.entity.UserEntity;
+import bg.softuni.Spring.ecommerce.app.repository.OrderRepository;
 import bg.softuni.Spring.ecommerce.app.repository.UserRepository;
 import bg.softuni.Spring.ecommerce.app.service.UserService;
 import bg.softuni.Spring.ecommerce.app.service.exception.ObjectNotFoundException;
@@ -26,15 +27,19 @@ class UserServiceImplTest {
     private UserService userService;
     @Autowired
     private UserTestDataUtil userTestDataUtil;
+    @Autowired
+    private OrderRepository orderRepository;
 
     @BeforeEach
     void setUp() {
-        userRepository.deleteAll();
+        orderRepository.deleteAll();
+        userTestDataUtil.clearAllTestData();
     }
 
     @AfterEach
     void tearDown() {
-        userRepository.deleteAll();
+        orderRepository.deleteAll();
+        userTestDataUtil.clearAllTestData();
     }
 
     @Test
@@ -78,6 +83,25 @@ class UserServiceImplTest {
         assertThrows(
                 ObjectNotFoundException.class,
                 () -> userService.getUserById(101L)
+        );
+    }
+
+    @Test
+    void testFindUserByEmail() {
+        UserEntity testUser = userTestDataUtil.createTestUser();
+
+        UserEntity returnedUserEntity = userService.findUserByEmail(testUser.getEmail());
+
+        assertNotNull(returnedUserEntity);
+        assertEquals(testUser.getName(), returnedUserEntity.getName());
+        assertEquals(testUser.getId(), returnedUserEntity.getId());
+    }
+
+    @Test
+    void testFindUserByEmailThrowExc() {
+        assertThrows(
+                ObjectNotFoundException.class,
+                () -> userService.findUserByEmail("test@email.com")
         );
     }
 }
