@@ -3,6 +3,7 @@ package bg.softuni.Spring.ecommerce.app.service.testUtils;
 import bg.softuni.Spring.ecommerce.app.model.dto.SignupRequestDto;
 import bg.softuni.Spring.ecommerce.app.model.entity.UserEntity;
 import bg.softuni.Spring.ecommerce.app.model.enums.UserRoleEnum;
+import bg.softuni.Spring.ecommerce.app.repository.OrderRepository;
 import bg.softuni.Spring.ecommerce.app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,8 @@ public class UserTestDataUtil {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private OrderRepository orderRepository;
 
     private UserEntity userEntity;
 
@@ -60,6 +63,7 @@ public class UserTestDataUtil {
 
     public void clearAllTestData() {
         userEntity = null;
+        orderRepository.deleteAll();
         userRepository.deleteAll();
     }
 }
