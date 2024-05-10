@@ -28,12 +28,12 @@ class ReviewServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        reviewRepository.deleteAll();
+        reviewTestDataUtil.clearAllTestData();
     }
 
     @AfterEach
     void tearDown() {
-        reviewRepository.deleteAll();
+        reviewTestDataUtil.clearAllTestData();
     }
 
     @Test
