@@ -32,13 +32,11 @@ class UserServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        orderRepository.deleteAll();
         userTestDataUtil.clearAllTestData();
     }
 
     @AfterEach
     void tearDown() {
-        orderRepository.deleteAll();
         userTestDataUtil.clearAllTestData();
     }
 
