@@ -1,5 +1,6 @@
 package bg.softuni.Spring.ecommerce.app.service.testUtils;
 
+import bg.softuni.Spring.ecommerce.app.model.dto.SignupRequestDto;
 import bg.softuni.Spring.ecommerce.app.model.entity.UserEntity;
 import bg.softuni.Spring.ecommerce.app.model.enums.UserRoleEnum;
 import bg.softuni.Spring.ecommerce.app.repository.UserRepository;
@@ -34,6 +35,13 @@ public class UserTestDataUtil {
 
     public UserEntity createTestAdmin(String email) {
         return createUser(email, UserRoleEnum.ADMIN);
+    }
+
+    public SignupRequestDto createSignupRequestDto() {
+        return new SignupRequestDto()
+                .setName(USERNAME)
+                .setEmail(TEST_USER_EMAIL)
+                .setPassword(USER_PASSWORD);
     }
 
     private UserEntity createUser(String email, UserRoleEnum userRoleEnum) {
