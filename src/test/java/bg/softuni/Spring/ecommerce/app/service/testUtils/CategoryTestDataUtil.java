@@ -1,5 +1,6 @@
 package bg.softuni.Spring.ecommerce.app.service.testUtils;
 
+import bg.softuni.Spring.ecommerce.app.model.dto.CategoryDto;
 import bg.softuni.Spring.ecommerce.app.model.entity.CategoryEntity;
 import bg.softuni.Spring.ecommerce.app.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,12 @@ public class CategoryTestDataUtil {
                 .setDescription(CATEGORY_DESCRIPTION);
 
         return categoryRepository.save(category);
+    }
+
+    public CategoryDto createCategorySeedDto () {
+        return new CategoryDto()
+                .setName(CATEGORY_NAME)
+                .setDescription(CATEGORY_DESCRIPTION);
     }
 
     public void cleanAllTestData() {
