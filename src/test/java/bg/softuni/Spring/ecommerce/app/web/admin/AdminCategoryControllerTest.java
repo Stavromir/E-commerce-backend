@@ -46,4 +46,17 @@ class AdminCategoryControllerTest {
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$").isNumber());
     }
+
+    @Test
+    void testGetAllCategories() throws Exception {
+        String jwtToken = jwtTestDataUtil.getJwtToken();
+        categoryTestDataUtil.createCategory();
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders.get("/api/admin/categories")
+                                .characterEncoding("utf-8")
+                                .header(HttpHeaders.AUTHORIZATION, jwtToken)
+                ).andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
+    }
 }
