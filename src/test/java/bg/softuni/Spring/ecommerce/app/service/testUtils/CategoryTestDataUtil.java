@@ -23,7 +23,7 @@ public class CategoryTestDataUtil {
         return categoryRepository.save(category);
     }
 
-    public CategoryDto createCategorySeedDto () {
+    public CategoryDto getCategorySeedDto() {
         return new CategoryDto()
                 .setName(CATEGORY_NAME)
                 .setDescription(CATEGORY_DESCRIPTION);
