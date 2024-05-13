@@ -36,7 +36,8 @@ dependencies {
 	// https://mvnrepository.com/artifact/com.vaadin.external.google/android-json
 	implementation 'com.vaadin.external.google:android-json:0.0.20131108.vaadin1'
 
-
+	// https://mvnrepository.com/artifact/com.google.code.gson/gson
+	implementation 'com.google.code.gson:gson:2.10.1'
 }
 
 tasks.named('test') {
