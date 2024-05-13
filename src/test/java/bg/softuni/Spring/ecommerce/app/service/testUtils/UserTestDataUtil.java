@@ -1,11 +1,13 @@
 package bg.softuni.Spring.ecommerce.app.service.testUtils;
 
 import bg.softuni.Spring.ecommerce.app.model.dto.SignupRequestDto;
+import bg.softuni.Spring.ecommerce.app.model.dto.UserAuthenticationRequestDto;
 import bg.softuni.Spring.ecommerce.app.model.entity.UserEntity;
 import bg.softuni.Spring.ecommerce.app.model.enums.UserRoleEnum;
 import bg.softuni.Spring.ecommerce.app.repository.OrderRepository;
 import bg.softuni.Spring.ecommerce.app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.HexFormat;
@@ -13,11 +15,16 @@ import java.util.HexFormat;
 @Component
 public class UserTestDataUtil {
 
-    public static final String IMG_HEX = "e04f";
-    public static final String USERNAME = "testUser";
-    public static final String TEST_USER_EMAIL = "test@email.com";
-    public static final String ADMIN_USER_EMAIL = "test@email.com";
-    public static final String USER_PASSWORD = "testPassword";
+    @Value("${admin.email}")
+    private String adminEmail;
+    @Value("${admin.password}")
+    private String adminPass;
+
+
+    private static final String IMG_HEX = "e04f";
+    private static final String USERNAME = "testUser";
+    private static final String TEST_USER_EMAIL = "test@email.com";
+    private static final String USER_PASSWORD = "userTestPass";
 
     @Autowired
     private UserRepository userRepository;
@@ -36,8 +43,10 @@ public class UserTestDataUtil {
         return userEntity;
     }
 
-    public UserEntity createTestAdmin(String email) {
-        return createUser(email, UserRoleEnum.ADMIN);
+    public UserAuthenticationRequestDto getUserAuthRequestDto() {
+        return new UserAuthenticationRequestDto()
+                .setUsername(adminEmail)
+                .setPassword(adminPass);
     }
 
     public SignupRequestDto createSignupRequestDto() {
