@@ -6,8 +6,7 @@ import bg.softuni.Spring.ecommerce.app.repository.CouponRepository;
 import bg.softuni.Spring.ecommerce.app.service.CouponService;
 import bg.softuni.Spring.ecommerce.app.service.exception.ObjectNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,10 +53,13 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public boolean isExpired(String code) {
         CouponEntity coupon = findByCode(code);
-        Date currentDate = new Date();
-        Date expirationDate = coupon.getExpirationDate();
+//        Date currentDate = new Date();
+//        Date expirationDate = coupon.getExpirationDate();
 
-        return currentDate.after(expirationDate);
+        LocalDateTime currentDate = LocalDateTime.now();
+        LocalDateTime expirationDate = coupon.getExpirationDate();
+
+        return currentDate.isAfter(expirationDate);
     }
 
     @Override
