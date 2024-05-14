@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Optional;
 
@@ -25,9 +26,9 @@ class CouponServiceTest {
     public static final String COUPON_NAME = "CouponOne";
     public static final String COUPON_CODE = "CodeOne";
     public static final Long COUPON_DISCOUNT = 10L;
-    public static final Date COUPON_EXPIRATION_NOW_DATE = new Date();
-    public static final Date COUPON_EXPIRATION_PAST_DATE = new Date(System.currentTimeMillis() - 86400000);
-    public static final Date COUPON_EXPIRATION_FEATURE_DATE = new Date(System.currentTimeMillis() + 86400000);
+    public static final LocalDateTime COUPON_EXPIRATION_NOW_DATE = LocalDateTime.now();
+    public static final LocalDateTime COUPON_EXPIRATION_PAST_DATE = COUPON_EXPIRATION_NOW_DATE.minusDays(1);
+    public static final LocalDateTime COUPON_EXPIRATION_FEATURE_DATE = COUPON_EXPIRATION_NOW_DATE.plusDays(1);
 
     private CouponService couponServiceToTest;
 
@@ -39,7 +40,7 @@ class CouponServiceTest {
 
 
     @BeforeEach
-    void SetUp () {
+    void SetUp() {
         this.couponServiceToTest = new CouponServiceImpl(couponRepository);
     }
 
@@ -75,7 +76,7 @@ class CouponServiceTest {
     }
 
     @Test
-    void testGetCouponDto(){
+    void testGetCouponDto() {
         CouponEntity testCoupon = createCouponEntity();
 
         CouponDto couponDto = couponServiceToTest.getCouponDto(testCoupon);
@@ -111,7 +112,7 @@ class CouponServiceTest {
     }
 
     @Test
-    void testIsExpired () {
+    void testIsExpired() {
         when(dateTime.getDate()).thenReturn(COUPON_EXPIRATION_PAST_DATE);
 
         CouponEntity testCouponEntity = createCouponEntity();
