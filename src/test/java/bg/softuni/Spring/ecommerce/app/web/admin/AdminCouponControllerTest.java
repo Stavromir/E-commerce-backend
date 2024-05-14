@@ -4,6 +4,8 @@ import bg.softuni.Spring.ecommerce.app.model.dto.CouponDto;
 import bg.softuni.Spring.ecommerce.app.service.testUtils.CouponTestDataUtil;
 import bg.softuni.Spring.ecommerce.app.service.testUtils.JwtTestDataUtil;
 import com.google.gson.Gson;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -28,6 +30,16 @@ class AdminCouponControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @BeforeEach
+    void setUp() {
+        couponTestDataUtil.clearAllTestData();
+    }
+
+    @AfterEach
+    void tearDown() {
+        couponTestDataUtil.clearAllTestData();
+    }
+
     @Test
     void testCreateCoupon() throws Exception {
 
@@ -49,7 +61,16 @@ class AdminCouponControllerTest {
     }
 
     @Test
-    void testGetAllCoupons() {
+    void testGetAllCoupons() throws Exception {
+        String jwtToken = jwtTestDataUtil.getJwtToken(mockMvc);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/api/admin/coupons")
+                        .characterEncoding("utf-8")
+                        .header(HttpHeaders.AUTHORIZATION, jwtToken)
+        )
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
 
     }
 }
