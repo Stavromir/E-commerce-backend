@@ -25,7 +25,7 @@ public class CategoryTestDataUtil {
 
     public CategoryDto getCategorySeedDto() {
         return new CategoryDto()
-                .setName("asasasas")
+                .setName(CATEGORY_NAME)
                 .setDescription(CATEGORY_DESCRIPTION);
     }
 
