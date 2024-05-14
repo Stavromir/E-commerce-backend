@@ -1,5 +1,7 @@
 package bg.softuni.Spring.ecommerce.app.service.testUtils;
 
+import bg.softuni.Spring.ecommerce.app.model.dto.CategoryDto;
+import bg.softuni.Spring.ecommerce.app.model.dto.CouponDto;
 import bg.softuni.Spring.ecommerce.app.model.entity.CouponEntity;
 import bg.softuni.Spring.ecommerce.app.repository.CouponRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,14 @@ public class CouponTestDataUtil {
                 .setExpirationDate(COUPON_EXPIRATION_PAST_DATE);
 
         return couponRepository.save(testCoupon);
+    }
+
+    public CouponDto createCouponDto() {
+        return new CouponDto()
+                .setName(COUPON_NAME)
+                .setDiscount(COUPON_DISCOUNT)
+                .setCode(COUPON_CODE)
+                .setExpirationDate(COUPON_EXPIRATION_FEATURE_DATE);
     }
 
     public void clearAllTestData() {
