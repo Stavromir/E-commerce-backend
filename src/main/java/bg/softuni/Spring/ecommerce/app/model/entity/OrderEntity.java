@@ -3,6 +3,7 @@ package bg.softuni.Spring.ecommerce.app.model.entity;
 import bg.softuni.Spring.ecommerce.app.model.enums.OrderStatusEnum;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -12,7 +13,7 @@ import java.util.UUID;
 public class OrderEntity extends BaseEntity {
 
     private String orderDescription;
-    private Date date;
+    private LocalDateTime date;
     private Long amount;
     private String address;
     private String payment;
@@ -37,11 +38,11 @@ public class OrderEntity extends BaseEntity {
         return this;
     }
 
-    public Date getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public OrderEntity setDate(Date date) {
+    public OrderEntity setDate(LocalDateTime date) {
         this.date = date;
         return this;
     }
