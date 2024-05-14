@@ -7,6 +7,7 @@ import bg.softuni.Spring.ecommerce.app.repository.CouponRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Component
@@ -15,8 +16,8 @@ public class CouponTestDataUtil {
     public static final String COUPON_NAME = "couponName";
     public static final String COUPON_CODE = "couponCode";
     public static final Long COUPON_DISCOUNT = 10L;
-    public static final Date COUPON_EXPIRATION_PAST_DATE = new Date(System.currentTimeMillis() - 86400000);
-    public static final Date COUPON_EXPIRATION_FEATURE_DATE = new Date(System.currentTimeMillis() + 86400000);
+    public static final LocalDateTime COUPON_EXPIRATION_PAST_DATE = LocalDateTime.now().minusDays(1);
+    public static final LocalDateTime COUPON_EXPIRATION_FEATURE_DATE = LocalDateTime.now().plusDays(1);
 
     @Autowired
     private CouponRepository couponRepository;
@@ -46,7 +47,7 @@ public class CouponTestDataUtil {
                 .setName(COUPON_NAME)
                 .setDiscount(COUPON_DISCOUNT)
                 .setCode(COUPON_CODE)
-                .setExpirationDate(COUPON_EXPIRATION_FEATURE_DATE);
+                .setExpirationDate(LocalDateTime.now());
     }
 
     public void clearAllTestData() {
