@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class CouponDto {
@@ -13,7 +14,7 @@ public class CouponDto {
     private String name;
     private String code;
     private Long discount;
-    private Date expirationDate;
+    private LocalDateTime expirationDate;
 
     public CouponDto() {
     }
@@ -58,11 +59,11 @@ public class CouponDto {
     }
 
     @NotNull
-    public Date getExpirationDate() {
+    public LocalDateTime getExpirationDate() {
         return expirationDate;
     }
 
-    public CouponDto setExpirationDate(Date expirationDate) {
+    public CouponDto setExpirationDate(LocalDateTime expirationDate) {
         this.expirationDate = expirationDate;
         return this;
     }
