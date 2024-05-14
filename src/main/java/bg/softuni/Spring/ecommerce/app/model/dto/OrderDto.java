@@ -4,6 +4,7 @@ import bg.softuni.Spring.ecommerce.app.model.entity.CartItemEntity;
 import bg.softuni.Spring.ecommerce.app.model.entity.UserEntity;
 import bg.softuni.Spring.ecommerce.app.model.enums.OrderStatusEnum;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -12,7 +13,7 @@ public class OrderDto {
 
     private Long id;
     private String orderDescription;
-    private Date date;
+    private LocalDateTime date;
     private Long amount;
     private String address;
     private String payment;
@@ -45,11 +46,11 @@ public class OrderDto {
         return this;
     }
 
-    public Date getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public OrderDto setDate(Date date) {
+    public OrderDto setDate(LocalDateTime date) {
         this.date = date;
         return this;
     }
