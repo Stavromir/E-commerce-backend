@@ -69,4 +69,17 @@ class AdminOrderControllerTest {
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
                 .andExpect(MockMvcResultMatchers.jsonPath("$").isNumber());
     }
+
+    @Test
+    void testGetAnalytics() throws Exception {
+        orderTestDataUtil.createOrderWithStatusPlaced();
+        String jwtToken = jwtTestDataUtil.getJwtToken(mockMvc);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/api/admin/analytics")
+                        .characterEncoding("utf-8")
+                        .header(HttpHeaders.AUTHORIZATION, jwtToken)
+        )
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
 }
