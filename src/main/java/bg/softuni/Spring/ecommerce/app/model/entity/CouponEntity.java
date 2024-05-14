@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -13,7 +14,7 @@ public class CouponEntity extends BaseEntity {
     private String name;
     private String code;
     private Long discount;
-    private Date expirationDate;
+    private LocalDateTime expirationDate;
 
     public CouponEntity() {
     }
@@ -49,11 +50,11 @@ public class CouponEntity extends BaseEntity {
     }
 
     @Column(nullable = false)
-    public Date getExpirationDate() {
+    public LocalDateTime getExpirationDate() {
         return expirationDate;
     }
 
-    public CouponEntity setExpirationDate(Date expirationDate) {
+    public CouponEntity setExpirationDate(LocalDateTime expirationDate) {
         this.expirationDate = expirationDate;
         return this;
     }
