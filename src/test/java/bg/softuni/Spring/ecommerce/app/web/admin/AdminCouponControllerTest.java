@@ -64,6 +64,8 @@ class AdminCouponControllerTest {
     void testGetAllCoupons() throws Exception {
         String jwtToken = jwtTestDataUtil.getJwtToken(mockMvc);
 
+        couponTestDataUtil.createValidCouponEntity();
+
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/api/admin/coupons")
                         .characterEncoding("utf-8")
