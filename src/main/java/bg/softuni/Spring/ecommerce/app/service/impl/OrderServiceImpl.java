@@ -12,6 +12,8 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -232,8 +234,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public AnalyticsResponseDto getAnalytics() {
 
-        LocalDate currentDate = LocalDate.now();
-        LocalDate previousMonthDate = currentDate.minusMonths(1);
+        LocalDateTime currentDate = LocalDateTime.now();
+        LocalDateTime previousMonthDate = currentDate.minusMonths(1);
 
         Long currentMonthOrders = (long) getTotalOrdersForMonth(currentDate.getMonthValue(), currentDate.getYear()).size();
         Long previousMonthOrders = (long) getTotalOrdersForMonth(previousMonthDate.getMonthValue(), previousMonthDate.getYear()).size();
@@ -270,14 +272,17 @@ public class OrderServiceImpl implements OrderService {
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
 
-        Date beginOfMonth = calendar.getTime();
+        LocalDateTime beginOfMonth = calendar.getTime().toInstant()
+                .atZone(ZoneId.systemDefault()).toLocalDateTime();
+
 
         calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
         calendar.set(Calendar.HOUR_OF_DAY, 23);
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);
 
-        Date endOfMonth = calendar.getTime();
+        LocalDateTime endOfMonth = calendar.getTime().toInstant()
+                .atZone(ZoneId.systemDefault()).toLocalDateTime();;
 
         return orderRepository
                 .findAllByDateBetweenAndOrderStatus(beginOfMonth, endOfMonth, OrderStatusEnum.DELIVERED);
