@@ -5,6 +5,7 @@ import bg.softuni.Spring.ecommerce.app.model.enums.OrderStatusEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Repository
@@ -20,5 +21,5 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
 
     Optional<OrderEntity> findByTrackingId(UUID trackingId);
 
-    List<OrderEntity> findAllByDateBetweenAndOrderStatus(Date begin, Date end, OrderStatusEnum orderStatus);
+    List<OrderEntity> findAllByDateBetweenAndOrderStatus(LocalDateTime begin, LocalDateTime end, OrderStatusEnum orderStatus);
 }
