@@ -147,6 +147,11 @@ class AdminProductControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber());
     }
 
+    @Test
+    void testUpdateProduct() {
+
+    }
+
     private String getJwtToken() throws Exception {
         return jwtTestDataUtil.getJwtToken(mockMvc);
     }
