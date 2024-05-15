@@ -43,7 +43,7 @@ class AdminCouponControllerTest {
     @Test
     void testCreateCoupon() throws Exception {
 
-        String jwtToken = jwtTestDataUtil.getJwtToken(mockMvc);
+        String jwtToken = getJwtToken();
         CouponDto couponDto = couponTestDataUtil.createCouponDto();
 
         String content = gson.toJson(couponDto);
@@ -62,7 +62,7 @@ class AdminCouponControllerTest {
 
     @Test
     void testGetAllCoupons() throws Exception {
-        String jwtToken = jwtTestDataUtil.getJwtToken(mockMvc);
+        String jwtToken = getJwtToken();
 
         couponTestDataUtil.createValidCouponEntity();
 
@@ -74,5 +74,9 @@ class AdminCouponControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
 
+    }
+
+    private String getJwtToken() throws Exception {
+        return jwtTestDataUtil.getJwtToken(mockMvc);
     }
 }
