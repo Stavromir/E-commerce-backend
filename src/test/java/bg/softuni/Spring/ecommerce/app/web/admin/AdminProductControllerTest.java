@@ -19,6 +19,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import static org.hamcrest.Matchers.is;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 class AdminProductControllerTest {
@@ -127,6 +129,22 @@ class AdminProductControllerTest {
         )
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$").isNumber());
+    }
+
+    @Test
+    void testGetProductById() throws Exception {
+        String jwtToken = getJwtToken();
+        ProductEntity testProduct = productTestDataUtil.createProduct();
+        Long productId = testProduct.getId();
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get(BASE_URL + "/products/{productId}", productId)
+                        .characterEncoding("utf-8")
+                        .header(HttpHeaders.AUTHORIZATION, jwtToken)
+        )
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id", is(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber());
     }
 
     private String getJwtToken() throws Exception {
