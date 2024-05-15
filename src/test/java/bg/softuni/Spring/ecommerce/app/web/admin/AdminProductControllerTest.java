@@ -91,6 +91,21 @@ class AdminProductControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
     }
 
+    @Test
+    void testDeleteProduct() throws Exception {
+        String jwtToken = getJwtToken();
+        ProductEntity testProductEntity = productTestDataUtil.createProduct();
+        Long productId = testProductEntity.getId();
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.delete(BASE_URL + "/products/{productId}", productId)
+                        .characterEncoding("utf-8")
+                        .header(HttpHeaders.AUTHORIZATION, jwtToken)
+        )
+                .andExpect(MockMvcResultMatchers.status().isNoContent())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").doesNotExist());
+    }
+
     private String getJwtToken() throws Exception {
         return jwtTestDataUtil.getJwtToken(mockMvc);
     }
