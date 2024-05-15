@@ -1,6 +1,7 @@
 package bg.softuni.Spring.ecommerce.app.web.admin;
 
 import bg.softuni.Spring.ecommerce.app.model.dto.ProductDto;
+import bg.softuni.Spring.ecommerce.app.model.entity.ProductEntity;
 import bg.softuni.Spring.ecommerce.app.service.testUtils.JwtTestDataUtil;
 import bg.softuni.Spring.ecommerce.app.service.testUtils.ProductTestDataUtil;
 import com.google.gson.Gson;
@@ -19,6 +20,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @SpringBootTest
 @AutoConfigureMockMvc
 class AdminProductControllerTest {
+
+    private static final String BASE_URL = "/api/admin";
 
     @Autowired
     private JwtTestDataUtil jwtTestDataUtil;
@@ -45,7 +48,7 @@ class AdminProductControllerTest {
         ProductDto productSeedDto = productTestDataUtil.createProductDto();
 
         mockMvc.perform(
-                MockMvcRequestBuilders.post("/api/admin/products")
+                MockMvcRequestBuilders.post(BASE_URL + "/products")
                         .characterEncoding("utf-8")
                         .header(HttpHeaders.AUTHORIZATION, jwtToken)
                         .param("name", productSeedDto.getName())
@@ -65,7 +68,22 @@ class AdminProductControllerTest {
         productTestDataUtil.createProduct();
 
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/api/admin/products")
+                MockMvcRequestBuilders.get(BASE_URL + "/products")
+                        .characterEncoding("utf-8")
+                        .header(HttpHeaders.AUTHORIZATION, jwtToken)
+        )
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
+    }
+
+    @Test
+    void testSearchProductByTitle() throws Exception {
+        String jwtToken = getJwtToken();
+        ProductEntity testProductEntity = productTestDataUtil.createProduct();
+        String name = testProductEntity.getName();
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get(BASE_URL + "/products/title/{name}", name)
                         .characterEncoding("utf-8")
                         .header(HttpHeaders.AUTHORIZATION, jwtToken)
         )
