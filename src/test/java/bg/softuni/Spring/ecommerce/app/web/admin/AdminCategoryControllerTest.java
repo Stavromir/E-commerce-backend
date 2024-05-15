@@ -43,7 +43,7 @@ class AdminCategoryControllerTest {
     @Test
     void testCreateCategory() throws Exception {
 
-        String jwtToken = jwtTestDataUtil.getJwtToken(mockMvc);
+        String jwtToken = getJwtToken();
 
         CategoryDto categorySeedDto = categoryTestDataUtil.getCategorySeedDto();
         String content = gson.toJson(categorySeedDto);
@@ -61,7 +61,7 @@ class AdminCategoryControllerTest {
 
     @Test
     void testGetAllCategories() throws Exception {
-        String jwtToken = jwtTestDataUtil.getJwtToken(mockMvc);
+        String jwtToken = getJwtToken();
         categoryTestDataUtil.createCategory();
 
         mockMvc.perform(
@@ -70,5 +70,9 @@ class AdminCategoryControllerTest {
                                 .header(HttpHeaders.AUTHORIZATION, jwtToken)
                 ).andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
+    }
+
+    private String getJwtToken() throws Exception {
+        return jwtTestDataUtil.getJwtToken(mockMvc);
     }
 }
