@@ -61,6 +61,20 @@ class AdminProductControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$").isNumber());
     }
 
+    @Test
+    void testGetProducts() throws Exception {
+        String jwtToken = getJwtToken();
+        productTestDataUtil.createProduct();
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/api/admin/products")
+                        .characterEncoding("utf-8")
+                        .header(HttpHeaders.AUTHORIZATION, jwtToken)
+        )
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
+    }
+
     private String getJwtToken() throws Exception {
         return jwtTestDataUtil.getJwtToken(mockMvc);
     }
