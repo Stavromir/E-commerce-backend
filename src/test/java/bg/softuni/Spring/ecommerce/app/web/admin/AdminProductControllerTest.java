@@ -1,7 +1,9 @@
 package bg.softuni.Spring.ecommerce.app.web.admin;
 
+import bg.softuni.Spring.ecommerce.app.model.dto.FAQDto;
 import bg.softuni.Spring.ecommerce.app.model.dto.ProductDto;
 import bg.softuni.Spring.ecommerce.app.model.entity.ProductEntity;
+import bg.softuni.Spring.ecommerce.app.service.testUtils.FAQTestDataUtil;
 import bg.softuni.Spring.ecommerce.app.service.testUtils.JwtTestDataUtil;
 import bg.softuni.Spring.ecommerce.app.service.testUtils.ProductTestDataUtil;
 import com.google.gson.Gson;
@@ -30,15 +32,19 @@ class AdminProductControllerTest {
     @Autowired
     private ProductTestDataUtil productTestDataUtil;
     @Autowired
+    private FAQTestDataUtil faqTestDataUtil;
+    @Autowired
     private MockMvc mockMvc;
 
     @BeforeEach
     void setUp() {
+        faqTestDataUtil.clearAllTestData();
         productTestDataUtil.clearAllTestData();
     }
 
     @AfterEach
     void tearDown() {
+        faqTestDataUtil.clearAllTestData();
         productTestDataUtil.clearAllTestData();
     }
 
@@ -104,6 +110,23 @@ class AdminProductControllerTest {
         )
                 .andExpect(MockMvcResultMatchers.status().isNoContent())
                 .andExpect(MockMvcResultMatchers.jsonPath("$").doesNotExist());
+    }
+
+    @Test
+    void testCreateFAQ() throws Exception {
+        String jwtToken = getJwtToken();
+        FAQDto faqDto = faqTestDataUtil.createFaqDto();
+        String content = gson.toJson(faqDto);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.post(BASE_URL + "/faqs")
+                        .characterEncoding("utf-8")
+                        .header(HttpHeaders.AUTHORIZATION, jwtToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(content)
+        )
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isNumber());
     }
 
     private String getJwtToken() throws Exception {
