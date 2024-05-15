@@ -43,7 +43,7 @@ class AdminOrderControllerTest {
     void testGetAllPlacedOrders() throws Exception {
         orderTestDataUtil.createFilledOrderInitialQuantity();
 
-        String jwtToken = jwtTestDataUtil.getJwtToken(mockMvc);
+        String jwtToken = getJwtToken();
 
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/api/admin/orders")
@@ -56,7 +56,7 @@ class AdminOrderControllerTest {
 
     @Test
     void testChangeOrderStatus() throws Exception {
-        String jwtToken = jwtTestDataUtil.getJwtToken(mockMvc);
+        String jwtToken = getJwtToken();
         OrderEntity testOrder = orderTestDataUtil.createOrderWithStatusPlaced();
         Long orderId = testOrder.getId();
         String newStatus = "Shipped";
@@ -73,7 +73,7 @@ class AdminOrderControllerTest {
     @Test
     void testGetAnalytics() throws Exception {
         orderTestDataUtil.createOrderWithStatusPlaced();
-        String jwtToken = jwtTestDataUtil.getJwtToken(mockMvc);
+        String jwtToken = getJwtToken();
 
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/api/admin/analytics")
@@ -81,5 +81,9 @@ class AdminOrderControllerTest {
                         .header(HttpHeaders.AUTHORIZATION, jwtToken)
         )
                 .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    private String getJwtToken() throws Exception {
+        return jwtTestDataUtil.getJwtToken(mockMvc);
     }
 }
