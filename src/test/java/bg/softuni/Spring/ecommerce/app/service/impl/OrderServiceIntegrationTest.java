@@ -32,8 +32,6 @@ import java.util.UUID;
 @SpringBootTest
 class OrderServiceIntegrationTest {
 
-    public static final String ORDER_ADDRESS = "testAddress";
-    public static final String ORDER_DESCRIPTION = "testDescription";
     public static final String ORDER_STATUS_SHIPPED = "Shipped";
     public static final String ORDER_STATUS_DELIVERED = "Delivered";
 
@@ -231,10 +229,8 @@ class OrderServiceIntegrationTest {
 
         OrderEntity emptyOrder = orderTestDataUtil.createEmptyOrder();
 
-        PlaceOrderDto placeOrderDto = new PlaceOrderDto()
-                .setUserId(emptyOrder.getUser().getId())
-                .setAddress(ORDER_ADDRESS)
-                .setOrderDescription(ORDER_DESCRIPTION);
+        PlaceOrderDto placeOrderDto = orderTestDataUtil
+                .createPlaceOrderDto(emptyOrder.getUser().getId());
 
         orderService.placeOrder(placeOrderDto);
 
@@ -242,9 +238,9 @@ class OrderServiceIntegrationTest {
         OrderEntity newEmptyOrder = orderRepository.
                 findByUserIdAndOrderStatus(emptyOrder.getUser().getId(), OrderStatusEnum.PENDING).get();
 
-        Assertions.assertEquals(ORDER_DESCRIPTION, savedOrder.getOrderDescription());
+        Assertions.assertEquals(placeOrderDto.getOrderDescription(), savedOrder.getOrderDescription());
         Assertions.assertEquals(OrderStatusEnum.PLACED, savedOrder.getOrderStatus());
-        Assertions.assertEquals(ORDER_ADDRESS, savedOrder.getAddress());
+        Assertions.assertEquals(placeOrderDto.getAddress(), savedOrder.getAddress());
         Assertions.assertEquals(mockedUUID, savedOrder.getTrackingId());
 //        Assertions.assertEquals(mockedDate.toInstant(), savedOrder.getDate().toInstant());
 
