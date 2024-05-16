@@ -186,6 +186,21 @@ class CustomerOrderControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$").isNumber());
     }
 
+    @Test
+    void testGetOrdersByUserId() throws Exception {
+        OrderEntity testOrder = orderTestDataUtil.createFilledOrderInitialQuantity();
+        Long userId = testOrder.getUser().getId();
+        String jwtToken = getJwtToken();
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get(BASE_URL + "/orders/{userId}", userId)
+                        .characterEncoding("utf-8")
+                        .header(HttpHeaders.AUTHORIZATION, jwtToken)
+        )
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
+    }
+
     private static AddProductInCartDto getAddProductInCartDto(Long testProductId, Long testUserId) {
         return new AddProductInCartDto()
                 .setProductId(testProductId)
