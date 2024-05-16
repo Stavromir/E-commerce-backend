@@ -116,7 +116,9 @@ class CustomerProductControllerTest {
         )
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$").isNotEmpty())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.productDto").isMap());
+                .andExpect(MockMvcResultMatchers.jsonPath("$.productDto").isMap())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.reviewDtos").isArray())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.faqDtos").isArray());
     }
 
     private String getJwtToken() throws Exception {
