@@ -42,6 +42,6 @@ public class WishListTestDataUtil {
     public void clearAllTestData() {
         wishListRepository.deleteAll();
         productTestDataUtil.clearAllTestData();
-        userTestDataUtil.clearAllTestData();
+//        userTestDataUtil.clearAllTestData();
     }
 }
