@@ -1,6 +1,7 @@
 package bg.softuni.Spring.ecommerce.app.web.customer;
 
 import bg.softuni.Spring.ecommerce.app.model.dto.AddProductInCartDto;
+import bg.softuni.Spring.ecommerce.app.model.dto.PlaceOrderDto;
 import bg.softuni.Spring.ecommerce.app.model.entity.CartItemEntity;
 import bg.softuni.Spring.ecommerce.app.model.entity.CouponEntity;
 import bg.softuni.Spring.ecommerce.app.model.entity.OrderEntity;
@@ -161,6 +162,26 @@ class CustomerOrderControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(content)
                 )
+                .andExpect(MockMvcResultMatchers.status().isAccepted())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isNumber());
+    }
+
+    @Test
+    void testPlaceOrder() throws Exception {
+        OrderEntity emptyOrder = orderTestDataUtil.createEmptyOrder();
+        PlaceOrderDto placeOrderDto = orderTestDataUtil
+                .createPlaceOrderDto(emptyOrder.getUser().getId());
+
+        String jwtToken = getJwtToken();
+        String content = gson.toJson(placeOrderDto);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.post(BASE_URL + "/orders")
+                        .characterEncoding("utf-8")
+                        .header(HttpHeaders.AUTHORIZATION, jwtToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(content)
+        )
                 .andExpect(MockMvcResultMatchers.status().isAccepted())
                 .andExpect(MockMvcResultMatchers.jsonPath("$").isNumber());
     }
