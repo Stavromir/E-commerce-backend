@@ -21,6 +21,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @AutoConfigureMockMvc
 class AdminCategoryControllerTest {
 
+    private static final String BASE_URL = "/api/admin";
+
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -49,7 +51,7 @@ class AdminCategoryControllerTest {
         String content = gson.toJson(categorySeedDto);
 
         mockMvc.perform(
-                        MockMvcRequestBuilders.post("/api/admin/categories")
+                        MockMvcRequestBuilders.post(BASE_URL + "/categories")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .characterEncoding("utf-8")
                                 .header(HttpHeaders.AUTHORIZATION, jwtToken)
@@ -65,7 +67,7 @@ class AdminCategoryControllerTest {
         categoryTestDataUtil.createCategory();
 
         mockMvc.perform(
-                        MockMvcRequestBuilders.get("/api/admin/categories")
+                        MockMvcRequestBuilders.get(BASE_URL + "/categories")
                                 .characterEncoding("utf-8")
                                 .header(HttpHeaders.AUTHORIZATION, jwtToken)
                 ).andExpect(MockMvcResultMatchers.status().isOk())
