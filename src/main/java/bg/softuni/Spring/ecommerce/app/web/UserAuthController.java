@@ -76,11 +76,13 @@ public class UserAuthController {
     public ResponseEntity<?> signupUser(@RequestBody SignupRequestDto signupRequest) {
 
         if (userService.hasUserWithEmail(signupRequest.getEmail())) {
-            return new ResponseEntity<>("User already exists", HttpStatus.NOT_ACCEPTABLE);
+//            return new ResponseEntity<>("User already exists", HttpStatus.NOT_ACCEPTABLE);
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("User already exists");
         }
 
         Long userId = userService.createUser(signupRequest);
-        return new ResponseEntity<>(userId, HttpStatus.OK);
+//        return new ResponseEntity<>(userId, HttpStatus.OK);
+        return ResponseEntity.ok().body(userId);
     }
 }
 
