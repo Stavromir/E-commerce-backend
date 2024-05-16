@@ -1,10 +1,10 @@
 package bg.softuni.Spring.ecommerce.app.web.customer;
 
+import bg.softuni.Spring.ecommerce.app.model.entity.FAQEntity;
 import bg.softuni.Spring.ecommerce.app.model.entity.OrderEntity;
 import bg.softuni.Spring.ecommerce.app.model.entity.ProductEntity;
-import bg.softuni.Spring.ecommerce.app.service.testUtils.JwtTestDataUtil;
-import bg.softuni.Spring.ecommerce.app.service.testUtils.OrderTestDataUtil;
-import bg.softuni.Spring.ecommerce.app.service.testUtils.ProductTestDataUtil;
+import bg.softuni.Spring.ecommerce.app.model.entity.ReviewEntity;
+import bg.softuni.Spring.ecommerce.app.service.testUtils.*;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,15 +34,25 @@ class CustomerProductControllerTest {
     private ProductTestDataUtil productTestDataUtil;
     @Autowired
     private OrderTestDataUtil orderTestDataUtil;
+    @Autowired
+    private FAQTestDataUtil faqTestDataUtil;
+    @Autowired
+    private ReviewTestDataUtil reviewTestDataUtil;
 
     @BeforeEach
     void setUp() {
+        faqTestDataUtil.clearAllTestData();
+        reviewTestDataUtil.clearAllTestData();
         productTestDataUtil.clearAllTestData();
+        orderTestDataUtil.clearAllTestData();
     }
 
     @AfterEach
     void tearDown() {
+        faqTestDataUtil.clearAllTestData();
+        reviewTestDataUtil.clearAllTestData();
         productTestDataUtil.clearAllTestData();
+        orderTestDataUtil.clearAllTestData();
     }
 
     @Test
@@ -88,6 +98,25 @@ class CustomerProductControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$").isNotEmpty())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.productDtos").isArray());
+    }
+
+    @Test
+    void testGetProductDetailById() throws Exception {
+        ProductEntity testProduct = productTestDataUtil.createProduct();
+        Long productId = testProduct.getId();
+        reviewTestDataUtil.createReviewEntity();
+        faqTestDataUtil.createFaqEntity();
+
+        String jwtToken = getJwtToken();
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get(BASE_URL + "/products/{productId}", productId)
+                        .characterEncoding(ENCODING)
+                        .header(HttpHeaders.AUTHORIZATION, jwtToken)
+        )
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isNotEmpty())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.productDto").isMap());
     }
 
     private String getJwtToken() throws Exception {
