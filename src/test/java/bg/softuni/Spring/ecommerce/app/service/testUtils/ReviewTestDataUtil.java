@@ -53,6 +53,6 @@ public class ReviewTestDataUtil {
     public void clearAllTestData() {
         reviewRepository.deleteAll();
         productTestDataUtil.clearAllTestData();
-        userTestDataUtil.clearAllTestData();
+//        userTestDataUtil.clearAllTestData();
     }
 }
