@@ -1,7 +1,9 @@
 package bg.softuni.Spring.ecommerce.app.web.customer;
 
+import bg.softuni.Spring.ecommerce.app.model.entity.OrderEntity;
 import bg.softuni.Spring.ecommerce.app.model.entity.ProductEntity;
 import bg.softuni.Spring.ecommerce.app.service.testUtils.JwtTestDataUtil;
+import bg.softuni.Spring.ecommerce.app.service.testUtils.OrderTestDataUtil;
 import bg.softuni.Spring.ecommerce.app.service.testUtils.ProductTestDataUtil;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.AfterEach;
@@ -30,6 +32,8 @@ class CustomerProductControllerTest {
     private Gson gson;
     @Autowired
     private ProductTestDataUtil productTestDataUtil;
+    @Autowired
+    private OrderTestDataUtil orderTestDataUtil;
 
     @BeforeEach
     void setUp() {
@@ -68,6 +72,22 @@ class CustomerProductControllerTest {
         )
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
+    }
+
+    @Test
+    void testGetOrderedProductsDetails() throws Exception {
+        OrderEntity testOrder = orderTestDataUtil.createFilledOrderInitialQuantity();
+        Long orderId = testOrder.getId();
+        String jwtToken = getJwtToken();
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders.get(BASE_URL + "/products/order/{orderId}", orderId)
+                                .characterEncoding(ENCODING)
+                                .header(HttpHeaders.AUTHORIZATION, jwtToken)
+                )
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isNotEmpty())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.productDtos").isArray());
     }
 
     private String getJwtToken() throws Exception {
