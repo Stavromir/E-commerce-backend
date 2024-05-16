@@ -1,5 +1,6 @@
 package bg.softuni.Spring.ecommerce.app.web.customer;
 
+import bg.softuni.Spring.ecommerce.app.model.entity.ProductEntity;
 import bg.softuni.Spring.ecommerce.app.service.testUtils.JwtTestDataUtil;
 import bg.softuni.Spring.ecommerce.app.service.testUtils.ProductTestDataUtil;
 import com.google.gson.Gson;
@@ -19,6 +20,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 class CustomerProductControllerTest {
 
     private static final String BASE_URL = "/api/customer";
+    private static final String ENCODING = "utf-8";
 
     @Autowired
     private MockMvc mockMvc;
@@ -46,7 +48,22 @@ class CustomerProductControllerTest {
 
         mockMvc.perform(
                 MockMvcRequestBuilders.get(BASE_URL + "/products")
-                        .characterEncoding("utf-8")
+                        .characterEncoding(ENCODING)
+                        .header(HttpHeaders.AUTHORIZATION, jwtToken)
+        )
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
+    }
+
+    @Test
+    void testSearchProductByTitle() throws Exception {
+        ProductEntity testProduct = productTestDataUtil.createProduct();
+        String name = testProduct.getName();
+        String jwtToken = getJwtToken();
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get(BASE_URL + "/products/title/{name}", name)
+                        .characterEncoding(ENCODING)
                         .header(HttpHeaders.AUTHORIZATION, jwtToken)
         )
                 .andExpect(MockMvcResultMatchers.status().isOk())
