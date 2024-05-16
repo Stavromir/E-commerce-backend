@@ -71,6 +71,11 @@ class CustomerOrderControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$").isNumber());
     }
 
+    @Test
+    void testGetCartByUserId() {
+
+    }
+
     private String getJwtToken() throws Exception {
         return jwtTestDataUtil.getJwtToken(mockMvc);
     }
