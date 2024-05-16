@@ -1,5 +1,6 @@
 package bg.softuni.Spring.ecommerce.app.service.testUtils;
 
+import bg.softuni.Spring.ecommerce.app.model.dto.PlaceOrderDto;
 import bg.softuni.Spring.ecommerce.app.model.entity.*;
 import bg.softuni.Spring.ecommerce.app.model.enums.OrderStatusEnum;
 import bg.softuni.Spring.ecommerce.app.repository.CartItemRepository;
@@ -16,6 +17,8 @@ public class OrderTestDataUtil {
 //    public static final String USER_EMAIL = "user@email.com";
     public static final Long INITIAL_PRODUCT_QUANTITY = 1L;
     public static final Long INCREASED_PRODUCT_QUANTITY = 2L;
+    public static final String ORDER_ADDRESS = "testAddress";
+    public static final String ORDER_DESCRIPTION = "testDescription";
 
     @Autowired
     private OrderRepository orderRepository;
@@ -76,6 +79,13 @@ public class OrderTestDataUtil {
                 .setTrackingId(randomUUID.createRandomUUID());
 
         return orderRepository.save(order);
+    }
+
+    public PlaceOrderDto createPlaceOrderDto(Long userId) {
+        return new PlaceOrderDto()
+                .setUserId(userId)
+                .setAddress(ORDER_ADDRESS)
+                .setOrderDescription(ORDER_DESCRIPTION);
     }
 
     private OrderEntity createFilledOrder(Long productQuantity) {
