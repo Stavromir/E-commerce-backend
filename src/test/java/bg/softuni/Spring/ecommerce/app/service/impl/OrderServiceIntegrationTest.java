@@ -25,6 +25,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -82,9 +83,11 @@ class OrderServiceIntegrationTest {
 
         orderService.addCartItemToActiveOrder(addProductInCartDto);
 
-        OrderEntity activeOrder = orderRepository.findByUserIdAndOrderStatus(testUserId,
-                OrderStatusEnum.PENDING).get();
+        Optional<OrderEntity> optionalActiveOrder = orderRepository.findByUserIdAndOrderStatus(testUserId,
+                OrderStatusEnum.PENDING);
 
+        Assertions.assertTrue(optionalActiveOrder.isPresent());
+        OrderEntity activeOrder = optionalActiveOrder.get();
         Assertions.assertEquals(testProduct.getPrice(), activeOrder.getAmount());
         Assertions.assertEquals(testProduct.getPrice(), activeOrder.getTotalAmount());
         Assertions.assertEquals(1, activeOrder.getCartItems().size());
