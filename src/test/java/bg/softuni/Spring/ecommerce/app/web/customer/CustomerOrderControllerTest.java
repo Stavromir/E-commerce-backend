@@ -1,8 +1,10 @@
 package bg.softuni.Spring.ecommerce.app.web.customer;
 
 import bg.softuni.Spring.ecommerce.app.model.dto.AddProductInCartDto;
+import bg.softuni.Spring.ecommerce.app.model.entity.CouponEntity;
 import bg.softuni.Spring.ecommerce.app.model.entity.OrderEntity;
 import bg.softuni.Spring.ecommerce.app.model.entity.ProductEntity;
+import bg.softuni.Spring.ecommerce.app.service.testUtils.CouponTestDataUtil;
 import bg.softuni.Spring.ecommerce.app.service.testUtils.JwtTestDataUtil;
 import bg.softuni.Spring.ecommerce.app.service.testUtils.OrderTestDataUtil;
 import bg.softuni.Spring.ecommerce.app.service.testUtils.ProductTestDataUtil;
@@ -35,15 +37,21 @@ class CustomerOrderControllerTest {
     private OrderTestDataUtil orderTestDataUtil;
     @Autowired
     private ProductTestDataUtil productTestDataUtil;
+    @Autowired
+    private CouponTestDataUtil couponTestDataUtil;
 
     @BeforeEach
     void setUp() {
+        productTestDataUtil.clearAllTestData();
         orderTestDataUtil.clearAllTestData();
+        couponTestDataUtil.clearAllTestData();
     }
 
     @AfterEach
     void tearDown() {
+        productTestDataUtil.clearAllTestData();
         orderTestDataUtil.clearAllTestData();
+        couponTestDataUtil.clearAllTestData();
     }
 
     @Test
@@ -87,10 +95,27 @@ class CustomerOrderControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.cartItems").isArray());
     }
 
+    @Test
+    void testApplyCoupon() throws Exception {
+        CouponEntity testCoupon = couponTestDataUtil.createValidCouponEntity();
+        String code = testCoupon.getCode();
+        OrderEntity filledOrder = orderTestDataUtil.createFilledOrderInitialQuantity();
+        Long userId = filledOrder.getUser().getId();
+
+        String jwtToken = getJwtToken();
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get(BASE_URL + "/coupons/{userId}/{code}", userId, code)
+                        .characterEncoding("utf-8")
+                        .header(HttpHeaders.AUTHORIZATION, jwtToken)
+        )
+                .andExpect(MockMvcResultMatchers.status().isAccepted())
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isNotEmpty())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.cartItems").isArray());
+    }
+
     private String getJwtToken() throws Exception {
         return jwtTestDataUtil.getJwtToken(mockMvc);
     }
-
-
-
 }
