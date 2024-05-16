@@ -148,8 +148,24 @@ class AdminProductControllerTest {
     }
 
     @Test
-    void testUpdateProduct() {
+    void testUpdateProduct() throws Exception {
+        String jwtToken = getJwtToken();
+        ProductEntity testProduct = productTestDataUtil.createProduct();
+        Long productId = testProduct.getId();
+        ProductDto testProductDto = productTestDataUtil.createUpdatedProductDto(productId);
 
+        mockMvc.perform(
+                MockMvcRequestBuilders.put(BASE_URL + "/products")
+                        .characterEncoding("utf-8")
+                        .header(HttpHeaders.AUTHORIZATION, jwtToken)
+                        .param("id", testProductDto.getId().toString())
+                        .param("price", testProductDto.getPrice().toString())
+                        .param("categoryId", testProductDto.getCategoryId().toString())
+                        .param("name", testProductDto.getName())
+                        .param("description", testProductDto.getDescription())
+        )
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isNumber());
     }
 
     private String getJwtToken() throws Exception {
