@@ -20,6 +20,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @AutoConfigureMockMvc
 class AdminOrderControllerTest {
 
+    private static final String BASE_URL = "/api/admin";
+
     @Autowired
     private OrderTestDataUtil orderTestDataUtil;
     @Autowired
@@ -46,7 +48,7 @@ class AdminOrderControllerTest {
         String jwtToken = getJwtToken();
 
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/api/admin/orders")
+                MockMvcRequestBuilders.get(BASE_URL + "/orders")
                         .characterEncoding("utf-8")
                         .header(HttpHeaders.AUTHORIZATION, jwtToken)
         )
@@ -62,7 +64,7 @@ class AdminOrderControllerTest {
         String newStatus = "Shipped";
 
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/api/admin/orders/{orderId}/{status}", orderId, newStatus)
+                MockMvcRequestBuilders.get(BASE_URL + "/orders/{orderId}/{status}", orderId, newStatus)
                         .characterEncoding("utf-8")
                         .header(HttpHeaders.AUTHORIZATION, jwtToken)
         )
@@ -76,7 +78,7 @@ class AdminOrderControllerTest {
         String jwtToken = getJwtToken();
 
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/api/admin/analytics")
+                MockMvcRequestBuilders.get(BASE_URL + "/analytics")
                         .characterEncoding("utf-8")
                         .header(HttpHeaders.AUTHORIZATION, jwtToken)
         )
