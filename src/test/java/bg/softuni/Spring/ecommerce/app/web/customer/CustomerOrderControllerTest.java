@@ -72,8 +72,19 @@ class CustomerOrderControllerTest {
     }
 
     @Test
-    void testGetCartByUserId() {
+    void testGetCartByUserId() throws Exception {
+        OrderEntity testOrder = orderTestDataUtil.createFilledOrderInitialQuantity();
+        Long userId = testOrder.getUser().getId();
+        String jwtToken = getJwtToken();
 
+        mockMvc.perform(
+                MockMvcRequestBuilders.get(BASE_URL + "/carts/{userId}", userId)
+                        .characterEncoding("utf-8")
+                        .header(HttpHeaders.AUTHORIZATION, jwtToken)
+        )
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isNotEmpty())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.cartItems").isArray());
     }
 
     private String getJwtToken() throws Exception {
