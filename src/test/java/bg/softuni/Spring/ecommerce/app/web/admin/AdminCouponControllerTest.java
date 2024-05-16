@@ -21,6 +21,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @AutoConfigureMockMvc
 class AdminCouponControllerTest {
 
+    private static final String BASE_URL = "/api/admin";
+
     @Autowired
     private CouponTestDataUtil couponTestDataUtil;
     @Autowired
@@ -49,7 +51,7 @@ class AdminCouponControllerTest {
         String content = gson.toJson(couponDto);
 
         mockMvc.perform(
-                MockMvcRequestBuilders.post("/api/admin/coupons")
+                MockMvcRequestBuilders.post(BASE_URL + "/coupons")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .header(HttpHeaders.AUTHORIZATION, jwtToken)
@@ -67,7 +69,7 @@ class AdminCouponControllerTest {
         couponTestDataUtil.createValidCouponEntity();
 
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/api/admin/coupons")
+                MockMvcRequestBuilders.get(BASE_URL + "/coupons")
                         .characterEncoding("utf-8")
                         .header(HttpHeaders.AUTHORIZATION, jwtToken)
         )
