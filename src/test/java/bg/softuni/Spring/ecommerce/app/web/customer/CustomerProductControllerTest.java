@@ -1,11 +1,8 @@
 package bg.softuni.Spring.ecommerce.app.web.customer;
 
-import bg.softuni.Spring.ecommerce.app.model.entity.FAQEntity;
 import bg.softuni.Spring.ecommerce.app.model.entity.OrderEntity;
 import bg.softuni.Spring.ecommerce.app.model.entity.ProductEntity;
-import bg.softuni.Spring.ecommerce.app.model.entity.ReviewEntity;
 import bg.softuni.Spring.ecommerce.app.service.testUtils.*;
-import com.google.gson.Gson;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,8 +25,6 @@ class CustomerProductControllerTest {
     private MockMvc mockMvc;
     @Autowired
     private JwtTestDataUtil jwtTestDataUtil;
-    @Autowired
-    private Gson gson;
     @Autowired
     private ProductTestDataUtil productTestDataUtil;
     @Autowired
