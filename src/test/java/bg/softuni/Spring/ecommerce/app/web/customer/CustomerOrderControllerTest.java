@@ -140,6 +140,31 @@ class CustomerOrderControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$").isNumber());
     }
 
+    @Test
+    void testDecreaseQuantity() throws Exception {
+        OrderEntity testOrder = orderTestDataUtil.createFilledOrderIncreasedQuantity();
+
+        Long testUserId = testOrder.getUser().getId();
+        CartItemEntity testCartItem = testOrder.getCartItems().get(0);
+        Long testProductId = testCartItem.getProduct().getId();
+
+        AddProductInCartDto addProductInCartDto =
+                getAddProductInCartDto(testProductId, testUserId);
+
+        String content = gson.toJson(addProductInCartDto);
+        String jwtToken = getJwtToken();
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders.post(BASE_URL + "/carts/subtraction")
+                                .characterEncoding("urf-8")
+                                .header(HttpHeaders.AUTHORIZATION, jwtToken)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(content)
+                )
+                .andExpect(MockMvcResultMatchers.status().isAccepted())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isNumber());
+    }
+
     private static AddProductInCartDto getAddProductInCartDto(Long testProductId, Long testUserId) {
         return new AddProductInCartDto()
                 .setProductId(testProductId)
