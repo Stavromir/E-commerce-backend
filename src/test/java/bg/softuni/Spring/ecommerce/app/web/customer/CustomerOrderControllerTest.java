@@ -1,6 +1,7 @@
 package bg.softuni.Spring.ecommerce.app.web.customer;
 
 import bg.softuni.Spring.ecommerce.app.model.dto.AddProductInCartDto;
+import bg.softuni.Spring.ecommerce.app.model.entity.CartItemEntity;
 import bg.softuni.Spring.ecommerce.app.model.entity.CouponEntity;
 import bg.softuni.Spring.ecommerce.app.model.entity.OrderEntity;
 import bg.softuni.Spring.ecommerce.app.model.entity.ProductEntity;
@@ -61,9 +62,8 @@ class CustomerOrderControllerTest {
 
         ProductEntity testProduct = productTestDataUtil.createProduct();
 
-        AddProductInCartDto addProductInCartDto = new AddProductInCartDto()
-                .setUserId(testUserId)
-                .setProductId(testProduct.getId());
+        AddProductInCartDto addProductInCartDto =
+                getAddProductInCartDto(testProduct.getId(), testUserId);
 
         String jwtToken = getJwtToken();
         String content = gson.toJson(addProductInCartDto);
@@ -113,6 +113,37 @@ class CustomerOrderControllerTest {
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$").isNotEmpty())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.cartItems").isArray());
+    }
+
+    @Test
+    void testIncreaseQuantity() throws Exception {
+        OrderEntity testOrder = orderTestDataUtil.createFilledOrderInitialQuantity();
+
+        Long testUserId = testOrder.getUser().getId();
+        CartItemEntity testCartItem = testOrder.getCartItems().get(0);
+        Long testProductId = testCartItem.getProduct().getId();
+
+        AddProductInCartDto addProductInCartDto =
+                getAddProductInCartDto(testProductId, testUserId);
+
+        String content = gson.toJson(addProductInCartDto);
+        String jwtToken = getJwtToken();
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.post(BASE_URL + "/carts/addition")
+                        .characterEncoding("urf-8")
+                        .header(HttpHeaders.AUTHORIZATION, jwtToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(content)
+        )
+                .andExpect(MockMvcResultMatchers.status().isAccepted())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isNumber());
+    }
+
+    private static AddProductInCartDto getAddProductInCartDto(Long testProductId, Long testUserId) {
+        return new AddProductInCartDto()
+                .setProductId(testProductId)
+                .setUserId(testUserId);
     }
 
     private String getJwtToken() throws Exception {
