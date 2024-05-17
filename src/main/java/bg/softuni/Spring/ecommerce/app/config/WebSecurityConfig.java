@@ -33,7 +33,7 @@ public class WebSecurityConfig {
                 )
                 .authorizeHttpRequests(
                         authorizeRequest ->authorizeRequest
-                                .requestMatchers("/authenticate", "/sign-up", "/order/**").permitAll()
+                                .requestMatchers("/authenticate", "/sign-up", "/orders/**").permitAll()
                                 .requestMatchers("/api/**").authenticated()
                 ).sessionManagement(
                         session -> session
