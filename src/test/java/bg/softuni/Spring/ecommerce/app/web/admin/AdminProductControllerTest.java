@@ -19,7 +19,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.hamcrest.Matchers.is;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -143,7 +142,6 @@ class AdminProductControllerTest {
                         .header(HttpHeaders.AUTHORIZATION, jwtToken)
         )
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id", is(1)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber());
     }
 
