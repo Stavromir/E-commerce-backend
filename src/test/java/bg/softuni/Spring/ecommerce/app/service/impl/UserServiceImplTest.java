@@ -8,6 +8,7 @@ import bg.softuni.Spring.ecommerce.app.service.UserService;
 import bg.softuni.Spring.ecommerce.app.service.exception.ObjectNotFoundException;
 import bg.softuni.Spring.ecommerce.app.service.testUtils.UserTestDataUtil;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,6 @@ class UserServiceImplTest {
     private UserService userService;
     @Autowired
     private UserTestDataUtil userTestDataUtil;
-    @Autowired
-    private OrderRepository orderRepository;
 
     @BeforeEach
     void setUp() {
@@ -58,11 +57,16 @@ class UserServiceImplTest {
     }
 
     @Test
-    void testHasUserWithEmail() {
-        UserEntity testUser = userTestDataUtil.createTestUser();
+    void testCreateUserThrowExc() {
+        SignupRequestDto testSignupRequestDto = userTestDataUtil
+                .createSignupRequestDto();
 
-        boolean hasUserWithEmail = userService.hasUserWithEmail(testUser.getEmail());
-        assertTrue(hasUserWithEmail);
+        userTestDataUtil.createTestUser();
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> userService.createUser(testSignupRequestDto)
+        );
     }
 
     @Test
