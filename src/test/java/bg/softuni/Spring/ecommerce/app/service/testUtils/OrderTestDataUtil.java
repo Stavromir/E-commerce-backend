@@ -14,7 +14,6 @@ import java.util.List;
 @Component
 public class OrderTestDataUtil {
 
-//    public static final String USER_EMAIL = "user@email.com";
     public static final Long INITIAL_PRODUCT_QUANTITY = 1L;
     public static final Long INCREASED_PRODUCT_QUANTITY = 2L;
     public static final String ORDER_ADDRESS = "testAddress";
@@ -24,7 +23,6 @@ public class OrderTestDataUtil {
     private OrderRepository orderRepository;
     @Autowired
     private CartItemRepository cartItemRepository;
-
     @Autowired
     private UserTestDataUtil userTestDataUtil;
     @Autowired
@@ -33,7 +31,7 @@ public class OrderTestDataUtil {
     private RandomUUID randomUUID;
 
     public OrderEntity createEmptyOrder() {
-        UserEntity testUser = userTestDataUtil.createTestUser();
+        UserEntity testUser = userTestDataUtil.getTestUserInstance();
 
         OrderEntity emptyOrder = new OrderEntity()
                 .setAmount(0L)
@@ -122,8 +120,5 @@ public class OrderTestDataUtil {
     public void clearAllTestData() {
         cartItemRepository.deleteAll();
         orderRepository.deleteAll();
-//        userTestDataUtil.clearAllTestData();
     }
-
-
 }
