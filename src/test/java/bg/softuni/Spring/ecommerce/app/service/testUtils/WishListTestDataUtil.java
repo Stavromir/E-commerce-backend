@@ -20,7 +20,7 @@ public class WishListTestDataUtil {
     private UserTestDataUtil userTestDataUtil;
 
     public WishListEntity createWishListEntity() {
-        UserEntity testUserEntity = userTestDataUtil.createTestUser();
+        UserEntity testUserEntity = userTestDataUtil.getTestUserInstance();
         ProductEntity testProductEntity = productTestDataUtil.createProduct();
 
         WishListEntity wishListEntity = new WishListEntity()
@@ -31,7 +31,7 @@ public class WishListTestDataUtil {
     }
 
     public WishListDto createWishListDto() {
-        UserEntity testUserEntity = userTestDataUtil.createTestUser();
+        UserEntity testUserEntity = userTestDataUtil.getTestUserInstance();
         ProductEntity testDataUtilProduct = productTestDataUtil.createProduct();
 
         return new WishListDto()
@@ -42,6 +42,5 @@ public class WishListTestDataUtil {
     public void clearAllTestData() {
         wishListRepository.deleteAll();
         productTestDataUtil.clearAllTestData();
-//        userTestDataUtil.clearAllTestData();
     }
 }
