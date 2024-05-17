@@ -49,5 +49,4 @@ class TrackingControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$").isMap())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.cartItems").isArray());
     }
-
 }
