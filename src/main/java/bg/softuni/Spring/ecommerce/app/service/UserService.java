@@ -8,8 +8,6 @@ public interface UserService {
 
     Long createUser(SignupRequestDto signupRequest);
 
-    boolean hasUserWithEmail(String email);
-
     UserEntity getUserById(Long userId);
 
     UserEntity findUserByEmail(String email);
