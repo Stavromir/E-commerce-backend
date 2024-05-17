@@ -6,7 +6,6 @@ import bg.softuni.Spring.ecommerce.app.model.entity.ReviewEntity;
 import bg.softuni.Spring.ecommerce.app.model.entity.UserEntity;
 import bg.softuni.Spring.ecommerce.app.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -27,7 +26,7 @@ public class ReviewTestDataUtil {
     public ReviewEntity createReviewEntity() {
 
         ProductEntity testProduct = productTestDataUtil.createProduct();
-        UserEntity testUser = userTestDataUtil.createTestUser();
+        UserEntity testUser = userTestDataUtil.getTestUserInstance();
 
         ReviewEntity reviewEntity = new ReviewEntity()
                 .setProduct(testProduct)
@@ -41,7 +40,7 @@ public class ReviewTestDataUtil {
 
     public ReviewDto createReviewDto() {
         ProductEntity testProduct = productTestDataUtil.createProduct();
-        UserEntity testUser = userTestDataUtil.createTestUser();
+        UserEntity testUser = userTestDataUtil.getTestUserInstance();
 
         return new ReviewDto()
                 .setProductId(testProduct.getId())
@@ -53,6 +52,5 @@ public class ReviewTestDataUtil {
     public void clearAllTestData() {
         reviewRepository.deleteAll();
         productTestDataUtil.clearAllTestData();
-//        userTestDataUtil.clearAllTestData();
     }
 }
