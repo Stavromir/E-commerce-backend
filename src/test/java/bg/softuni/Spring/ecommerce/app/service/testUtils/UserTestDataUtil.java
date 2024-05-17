@@ -24,6 +24,7 @@ public class UserTestDataUtil {
     private static final String IMG_HEX = "e04f";
     private static final String USERNAME = "testUser";
     private static final String TEST_USER_EMAIL = "test@email.com";
+    private static final String NEW_TEST_USER_EMAIL = "newTest@email.com";
     private static final String USER_PASSWORD = "userTestPass";
 
     @Autowired
@@ -52,7 +53,7 @@ public class UserTestDataUtil {
     public SignupRequestDto createSignupRequestDto() {
         return new SignupRequestDto()
                 .setName(USERNAME)
-                .setEmail(TEST_USER_EMAIL)
+                .setEmail(NEW_TEST_USER_EMAIL)
                 .setPassword(USER_PASSWORD);
     }
 
