@@ -45,8 +45,6 @@ public class UserAuthController {
     @PostMapping("/authenticate")
     public void createAuthenticationToken(@RequestBody UserAuthenticationRequestDto userAuthenticationRequest,
                                           HttpServletResponse response) throws IOException, JSONException {
-
-
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userAuthenticationRequest.getUsername(),
                     userAuthenticationRequest.getPassword()));
@@ -73,15 +71,9 @@ public class UserAuthController {
 
 
     @PostMapping("/sign-up")
-    public ResponseEntity<?> signupUser(@RequestBody SignupRequestDto signupRequest) {
-
-        if (userService.hasUserWithEmail(signupRequest.getEmail())) {
-//            return new ResponseEntity<>("User already exists", HttpStatus.NOT_ACCEPTABLE);
-            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("User already exists");
-        }
+    public ResponseEntity<Long> signupUser(@RequestBody SignupRequestDto signupRequest) {
 
         Long userId = userService.createUser(signupRequest);
-//        return new ResponseEntity<>(userId, HttpStatus.OK);
         return ResponseEntity.ok().body(userId);
     }
 }
