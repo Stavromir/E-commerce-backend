@@ -4,13 +4,14 @@ import bg.softuni.Spring.ecommerce.app.model.dto.SignupRequestDto;
 import bg.softuni.Spring.ecommerce.app.model.dto.UserAuthenticationRequestDto;
 import bg.softuni.Spring.ecommerce.app.model.entity.UserEntity;
 import bg.softuni.Spring.ecommerce.app.model.enums.UserRoleEnum;
-import bg.softuni.Spring.ecommerce.app.repository.OrderRepository;
 import bg.softuni.Spring.ecommerce.app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.HexFormat;
+
+import static bg.softuni.Spring.ecommerce.app.service.testUtils.UserTestInfo.*;
 
 @Component
 public class UserTestDataUtil {
@@ -20,28 +21,19 @@ public class UserTestDataUtil {
     @Value("${admin.password}")
     private String adminPass;
 
-
-    private static final String IMG_HEX = "e04f";
-    private static final String USERNAME = "testUser";
-    private static final String TEST_USER_EMAIL = "test@email.com";
-    private static final String NEW_TEST_USER_EMAIL = "newTest@email.com";
-    private static final String USER_PASSWORD = "userTestPass";
-
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private OrderRepository orderRepository;
 
-    private UserEntity userEntity;
+    private UserEntity userEntityInstance;
 
     private UserTestDataUtil() {
     }
 
-    public UserEntity createTestUser() {
-        if (userEntity == null) {
-            userEntity = createUser(TEST_USER_EMAIL, UserRoleEnum.CUSTOMER);
+    public UserEntity getTestUserInstance() {
+        if (userEntityInstance == null) {
+            userEntityInstance = createUser(USER_EMAIL_1, UserRoleEnum.CUSTOMER);
         }
-        return userEntity;
+        return userEntityInstance;
     }
 
     public UserAuthenticationRequestDto getUserAuthRequestDto() {
@@ -50,10 +42,10 @@ public class UserTestDataUtil {
                 .setPassword(adminPass);
     }
 
-    public SignupRequestDto createSignupRequestDto() {
+    public SignupRequestDto createSignupRequestDto(String email) {
         return new SignupRequestDto()
                 .setName(USERNAME)
-                .setEmail(NEW_TEST_USER_EMAIL)
+                .setEmail(email)
                 .setPassword(USER_PASSWORD);
     }
 
@@ -69,11 +61,5 @@ public class UserTestDataUtil {
                 .setImg(img);
 
         return userRepository.save(user);
-    }
-
-    public void clearAllTestData() {
-        userEntity = null;
-        orderRepository.deleteAll();
-        userRepository.deleteAll();
     }
 }
