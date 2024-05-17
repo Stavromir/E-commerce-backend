@@ -2,14 +2,10 @@ package bg.softuni.Spring.ecommerce.app.service.impl;
 
 import bg.softuni.Spring.ecommerce.app.model.dto.SignupRequestDto;
 import bg.softuni.Spring.ecommerce.app.model.entity.UserEntity;
-import bg.softuni.Spring.ecommerce.app.repository.OrderRepository;
 import bg.softuni.Spring.ecommerce.app.repository.UserRepository;
 import bg.softuni.Spring.ecommerce.app.service.UserService;
 import bg.softuni.Spring.ecommerce.app.service.exception.ObjectNotFoundException;
 import bg.softuni.Spring.ecommerce.app.service.testUtils.UserTestDataUtil;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,6 +13,7 @@ import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 
 import java.util.Optional;
 
+import static bg.softuni.Spring.ecommerce.app.service.testUtils.UserTestInfo.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -29,20 +26,10 @@ class UserServiceImplTest {
     @Autowired
     private UserTestDataUtil userTestDataUtil;
 
-    @BeforeEach
-    void setUp() {
-        userTestDataUtil.clearAllTestData();
-    }
-
-    @AfterEach
-    void tearDown() {
-        userTestDataUtil.clearAllTestData();
-    }
-
     @Test
     void testCreateUser() {
         SignupRequestDto testSignupRequestDto = userTestDataUtil
-                .createSignupRequestDto();
+                .createSignupRequestDto(USER_EMAIL_2);
 
         Long userId = userService.createUser(testSignupRequestDto);
 
@@ -59,9 +46,9 @@ class UserServiceImplTest {
     @Test
     void testCreateUserThrowExc() {
         SignupRequestDto testSignupRequestDto = userTestDataUtil
-                .createSignupRequestDto();
+                .createSignupRequestDto(USER_EMAIL_1);
 
-        userTestDataUtil.createTestUser();
+        userTestDataUtil.getTestUserInstance();
 
         assertThrows(
                 IllegalArgumentException.class,
@@ -71,7 +58,7 @@ class UserServiceImplTest {
 
     @Test
     void testGetUserById() {
-        UserEntity testUser = userTestDataUtil.createTestUser();
+        UserEntity testUser = userTestDataUtil.getTestUserInstance();
 
         UserEntity returnedUserEntity = userService.getUserById(testUser.getId());
 
@@ -90,7 +77,7 @@ class UserServiceImplTest {
 
     @Test
     void testFindUserByEmail() {
-        UserEntity testUser = userTestDataUtil.createTestUser();
+        UserEntity testUser = userTestDataUtil.getTestUserInstance();
 
         UserEntity returnedUserEntity = userService.findUserByEmail(testUser.getEmail());
 
