@@ -39,6 +39,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public Long createUser(SignupRequestDto signupRequest) {
 
+        isUserExist(signupRequest);
+
         UserEntity user = new UserEntity()
                 .setEmail(signupRequest.getEmail())
                 .setName(signupRequest.getName())
@@ -50,11 +52,6 @@ public class UserServiceImpl implements UserService {
         orderService.createEmptyOrder(user);
 
         return savedUser.getId();
-    }
-
-    @Override
-    public boolean hasUserWithEmail(String email) {
-        return userRepository.findByEmail(email).isPresent();
     }
 
     @Override
@@ -81,6 +78,15 @@ public class UserServiceImpl implements UserService {
                     .setRole(UserRoleEnum.ADMIN)
                     .setPassword(Pbkdf2PasswordEncoder.defaultsForSpringSecurity_v5_8().encode(adminPassword));
             userRepository.save(adminUser);
+        }
+    }
+
+    private void isUserExist(SignupRequestDto signupRequest) {
+        Optional<UserEntity> optionalUserEntity = userRepository
+                .findByEmail(signupRequest.getEmail());
+
+        if (optionalUserEntity.isPresent()) {
+            throw new IllegalArgumentException("User already exists");
         }
     }
 
