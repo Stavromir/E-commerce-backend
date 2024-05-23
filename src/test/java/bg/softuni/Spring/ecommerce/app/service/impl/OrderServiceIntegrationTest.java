@@ -104,7 +104,9 @@ class OrderServiceIntegrationTest {
 
         orderService.applyCoupon(testUserId, couponCode);
 
-        OrderEntity orderAfterCouponApply = orderRepository.findById(filledOrder.getId()).get();
+        Optional<OrderEntity> optionalOrderById = orderRepository.findById(filledOrder.getId());
+        Assertions.assertTrue(optionalOrderById.isPresent());
+        OrderEntity orderAfterCouponApply = optionalOrderById.get();
 
         Assertions.assertNotNull(orderAfterCouponApply.getCoupon());
         Assertions.assertEquals(testCoupon.getCode(), orderAfterCouponApply.getCoupon().getCode());
