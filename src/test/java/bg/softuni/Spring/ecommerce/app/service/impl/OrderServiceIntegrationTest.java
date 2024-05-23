@@ -170,7 +170,8 @@ class OrderServiceIntegrationTest {
 
         orderService.increaseProductQuantity(addProductInCartDto);
 
-        OrderEntity savedOrder = orderRepository.findById(testOrder.getId()).get();
+        Optional<OrderEntity> optionalOrderById = orderRepository.findById(testOrder.getId());
+
         CartItemEntity savedCartItem = savedOrder.getCartItems().get(0);
 
         Assertions.assertEquals(testCartItem.getQuantity() + 1, savedCartItem.getQuantity());
