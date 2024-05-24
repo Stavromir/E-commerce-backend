@@ -247,7 +247,7 @@ class OrderServiceIntegrationTest {
 
         orderService.placeOrder(placeOrderDto);
 
-        OrderEntity savedOrder = orderRepository.findById(emptyOrder.getId()).get();
+        Optional<OrderEntity> optionalOrderById = orderRepository.findById(emptyOrder.getId());
         OrderEntity newEmptyOrder = orderRepository.
                 findByUserIdAndOrderStatus(emptyOrder.getUser().getId(), OrderStatusEnum.PENDING).get();
 
