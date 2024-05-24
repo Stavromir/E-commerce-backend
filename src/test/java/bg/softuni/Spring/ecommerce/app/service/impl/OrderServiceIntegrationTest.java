@@ -251,8 +251,8 @@ class OrderServiceIntegrationTest {
         Assertions.assertTrue(optionalOrderById.isPresent());
         OrderEntity savedOrder = optionalOrderById.get();
 
-        OrderEntity newEmptyOrder = orderRepository.
-                findByUserIdAndOrderStatus(emptyOrder.getUser().getId(), OrderStatusEnum.PENDING).get();
+        Optional<OrderEntity> optionalNewEmptyOrder = orderRepository.
+                findByUserIdAndOrderStatus(emptyOrder.getUser().getId(), OrderStatusEnum.PENDING);
 
         Assertions.assertEquals(placeOrderDto.getOrderDescription(), savedOrder.getOrderDescription());
         Assertions.assertEquals(OrderStatusEnum.PLACED, savedOrder.getOrderStatus());
@@ -260,7 +260,7 @@ class OrderServiceIntegrationTest {
         Assertions.assertEquals(mockedUUID, savedOrder.getTrackingId());
 //        Assertions.assertEquals(mockedDate.toInstant(), savedOrder.getDate().toInstant());
 
-        Assertions.assertNotNull(newEmptyOrder);
+        Assertions.assertTrue(optionalNewEmptyOrder.isPresent());
     }
 
     @Test
