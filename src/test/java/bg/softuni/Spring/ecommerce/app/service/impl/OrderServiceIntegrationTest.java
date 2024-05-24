@@ -222,6 +222,8 @@ class OrderServiceIntegrationTest {
 
         Optional<OrderEntity> optionalOrderById = orderRepository.findById(testOrder.getId());
         Assertions.assertTrue(optionalOrderById.isPresent());
+        OrderEntity savedOrder = optionalOrderById.get();
+
         CartItemEntity savedCartItem = savedOrder.getCartItems().get(0);
 
         Assertions.assertEquals(testCartItem.getQuantity() - 1, savedCartItem.getQuantity());
